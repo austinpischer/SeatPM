@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Host Files\Source Files\host_main.c">
 <ExpandedNodeIds>
 <v>CE215120_BLE_Device_Information_Service01</v>
 <v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01</v>
@@ -73,39 +73,38 @@
 <v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Shared Files\cy_ipc_config.h</v>
 <v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Shared Files\cyapicallbacks.h</v>
 <v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Shared Files\system_psoc63.h</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Generated_Source</v>
 <v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Generated_Source\PSoC6</v>
 <v>CE215120_BLE_Device_Information_Service01\CE215120.pdf</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
-<v>CE215120_BLE_Device_Information_Service01</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\TopDesign</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydwr</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydwr\Pins</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydwr\Analog</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydwr\DMA</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydwr\Clocks</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydwr\Interrupts</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydwr\System</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydwr\Directives</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\ARM GCC Generic</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\ARM GCC Generic\cy8c6xx7_cm0plus.ld</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\ARM IAR Generic</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\ARM IAR Generic\cy8c6xx7_cm0plus.icf</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\ARM MDK Generic</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\ARM MDK Generic\cy8c6xx7_cm0plus.scat</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Header Files</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Source Files</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Source Files\ARM GCC Generic</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Source Files\ARM GCC Generic\startup_psoc63_cm0plus.S</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Source Files\ARM IAR Generic</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Source Files\ARM IAR Generic\startup_psoc63_cm0plus.s</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Source Files\ARM MDK Generic</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Source Files\ARM MDK Generic\startup_psoc63_cm0plus.s</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Source Files\main_cm0p.c</v>
-<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM0p (Core 0)\Source Files\system_psoc63_cm0plus.c</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\ARM IAR Generic\cy8c6xx7_cm4_dual.icf</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\ARM MDK Generic</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\ARM MDK Generic\cy8c6xx7_cm4_dual.scat</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Header Files</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Source Files</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Source Files\ARM GCC Generic</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Source Files\ARM GCC Generic\startup_psoc63_cm4.S</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Source Files\ARM IAR Generic</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Source Files\ARM IAR Generic\startup_psoc63_cm4.s</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Source Files\ARM MDK Generic</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Source Files\ARM MDK Generic\startup_psoc63_cm4.s</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Source Files\main_cm4.c</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\CM4 (Core 1)\Source Files\system_psoc63_cm4.c</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Host Files</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Host Files\Header Files</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Host Files\Header Files\common.h</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Host Files\Header Files\user_interface.h</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Host Files\Source Files</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Host Files\Source Files\host_main.c</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Host Files\Source Files\user_interface.c</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Shared Files</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Shared Files\cy_ble_config.h</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Shared Files\cy_ipc_config.c</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Shared Files\cy_ipc_config.h</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Shared Files\cyapicallbacks.h</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Shared Files\system_psoc63.h</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01\Generated_Source</v>
+<v>CE215120_BLE_Device_Information_Service01\CE215120.pdf</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
@@ -363,7 +362,18 @@
 </userData>
 </CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
 <Unloaded />
-<OpenDocs />
+<OpenDocs>
+<name v=".\CE215120_BLE_Device_Information_Service01.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\CE215120_BLE_Device_Information_Service01.cydsn\user_interface.c" />
+<name v=".\CE215120_BLE_Device_Information_Service01.cydsn\host_main.c" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="948, 412" SelectedTabbedMdiWindow="360e323b-481a-4564-aa47-d11a646cc9ed"><DocumentWindow Key="C:\Users\Admin\Desktop\SeatPM\SeatPM\Microcontroller\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydsn\TopDesign\TopDesign.cysch" Guid="7ab0a860-e1d1-4a09-906b-137c7e270a90" /><DocumentWindow Key="C:\Users\Admin\Desktop\SeatPM\SeatPM\Microcontroller\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydsn\user_interface.c" Guid="360e323b-481a-4564-aa47-d11a646cc9ed" /><DocumentWindow Key="C:\Users\Admin\Desktop\SeatPM\SeatPM\Microcontroller\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydsn\host_main.c" Guid="932737dc-a2c4-404e-aed0-5cee389ec996" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
