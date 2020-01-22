@@ -11,69 +11,68 @@
 */
 
 import 'package:flutter/material.dart';
-import 'parameter.dart';
+import 'parameter_model.dart';
 
-class ParameterWidget {
-  String name;
-  Parameter myParameter;
-  Row parameterControls;
+class ParameterWidget extends StatelessWidget {
+  final String name;
+  final ParameterModel model;
 
-  ParameterWidget(String parameterName)
-  {
-    name = parameterName;
-    parameterControls = _makeParameterControls(name);
-  }
+  ParameterWidget(this.name, this.model);
 
-  Row _makeParameterControls(parameterName) {
-  return Row (
-    children: <Widget>[
-      // *********** Parameter DOWN button on the left ***********
-      Expanded( 
-        child: RaisedButton(
-          onPressed: () {}, // TODO
-          onLongPress: () {}, // TODO
-          child: Text(
-             parameterName + 'Down'
-            ),
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        //=====================================================================
+        // Down Button
+        //=====================================================================
+        Expanded(
+          child: RaisedButton(
+            onPressed: () {
+              model.setValue(model.getValue() - 1);
+            }, // TODO
+            onLongPress: () {}, // TODO
+            child: Text(name + ' Down'),
           ),
         ),
 
-      // *********** Parameter VALUE display ***********
-      Expanded(
-        child: ValueDisplay( )
-          
+        //=====================================================================
+        // Value Display
+        //=====================================================================
+        Expanded(
+          child: ValueDisplay(name, model),
         ),
-      ),
 
-      // *********** Parameter UP button on the right ***********
-      Expanded(
-        child: RaisedButton(
-          onPressed: () {}, // TODO
-          onLongPress: () {}, // TODO
-          child: Text(
-             parameterName + 'Up'
-            ),
+        //=====================================================================
+        // Up Button
+        //=====================================================================
+        Expanded(
+          child: RaisedButton(
+            onPressed: () {
+              model.setValue(model.getValue() + 1);
+            }, // TODO
+            onLongPress: () {}, // TODO
+            child: Text(name + ' Up'),
           ),
-       ),
-
-    ],
-  );
+        ),
+      ],
+    );
   }
 }
 
 class ValueDisplay extends StatefulWidget {
-  final String parName;
-  final String parValue;
+  final String name;
+  final ParameterModel model;
 
-  const ValueDisplay(this.parName, this.parValue);
+  ValueDisplay(this.name, this.model);
 
   @override
-  _ValueDisplayState createState() => _ValueDisplayState();
+  ValueDisplayState createState() => ValueDisplayState();
 }
 
-class _ValueDisplayState extends State<ValueDisplay> {
-  @override 
+class ValueDisplayState extends State<ValueDisplay> {
+  @override
   Widget build(BuildContext context) {
-    return Text(widget.parName + ' value: ' + widget.parValue);
+    return Text(widget.name + ' value: ' + widget.model.getValue().toString());
   }
 }
