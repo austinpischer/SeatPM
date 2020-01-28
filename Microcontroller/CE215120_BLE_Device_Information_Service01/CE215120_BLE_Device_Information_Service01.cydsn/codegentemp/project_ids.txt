@@ -1,6 +1,0 @@
-C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|f5cb90eb-3c9b-4d16-8eef-51568a0fcf30
-C:\Users\Admin\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\Downloads ( 4.2).cyprj|fd3cb214-2344-4da5-91a2-a5c66cdc7221
-C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|7d8a6ed7-57a4-4cd7-9cde-bbf9c09b4a37
-C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|51be1f85-2ac6-4cf5-98ee-bba1769609cb
-C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|5ed8d1bb-0ee8-445c-83e8-523b4a574255
-C:\Users\Admin\Desktop\SeatPM\SeatPM\Microcontroller\CE215120_BLE_Device_Information_Service01\CE215120_BLE_Device_Information_Service01.cydsn\CE215120_BLE_Device_Information_Service01.cyprj|1bc0f274-b183-4bae-82fc-61de0f81f657

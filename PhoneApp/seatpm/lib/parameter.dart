@@ -11,6 +11,6 @@ class Parameter {
   Parameter(String parameterName) {
     name = parameterName;
     model = ParameterModel();
-    widget = ParameterWidget(name, model);
+    widget = new ParameterWidget(name, model);
   }
 }
