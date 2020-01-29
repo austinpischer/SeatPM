@@ -1,0 +1,21 @@
+# https://git-scm.com/docs/gitignore
+
+# CREDIT TO: https://github.com/SorenHN/PSoC-gitignore/blob/master/.gitignore
+
+# Userfile
+*.cyprj.*
+*.cywrk.*
+
+# Miscellaneous files
+*.cycdx
+*.gsvd
+*.html
+*.pdf
+*.rpt
+*/ComponentUpdateLog.txt
+
+# Folders
+*codegentemp/
+*CoretexM3/
+*Debug/
+*Generated_Source/
