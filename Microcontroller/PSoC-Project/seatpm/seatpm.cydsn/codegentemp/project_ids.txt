@@ -1,0 +1,6 @@
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|02705269-ef6b-41a9-86e5-8fbb65c84ad9
+C:\Users\austi\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\Downloads ( 4.2).cyprj|71b24c98-f776-4fd3-8d2d-464ba52db081
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|373f4138-7271-4867-953e-b46aba40e4b7
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|c47424a7-628c-4a69-a969-a996a1170c6a
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|95ba6035-4340-456a-ba49-26297341d7a7
+C:\Users\austi\Desktop\SeatPM\Microcontroller\PSoC-Project\seatpm\seatpm.cydsn\seatpm.cyprj|f1dcb42b-4446-4a6a-b611-8dc3a6b1343a
