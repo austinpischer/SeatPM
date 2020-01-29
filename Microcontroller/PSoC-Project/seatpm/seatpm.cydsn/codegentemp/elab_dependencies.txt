@@ -1,2 +1,0 @@
-C:\Users\austi\Desktop\SeatPM\Microcontroller\PSoC-Project\seatpm\seatpm.cydsn\TopDesign\TopDesign.cysch
-C:\Users\austi\Desktop\SeatPM\Microcontroller\PSoC-Project\seatpm\seatpm.cydsn\seatpm.cydwr
