@@ -45,6 +45,10 @@ int main(void)
     Cy_SysEnableCM4(CY_CORTEX_M4_APPL_ADDR); 
 
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+    struct GoniometerTransferConfigs configs;
+    InitializeGoniometerTranferConfigs(configs);
+    
+    goni_a_MasterWrite(&configs.a0);
     
     for(;;)
     {

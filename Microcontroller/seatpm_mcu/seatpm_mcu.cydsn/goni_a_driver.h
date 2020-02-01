@@ -22,6 +22,11 @@
 #include "project.h"
 #include "goniometer_driver.h"
 
+void goni_a_ISR();
+bool goni_a_isMasterBusy();
+bool goni_a_Read(transfer_config config);
+bool goni_a_Write(transfer_config config, uint8 numberOfBytes);
+
 #endif
 
 /* [] END OF FILE */

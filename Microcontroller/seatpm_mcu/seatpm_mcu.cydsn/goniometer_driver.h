@@ -29,6 +29,7 @@
 #define B1_ADDR ALTERNATE_ADDRESS
     
 typedef cy_stc_scb_i2c_master_xfer_config_t transfer_config;
+typedef cy_en_scb_i2c_status_t i2c_status;
 
 struct GoniometerTransferConfigs {
     transfer_config a0, a1, b0, b1;
