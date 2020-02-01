@@ -48,8 +48,6 @@
           <File BuildType="BUILD" Toolchain="">cy_ble_config.h</File>
           <File BuildType="BUILD" Toolchain="">system_psoc6.h</File>
           <File BuildType="BUILD" Toolchain="">adxl345_registers.h</File>
-          <File BuildType="BUILD" Toolchain="">goni_a_driver.h</File>
-          <File BuildType="BUILD" Toolchain="">goni_a_driver.c</File>
           <File BuildType="BUILD" Toolchain="">goniometer_driver.h</File>
           <File BuildType="BUILD" Toolchain="">goniometer_driver.c</File>
         </Files>

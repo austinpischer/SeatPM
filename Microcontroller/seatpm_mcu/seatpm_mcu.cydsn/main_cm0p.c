@@ -20,22 +20,6 @@
 #include "goniometer_driver.h"
 
 //=============================================================================
-// Global Variables
-//=============================================================================
-// All global variables should be named with a preceding "g_"
-
-// Accelerometer RX/TX buffers
-// The SeatPM has 2 goniometers with 2 accelerometers each.
-// Each accelerometer needs a read buffer and a write buffer.
-//      Thus, a/b refers to the goniometer
-//      and 0/1 refers to each accelerometer in the goniometer 
-
-uint8 g_a0_Buffer[BUFFER_SIZE];
-uint8 g_a1_Buffer[BUFFER_SIZE];
-uint8 g_b0_Buffer[BUFFER_SIZE];
-uint8 g_b1_Buffer[BUFFER_SIZE];
-
-//=============================================================================
 // Main Function (Core 0)
 //=============================================================================
 int main(void)
