@@ -32,8 +32,6 @@ int main(void)
     struct GoniometerTransferConfigs configs;
     InitializeGoniometerTranferConfigs(configs);
     
-    goni_a_MasterWrite(&configs.a0);
-    
     for(;;)
     {
         /* Place your application code here. */

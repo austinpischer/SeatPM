@@ -50,16 +50,6 @@ struct GoniometerTransferConfigs {
 
 void InitializeGoniometerTranferConfigs(struct GoniometerTransferConfigs myConfigs);
 
-bool Accel_MasterRead(CySCB_Type base,
-                      cy_stc_scb_i2c_master_xfer_config_t xferConfig,
-                      cy_stc_scb_i2c_context_t i2cContext,
-                      uint32_t byteCount);
-
-bool Accel_MasterWrite(CySCB_Type base,
-                       cy_stc_scb_i2c_master_xfer_config_t xferConfig,
-                       cy_stc_scb_i2c_context_t i2cContext,
-                       uint32_t byteCount);
-
 #endif    
     
 /* [] END OF FILE */
