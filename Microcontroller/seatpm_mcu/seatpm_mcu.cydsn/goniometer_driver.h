@@ -21,6 +21,7 @@
 
 #include "project.h"
 #include "adxl345_registers.h"
+#include "accelerometer_driver.h"
     
 #define BUFFER_SIZE 10
 #define A0_ADDR DEFAULT_ADDRESS
@@ -44,11 +45,12 @@ uint8 g_a1_Buffer[BUFFER_SIZE];
 uint8 g_b0_Buffer[BUFFER_SIZE];
 uint8 g_b1_Buffer[BUFFER_SIZE];
 
-struct GoniometerTransferConfigs {
+struct xferConfigs {
     cy_stc_scb_i2c_master_xfer_config_t a0, a1, b0, b1;
 };
 
-void InitializeGoniometerTranferConfigs(struct GoniometerTransferConfigs myConfigs);
+void InitializeGoniometerTranferConfigs(struct xferConfigs myConfigs);
+void SetupGoniometers(struct xferConfigs myConfigs);
 
 #endif    
     

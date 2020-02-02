@@ -27,7 +27,7 @@ extern uint8 g_b1_Buffer[BUFFER_SIZE];
 /* ============================================================================
  *
  */
-void InitializeGoniometerTranferConfigs(struct GoniometerTransferConfigs myConfigs)
+void InitializeGoniometerTranferConfigs(struct xferConfigs myConfigs)
 {
     /* buffer */
     myConfigs.a0.buffer = g_a0_Buffer;
@@ -52,6 +52,14 @@ void InitializeGoniometerTranferConfigs(struct GoniometerTransferConfigs myConfi
     myConfigs.a1.xferPending = false;
     myConfigs.b0.xferPending = false;
     myConfigs.b1.xferPending = false;
+}
+
+void SetupGoniometers(struct xferConfigs myConfigs)
+{
+    SetUpAccelerometer(goni_a_HW, &myConfigs.a0, &goni_a_context);
+    SetUpAccelerometer(goni_a_HW, &myConfigs.a1, &goni_a_context);
+    SetUpAccelerometer(goni_b_HW, &myConfigs.b0, &goni_b_context);
+    SetUpAccelerometer(goni_b_HW, &myConfigs.b1, &goni_b_context);
 }
 
 

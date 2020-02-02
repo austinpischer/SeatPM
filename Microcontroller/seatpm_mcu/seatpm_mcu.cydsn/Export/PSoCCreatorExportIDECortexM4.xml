@@ -52,6 +52,8 @@
           <File BuildType="BUILD" Toolchain="">goniometer_driver.c</File>
           <File BuildType="BUILD" Toolchain="">accelerometer_driver.h</File>
           <File BuildType="BUILD" Toolchain="">accelerometer_driver.c</File>
+          <File BuildType="BUILD" Toolchain="">goni_a_driver.h</File>
+          <File BuildType="BUILD" Toolchain="">goni_a_driver.c</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\Microcontroller\seatpm_mcu\seatpm_mcu.cydsn\Generated_Source\PSoC6">

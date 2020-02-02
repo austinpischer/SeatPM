@@ -21,27 +21,33 @@
 
 #include "project.h"
 #include "adxl345_registers.h"
-/* 
-bool Accel_MasterRead(CySCB_Type base,
-                      cy_stc_scb_i2c_master_xfer_config_t xferConfig,
-                      cy_stc_scb_i2c_context_t i2cContext,
+
+/* Low Level */
+bool Accel_MasterRead(CySCB_Type *hw,
+                      cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
+                      cy_stc_scb_i2c_context_t *i2cContext,
                       uint32_t byteCount);
 
-bool Accel_MasterWrite(CySCB_Type base,
-                       cy_stc_scb_i2c_master_xfer_config_t xferConfig,
-                       cy_stc_scb_i2c_context_t i2cContext,
+bool Accel_MasterWrite(CySCB_Type *hw,
+                       cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
+                       cy_stc_scb_i2c_context_t *i2cContext,
                        uint32_t byteCount);
 
-void Accel_ReadDataRegisters(CySCB_Type base,
-                             cy_stc_scb_i2c_master_xfer_config_t xferConfig,
-                             cy_stc_scb_i2c_context_t i2cContext);
+/* Mid Level */
+void Accel_ReadDataRegisters(CySCB_Type *hw,
+                             cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
+                             cy_stc_scb_i2c_context_t *i2cContext);
 
-void Accel_WriteControlRegister(const uint8 RegisterAddress, 
+void Accel_WriteConfigRegister(const uint8 RegisterAddress, 
                                 uint8 value, 
-                                CySCB_Type base,
-                                cy_stc_scb_i2c_master_xfer_config_t xferConfig,
-                                cy_stc_scb_i2c_context_t i2cContext);
-*/
+                                CySCB_Type *hw,
+                                cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
+                                cy_stc_scb_i2c_context_t *i2cContext);
+
+void SetUpAccelerometer(CySCB_Type *hw,
+                        cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
+                        cy_stc_scb_i2c_context_t *i2cContext);
+
 #endif
 
 /* [] END OF FILE */
