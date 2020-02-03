@@ -23,7 +23,7 @@
  *
  */
 bool Accel_MasterRead(CySCB_Type *hw,
-                      cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
+                      xfer_config *xferConfig,
                       cy_stc_scb_i2c_context_t *i2cContext,
                       uint32_t byteCount) 
 {
@@ -99,7 +99,7 @@ bool Accel_MasterRead(CySCB_Type *hw,
  *
  */
 bool Accel_MasterWrite(CySCB_Type *hw,
-                       cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
+                       xfer_config *xferConfig,
                        cy_stc_scb_i2c_context_t *i2cContext,
                        uint32_t byteCount)
 {
@@ -167,7 +167,7 @@ bool Accel_MasterWrite(CySCB_Type *hw,
  *
  */
 void Accel_ReadDataRegisters(CySCB_Type *hw,
-                             cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
+                             xfer_config *xferConfig,
                              cy_stc_scb_i2c_context_t *i2cContext)
 {
     // First, write first ADXL345 Register Number you want to read
@@ -187,7 +187,7 @@ void Accel_ReadDataRegisters(CySCB_Type *hw,
 void Accel_WriteConfigRegister(const uint8 RegisterAddress, 
                                 uint8 value, 
                                 CySCB_Type *hw,
-                                cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
+                                xfer_config *xferConfig,
                                 cy_stc_scb_i2c_context_t *i2cContext)
 {
     xferConfig->buffer[0] = RegisterAddress;
@@ -200,9 +200,9 @@ void Accel_WriteConfigRegister(const uint8 RegisterAddress,
  * 
  * Description: Writes values to all the various accelerometer config registers.
  */
-void SetUpAccelerometer(CySCB_Type *hw,
-                        cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
-                        cy_stc_scb_i2c_context_t *i2cContext)
+void InitializeAccelerometer(CySCB_Type *hw,
+                             xfer_config *xferConfig,
+                             cy_stc_scb_i2c_context_t *i2cContext)
 {
     /* A setting of 0 in the measure bit places the part into standby mode,
      * and a setting of 1 places the part into measurement mode. The
@@ -238,8 +238,42 @@ void SetUpAccelerometer(CySCB_Type *hw,
      */
     uint8 DataRange = 0b00000011;
     Accel_WriteConfigRegister(DATA_FORMAT, DataRange, hw, xferConfig, i2cContext);
-
 }
 
+
+
+int16 CalculateAccelVectorComponent(uint8 dataReg0, uint8 dataReg1)
+{
+    int16 axisAcceleration;
+    
+    // "The output data is twos complement, 
+    //      with DATAx0 as the least significant byte
+    //      and DATAx1 as the most significant byte,
+    //      where x represent X, Y, or Z."
+    // Thus, left shift upper byte and OR in the lower.
+    axisAcceleration = dataReg1<<8|dataReg0;
+    return(axisAcceleration);
+}
+
+struct accel_vector CalculateAccelVector(xfer_config xferConfig)
+{
+    struct accel_vector myVector;
+    uint8 x0, x1, y0, y1, z0, z1;
+    
+    x0 = xferConfig.buffer[0];
+    x1 = xferConfig.buffer[1];
+    
+    y0 = xferConfig.buffer[2];
+    y1 = xferConfig.buffer[3];
+    
+    z0 = xferConfig.buffer[4];
+    z1 = xferConfig.buffer[5];
+    
+    myVector.x = CalculateAccelVectorComponent(x0, x1);
+    myVector.y = CalculateAccelVectorComponent(y0, y1);
+    myVector.z = CalculateAccelVectorComponent(z0, z1);
+    
+    return(myVector);
+}
 
 /* [] END OF FILE */

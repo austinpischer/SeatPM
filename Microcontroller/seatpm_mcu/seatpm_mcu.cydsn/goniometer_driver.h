@@ -22,36 +22,24 @@
 #include "project.h"
 #include "adxl345_registers.h"
 #include "accelerometer_driver.h"
+ #include "math.h"
     
 #define BUFFER_SIZE 10
-#define A0_ADDR DEFAULT_ADDRESS
-#define A1_ADDR ALTERNATE_ADDRESS
-#define B0_ADDR DEFAULT_ADDRESS
-#define B1_ADDR ALTERNATE_ADDRESS
+#define THIGH_ACCEL_ADDRESS DEFAULT_ADDRESS
+#define SHANK_ACCEL_ADDRESS DEFAULT_ADDRESS
 
-//=============================================================================
-// Global Variables
-//=============================================================================
-// All global variables should be named with a preceding "g_"
-
-// Accelerometer RX/TX buffers
-// The SeatPM has 2 goniometers with 2 accelerometers each.
-// Each accelerometer needs a read buffer and a write buffer.
-//      Thus, a/b refers to the goniometer
-//      and 0/1 refers to each accelerometer in the goniometer 
-
-uint8 g_a0_Buffer[BUFFER_SIZE];
-uint8 g_a1_Buffer[BUFFER_SIZE];
-uint8 g_b0_Buffer[BUFFER_SIZE];
-uint8 g_b1_Buffer[BUFFER_SIZE];
-
-struct xferConfigs {
-    cy_stc_scb_i2c_master_xfer_config_t a0, a1, b0, b1;
+    
+struct goni_configs {
+    xfer_config thigh_accel, shank_accel;
 };
 
-void InitializeGoniometerTranferConfigs(struct xferConfigs myConfigs);
-void SetupGoniometers(struct xferConfigs myConfigs);
-
+void InitializeGoniConfigs(struct goni_configs *myConfigs,
+                           uint8 *thigh_accel_buffer, 
+                           uint8 *shank_accel_buffer);
+void InitializeGoniAccels(struct goni_configs *myConfigs);
+void Goniometer_ReadDataRegisters(struct goni_configs myConfigs);
+uint16 CalculateKneeAngle(struct accel_vector thigh_vector,
+                          struct accel_vector shank_vector);
 #endif    
     
 /* [] END OF FILE */

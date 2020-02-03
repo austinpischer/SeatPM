@@ -16,51 +16,83 @@
  * ============================================================================
 */
 
-#include "project.h"
 #include "goniometer_driver.h"
 
-extern uint8 g_a0_Buffer[BUFFER_SIZE];
-extern uint8 g_a1_Buffer[BUFFER_SIZE];
-extern uint8 g_b0_Buffer[BUFFER_SIZE];
-extern uint8 g_b1_Buffer[BUFFER_SIZE];
-
-/* ============================================================================
+/******************************************************************************
  *
  */
-void InitializeGoniometerTranferConfigs(struct xferConfigs myConfigs)
-{
+void InitializeGoniConfigs(struct goni_configs *myConfigs,
+                           uint8 *thigh_accel_buffer, 
+                           uint8 *shank_accel_buffer)
+{    
     /* buffer */
-    myConfigs.a0.buffer = g_a0_Buffer;
-    myConfigs.a1.buffer = g_a1_Buffer;
-    myConfigs.b0.buffer = g_b0_Buffer;
-    myConfigs.b1.buffer = g_b1_Buffer;
+    myConfigs->thigh_accel.buffer = thigh_accel_buffer;
+    myConfigs->shank_accel.buffer = shank_accel_buffer;
     
     /* bufferSize */ 
-    myConfigs.a0.bufferSize = BUFFER_SIZE;
-    myConfigs.a1.bufferSize = BUFFER_SIZE;
-    myConfigs.b0.bufferSize = BUFFER_SIZE;
-    myConfigs.b1.bufferSize = BUFFER_SIZE;
+    myConfigs->thigh_accel.bufferSize = BUFFER_SIZE;
+    myConfigs->shank_accel.bufferSize = BUFFER_SIZE;
     
     /* Address */
-    myConfigs.a0.slaveAddress = A0_ADDR;
-    myConfigs.a1.slaveAddress = A1_ADDR;
-    myConfigs.b0.slaveAddress = B0_ADDR;
-    myConfigs.b1.slaveAddress = B1_ADDR;
+    myConfigs->thigh_accel.slaveAddress = THIGH_ACCEL_ADDRESS;
+    myConfigs->shank_accel.slaveAddress = SHANK_ACCEL_ADDRESS;
     
     /* Tranfer Pending */
-    myConfigs.a0.xferPending = false;
-    myConfigs.a1.xferPending = false;
-    myConfigs.b0.xferPending = false;
-    myConfigs.b1.xferPending = false;
+    myConfigs->thigh_accel.xferPending = false;
+    myConfigs->shank_accel.xferPending = false;
 }
 
-void SetupGoniometers(struct xferConfigs myConfigs)
+/******************************************************************************
+ *
+ */
+void InitializeGoniAccels(struct goni_configs *myConfigs)
 {
-    SetUpAccelerometer(goni_a_HW, &myConfigs.a0, &goni_a_context);
-    SetUpAccelerometer(goni_a_HW, &myConfigs.a1, &goni_a_context);
-    SetUpAccelerometer(goni_b_HW, &myConfigs.b0, &goni_b_context);
-    SetUpAccelerometer(goni_b_HW, &myConfigs.b1, &goni_b_context);
+    /* Initialize Thigh Accelerometer */
+    InitializeAccelerometer(goni_a_HW,
+                            &myConfigs->thigh_accel,
+                            &goni_a_context);
+    /* Initialize Shank Accelerometer */
+    InitializeAccelerometer(goni_a_HW,
+                            &myConfigs->shank_accel,
+                            &goni_a_context);
 }
 
+/******************************************************************************
+ *
+ */
+void Goniometer_ReadDataRegisters(struct goni_configs myConfigs)
+{
+    Accel_ReadDataRegisters(goni_a_HW, &myConfigs.thigh_accel, &goni_a_context);
+    Accel_ReadDataRegisters(goni_a_HW, &myConfigs.shank_accel, &goni_a_context);
+}
 
+/******************************************************************************
+ *
+ */
+uint16 CalculateKneeAngle(struct accel_vector thigh_vector,
+                          struct accel_vector shank_vector)
+{
+    double kneeAngle;
+    double dotProduct;
+    double aMagnitude, bMagnitude;
+    double ax, ay, az;
+    double bx, by, bz;
+    
+    ax = (double) thigh_vector.x;
+    ay = (double) thigh_vector.y;
+    az = (double) thigh_vector.z;
+    
+    bx = (double) shank_vector.x;
+    by = (double) shank_vector.y;
+    bz = (double) shank_vector.z;
+
+    dotProduct = (ax*bx)+(ay*by)+(az*bz); 
+    
+    aMagnitude = sqrt((ax*ax)+(ay*ay)+(az*az));
+    bMagnitude = sqrt((bx*bx)+(by*by)+(bz*bz));
+    
+    kneeAngle = acos(dotProduct/(aMagnitude*bMagnitude));
+    
+    return(kneeAngle);
+}
 /* [] END OF FILE */
