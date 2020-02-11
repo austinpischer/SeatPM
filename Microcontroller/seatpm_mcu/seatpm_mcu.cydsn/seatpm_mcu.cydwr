@@ -4,7 +4,27 @@
     <Group key="v1" />
   </Group>
   <Data key="DataVersionKey" value="2" />
-  <Group key="DWRInstGuidMapping" />
+  <Group key="DWRInstGuidMapping">
+    <Group key="Interrupt">
+      <Data key="43c97b1d-97d4-436b-a72c-1327e34a0653/b9a438dd-31dc-4d3f-932a-b92d7b255394" value="goni_b_SCB_IRQ" />
+      <Data key="61263e8a-3ed9-46e9-ba7a-4bd771b3e2d4" value="goni_sample_interrupt" />
+      <Data key="e5aa071a-a426-40cb-a9a2-86993e404f8a/b9a438dd-31dc-4d3f-932a-b92d7b255394" value="goni_a_SCB_IRQ" />
+    </Group>
+  </Group>
+  <Group key="Interrupt">
+    <Group key="61263e8a-3ed9-46e9-ba7a-4bd771b3e2d4">
+      <Group key="CortexM0p">
+        <Data key="Assigned" value="True" />
+        <Data key="Priority" value="Default" />
+        <Data key="Vector" value="8" />
+      </Group>
+      <Group key="CortexM4">
+        <Data key="Assigned" value="False" />
+        <Data key="Priority" value="Default" />
+        <Data key="Vector" value="-1" />
+      </Group>
+    </Group>
+  </Group>
   <Group key="M0S8Clock">
     <Group key="DesigneWideClks">
       <Group key="8AF878A3-9701-44BB-864C-92E241DEEFC9">
