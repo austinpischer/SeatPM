@@ -21,6 +21,7 @@
 
 #include "project.h"
 #include "adxl345_registers.h"
+#include "adxl345_i2c_addresses.h"
     
 typedef cy_stc_scb_i2c_master_xfer_config_t xfer_config;
     
@@ -50,6 +51,7 @@ void Accel_WriteConfigRegister(const uint8 RegisterAddress,
                                 cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
                                 cy_stc_scb_i2c_context_t *i2cContext);
 
+/* High Level */
 void InitializeAccelerometer(CySCB_Type *hw,
                              xfer_config *xferConfig,
                              cy_stc_scb_i2c_context_t *i2cContext);

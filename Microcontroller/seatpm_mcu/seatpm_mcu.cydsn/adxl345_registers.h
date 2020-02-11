@@ -26,10 +26,6 @@
 #ifndef ADXL345_REGISTERS_H
 #define ADXL345_REGISTERS_H
 
-/* I2C Addresses */   
-#define DEFAULT_ADDRESS 0x1D
-#define ALTERNATE_ADDRESS 0x3B
-
 /* Device ID Registers */
 #define DEVID 0x00 // R, Device ID.
 

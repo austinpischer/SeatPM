@@ -48,13 +48,13 @@ void InitializeGoniConfigs(struct goni_configs *myConfigs,
 void InitializeGoniAccels(struct goni_configs *myConfigs)
 {
     /* Initialize Thigh Accelerometer */
-    InitializeAccelerometer(goni_a_HW,
+    InitializeAccelerometer(goniometer_i2c_HW,
                             &myConfigs->thigh_accel,
-                            &goni_a_context);
+                            &goniometer_i2c_context);
     /* Initialize Shank Accelerometer */
-    InitializeAccelerometer(goni_a_HW,
+    InitializeAccelerometer(goniometer_i2c_HW,
                             &myConfigs->shank_accel,
-                            &goni_a_context);
+                            &goniometer_i2c_context);
 }
 
 /******************************************************************************
@@ -62,8 +62,8 @@ void InitializeGoniAccels(struct goni_configs *myConfigs)
  */
 void Goniometer_ReadDataRegisters(struct goni_configs myConfigs)
 {
-    Accel_ReadDataRegisters(goni_a_HW, &myConfigs.thigh_accel, &goni_a_context);
-    Accel_ReadDataRegisters(goni_a_HW, &myConfigs.shank_accel, &goni_a_context);
+    Accel_ReadDataRegisters(goniometer_i2c_HW, &myConfigs.thigh_accel, &goniometer_i2c_context);
+    Accel_ReadDataRegisters(goniometer_i2c_HW, &myConfigs.shank_accel, &goniometer_i2c_context);
 }
 
 /******************************************************************************
