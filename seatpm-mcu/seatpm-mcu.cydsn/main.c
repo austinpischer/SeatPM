@@ -16,6 +16,12 @@ int main(void)
     CyGlobalIntEnable; /* Enable global interrupts. */
 
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+    
+    //========================================================================
+    // Screen Startup Code
+    Screen_Start();
+    char TestString[] = "Test";
+    Screen_PrintString(TestString);
 
     for(;;)
     {
