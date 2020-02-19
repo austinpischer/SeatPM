@@ -10,15 +10,21 @@
  * ========================================
 */
 #include "project.h"
+#include "austin_debug.h"
 
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
 
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+    
     Screen_Start();
-    char test[] = "Hello, world!";
-    Screen_PrintString(test);
+    
+    #ifdef AUSTIN_DEBUG
+    //====== Screen Test Code =====
+    DEBUG_PRINT("Hello, World!"); 
+    #endif
+    
     for(;;)
     {
         /* Place your application code here. */

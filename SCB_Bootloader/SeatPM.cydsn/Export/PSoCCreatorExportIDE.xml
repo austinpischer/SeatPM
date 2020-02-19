@@ -38,6 +38,7 @@
         <Files Root="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
           <File BuildType="BUILD" Toolchain="">main.c</File>
           <File BuildType="BUILD" Toolchain="">cyapicallbacks.h</File>
+          <File BuildType="BUILD" Toolchain="">austin_debug.h</File>
           <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer\AcceleromationVectorModel\acceleration_vector.c</File>
           <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer\AcceleromationVectorModel\acceleration_vector.h</File>
         </Files>
