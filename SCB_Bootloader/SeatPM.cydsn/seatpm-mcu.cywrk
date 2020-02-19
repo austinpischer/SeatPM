@@ -2,7 +2,7 @@
 <CyXmlSerializer>
 <!--This file is machine generated and read. It is not intended to be edited by hand.-->
 <!--Due to this, there is no schema for this file.-->
-<CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="SeatPM-000" persistent="SeatPM-000.cywrk" platform="NOT_USED">
+<CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="seatpm-mcu" persistent="seatpm-mcu.cywrk" platform="NOT_USED">
 <current_project name=".\SeatPM.cyprj" />
 <wrkspc_folders />
 <files />

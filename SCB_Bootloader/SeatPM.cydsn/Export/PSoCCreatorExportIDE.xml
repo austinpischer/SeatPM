@@ -6,7 +6,7 @@
     <Toolchain Name="ARM GCC Generic" Selected="True">
       <Tool Name="prebuild" Command="" Options="" />
       <Tool Name="assembler" Command="arm-none-eabi-as.exe" Options="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=${OutputDir}/${CompileFile}.lst -g -W" />
-      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I.\AustinsComponentDrivers -I.\AustinsComponentDrivers\Accelerometer -I.\AustinsComponentDrivers\UserInterface -I.\AustinsComponentDrivers\UserInterface\FiniteStateMachine -I.\AustinsComponentDrivers\Goniometer -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Og" />
+      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I.\AustinsComponentDrivers -I.\AustinsComponentDrivers\Goniometer -I.\AustinsComponentDrivers\Goniometer\ADXL345 -I.\AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer -I.\AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer\AcceleromationVectorModel -I.\AustinsComponentDrivers\UserInterface\FiniteStateMachine -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Og" />
       <Tool Name="linker" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects" />
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
@@ -37,20 +37,9 @@
       <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
         <Files Root="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
           <File BuildType="BUILD" Toolchain="">main.c</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\goniometer_driver.c</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\UserInterface\FiniteStateMachine\user_interface_fsm.c</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Accelerometer\accelerometer_driver.c</File>
-          <File BuildType="BUILD" Toolchain="">adxl345_driver.c</File>
-          <File BuildType="BUILD" Toolchain="">acceleration_vector.c</File>
           <File BuildType="BUILD" Toolchain="">cyapicallbacks.h</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\goniometer_driver.h</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\UserInterface\FiniteStateMachine\user_interface_fsm.h</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\UserInterface\FiniteStateMachine\finite_state_machine.h</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Accelerometer\adxl345_i2c_addresses.h</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Accelerometer\adxl345_registers.h</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Accelerometer\accelerometer_driver.h</File>
-          <File BuildType="BUILD" Toolchain="">adxl345_driver.h</File>
-          <File BuildType="BUILD" Toolchain="">acceleration_vector.h</File>
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer\AcceleromationVectorModel\acceleration_vector.c</File>
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer\AcceleromationVectorModel\acceleration_vector.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn\Generated_Source\PSoC4">
@@ -141,6 +130,37 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_scl_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_SCB_IRQ.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_SCB_IRQ.h</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\UserInterface\user_interface_fsm.c</File>
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\UserInterface\user_interface_fsm.h</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\UserInterface\FiniteStateMachine\finite_state_machine.h</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer\accelerometer_driver.c</File>
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer\accelerometer_driver.h</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\adxl345_driver.c</File>
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\adxl345_driver.h</File>
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\adxl345_i2c_addresses.h</File>
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\adxl345_registers.h</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\goniometer_driver.h</File>
+          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\goniometer_driver.c</File>
         </Files>
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\codegentemp">
