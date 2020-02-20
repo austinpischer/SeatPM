@@ -16,6 +16,8 @@
  *      
  * ============================================================================
 */
+
+/* Multiple inclusion protection. See: austin_debug.h */
 #ifndef ACCELERATION_VECTOR_H
 #define ACCELERATION_VECTOR_H
 

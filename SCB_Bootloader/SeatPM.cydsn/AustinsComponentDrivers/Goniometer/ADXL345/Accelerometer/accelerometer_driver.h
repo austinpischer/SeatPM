@@ -17,11 +17,12 @@
  * ============================================================================
 */
 
+/* Multiple inclusion protection. See: austin_debug.h */
 #ifndef ACCELEROMETER_DRIVER_H
 #define ACCELEROMETER_DRIVER_H
 
-#include "project.h"
-#include "acceleration_vector.h"
+#include "project.h"                // For type definitions, etc.
+#include "acceleration_vector.h"    // An accelerometer *has an* acceleration vector
     
 #define FILTER_DATA_SET_SIZE 5
     

@@ -16,13 +16,15 @@
  *      
  * ============================================================================
 */
+
+/* Multiple inclusion protection. See: austin_debug.h */
 #ifndef ADXL_345_DRIVER_H
 #define ADXL_345_DRIVER_H
     
-#include "project.h"
-#include "adxl345_registers.h"
-#include "adxl345_i2c_addresses.h"
-#include "accelerometer_driver.h"
+#include "project.h"                // For type definitions, etc.
+#include "adxl345_registers.h"      // Datasheet macros
+#include "adxl345_i2c_addresses.h"  // Datasheet macros
+#include "accelerometer_driver.h"   // ADXL345 *is an* accelerometer
 
 #define ACCELEROMETER_READ_BUFFER_SIZE 10
 #define ACCELEROMETER_WRITE_BUFFER_SIZE 10

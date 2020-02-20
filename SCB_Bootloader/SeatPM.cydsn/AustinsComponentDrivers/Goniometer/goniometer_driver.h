@@ -17,14 +17,13 @@
  * ============================================================================
 */
 
-#ifndef GONIOMETER_DRIVER_H
+/* Multiple inclusion protection. See: austin_debug.h */
+#ifndef GONIOMETER_DRIVER_H 
 #define GONIOMETER_DRIVER_H
 
-#include "project.h"
-#include "accelerometer_driver.h"
-#include "adxl345_registers.h"
-#include "adxl345_driver.h"
-#include "math.h"
+#include "project.h"        // For type definitions, etc.
+#include "adxl345_driver.h" // Our Goniometer *is composed of* 2 ADXL345 accelerometers
+#include "math.h"           // For calculating knee angle
     
 #define UNDEFINED_ANGLE 0;
 
@@ -39,6 +38,7 @@ struct Goniometer
 
 void Goniometer_Intitialize(Goniometer *me);
 void Goniometer_CalculateKneeAngle(Goniometer *me);
+
 #endif    
     
 /* [] END OF FILE */

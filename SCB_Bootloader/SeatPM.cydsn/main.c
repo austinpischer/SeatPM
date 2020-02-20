@@ -11,6 +11,7 @@
 */
 #include "project.h"
 #include "austin_debug.h"
+#include "goniometer_driver.h"
 
 int main(void)
 {
@@ -18,11 +19,23 @@ int main(void)
 
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     
+    /* Hardware Startup */
+    I2C_Start();
     Screen_Start();
+    
+    /* Goniometer Setup */
+    Goniometer KneeGoniometer;
+    
     
     #ifdef AUSTIN_DEBUG
     //====== Screen Test Code =====
-    DEBUG_PRINT("Hello, World!"); 
+    DEBUG_PRINT("Hello, World!");
+    CyDelay(2000); // Wait 2 seconds
+    
+    DEBUG_PRINT("Init Goni");
+    
+    
+    //=====
     #endif
     
     for(;;)
