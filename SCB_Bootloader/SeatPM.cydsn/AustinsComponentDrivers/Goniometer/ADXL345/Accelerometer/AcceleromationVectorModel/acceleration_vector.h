@@ -22,6 +22,7 @@
 #define ACCELERATION_VECTOR_H
 
 #include "project.h"
+#include "austin_debug.h"
     
 #define UNDEFINED_COMPONENT_MAGNITUDE -32769 // Just outside of int16 range
     
@@ -34,6 +35,6 @@ struct AccelerationVector
     Component x,y,z;
 };
 
-void AccelerationVector_Initialize(AccelerationVector *me);
+void AccelerationVector_Constructor(AccelerationVector *me);
 #endif
 /* [] END OF FILE */

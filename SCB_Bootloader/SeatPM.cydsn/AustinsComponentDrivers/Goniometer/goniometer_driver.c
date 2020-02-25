@@ -18,15 +18,15 @@
 */
 
 #include "goniometer_driver.h"
-
 /******************************************************************************
  *
  */
-void Goniometer_Intitialize(Goniometer *me)
+void Goniometer_Constructor(Goniometer *me)
 {
-    me->CurrentAngle = UNDEFINED_ANGLE;
-    ADXL345_Initialize(&(me->Accelerometer_A));
-    ADXL345_Initialize(&(me->Accelerometer_B));
+    DEBUG_PRINT("Goni Constructor");
+    me->CurrentAngle = INVALID_ANGLE;
+    ADXL345_Constructor(&(me->Accelerometer_A));
+    ADXL345_Constructor(&(me->Accelerometer_B));
 }
 
 /******************************************************************************
@@ -52,11 +52,11 @@ void Goniometer_CalculateCurrentAngle(Goniometer *me)
     bz = (double) me->Accelerometer_B.Base.CurrentAcceleration.z;
     
     // Algorithm Starts HERE
-    dotProduct = (ax*bx)+(ay*by)+(az*bz); 
-    
+    dotProduct = (ax*bx)+(ay*by)+(az*bz);
     aMagnitude = sqrt((ax*ax)+(ay*ay)+(az*az));
     bMagnitude = sqrt((bx*bx)+(by*by)+(bz*bz));
     
     me->CurrentAngle = acos(dotProduct/(aMagnitude*bMagnitude));
 }
+
 /* [] END OF FILE */

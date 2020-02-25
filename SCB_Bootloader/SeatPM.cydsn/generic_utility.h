@@ -15,6 +15,13 @@
 #define GENERIC_UTILITY_H
     
 typedef unsigned int uint;
+
+typedef enum bool bool;
+enum bool
+{   
+    FALSE = 0,
+    TRUE = 1,
+};
     
 #endif 
 

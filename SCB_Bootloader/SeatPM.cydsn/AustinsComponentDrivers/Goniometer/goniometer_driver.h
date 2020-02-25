@@ -23,21 +23,21 @@
 
 #include "project.h"        // For type definitions, etc.
 #include "adxl345_driver.h" // Our Goniometer *is composed of* 2 ADXL345 accelerometers
-#include "math.h"           // For calculating knee angle
+#include <math.h>           // For calculating knee angle
+#include "austin_debug.h"
     
-#define UNDEFINED_ANGLE 0;
+#define INVALID_ANGLE 0
 
 typedef struct Goniometer Goniometer;
 struct Goniometer
 {
-    char* Name; 
     ADXL345 Accelerometer_A;
     ADXL345 Accelerometer_B;
     double CurrentAngle;
 };
 
-void Goniometer_Intitialize(Goniometer *me);
-void Goniometer_CalculateKneeAngle(Goniometer *me);
+void Goniometer_Constructor(Goniometer *me);
+void Goniometer_CalculateCurrentAngle(Goniometer *me);
 
 #endif    
     

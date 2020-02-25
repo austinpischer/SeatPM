@@ -22,23 +22,22 @@
 /******************************************************************************
  *
  */
-void Accelerometer_Initialize(Accelerometer *me)
+void Accelerometer_Constructor(Accelerometer *me)
 {
+    DEBUG_PRINT("Accel Constr");
     unsigned int Index;
     for(Index = 0; Index < FILTER_DATA_SET_SIZE; Index++)
     {
-        AccelerationVector_Initialize(&(me->FilterData[Index]));
+        AccelerationVector_Constructor(&(me->FilterData[Index]));
     }
     
-    AccelerationVector_Initialize(&(me->CurrentAcceleration));
-    AccelerationVector_Initialize(&(me->FilteredAcceleration));
+    AccelerationVector_Constructor(&(me->CurrentAcceleration));
+    AccelerationVector_Constructor(&(me->FilteredAcceleration));
     
     me->MovingAverageFilter_OldestIndex = 0;
+   
 }
 
-/******************************************************************************
- *
- */
 void Accelerometer_UpdateFilterData_MovingAverageFilter(Accelerometer *me)
 {
     me->FilterData[me->MovingAverageFilter_OldestIndex] = me->CurrentAcceleration;
@@ -52,9 +51,6 @@ void Accelerometer_UpdateFilterData_MovingAverageFilter(Accelerometer *me)
     }
 }
 
-/******************************************************************************
- *
- */
 void Accelerometer_CalculateFilteredAcceleration(Accelerometer *me)
 {
     //Moving Average Filter

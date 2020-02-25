@@ -23,22 +23,23 @@
 
 #include "project.h"                // For type definitions, etc.
 #include "acceleration_vector.h"    // An accelerometer *has an* acceleration vector
+#include "generic_utility.h"
     
 #define FILTER_DATA_SET_SIZE 5
+
     
-typedef unsigned int uint;
+typedef struct Accelerometer_VectorTable Accelerometer_VectorTable;
     
 typedef struct Accelerometer Accelerometer;
 struct Accelerometer
 {
-    char* Name;
     AccelerationVector CurrentAcceleration;
     AccelerationVector FilterData[FILTER_DATA_SET_SIZE]; 
     AccelerationVector FilteredAcceleration;
     uint MovingAverageFilter_OldestIndex;
 };
 
-void Accelerometer_Initialize(Accelerometer *me);
+void Accelerometer_Constructor(Accelerometer *me);
 void Accelerometer_UpdateFilterData_MovingAverageFilter(Accelerometer *me);
 void Accelerometer_CalculateFilteredAcceleration(Accelerometer *me);
 

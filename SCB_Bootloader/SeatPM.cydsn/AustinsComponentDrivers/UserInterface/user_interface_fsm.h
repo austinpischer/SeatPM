@@ -2,6 +2,9 @@
 #define USER_INTERFACE_FSM_H
 
 #include "finite_state_machine.h"
+#include "goniometer_driver.h"
+#include "project.h"
+#include "stdio.h"
 
 // Define "struct <tag>" as type "<tag>"
 typedef struct UserInterface_FSM UserInterface_FSM;
@@ -10,7 +13,9 @@ typedef struct UserInterface_FSM_Event UserInterface_FSM_Event;
 // Derived class of FiniteStateMachine base class
 struct UserInterface_FSM
 {
+    
     FiniteStateMachine parent; // Acheiving inheritance by requiring base class
+    char KneeAngleString[17]; // Limit to 16 characters + null terminator
 };
 
 // Derived class of Event 
@@ -32,6 +37,10 @@ enum UserInterface_FSM_Signals
 // User Interface FSM function prototypes:
 // 
 void UserInterface_FSM_Constructor(UserInterface_FSM *UI_FSM);
+
+void UserInterface_FSM_UpdateCurrentKneeAngleString(
+                                            UserInterface_FSM *UI_FSM, 
+                                            Goniometer* KneeGoniometer);
                                 
 //=============================================================================
 // User Interface FSM state function protoypes:

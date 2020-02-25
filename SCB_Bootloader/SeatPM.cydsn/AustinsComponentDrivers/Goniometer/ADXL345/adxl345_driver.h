@@ -41,6 +41,9 @@ struct ADXL345
     uint8 WriteBuffer[ACCELEROMETER_WRITE_BUFFER_SIZE];
 };
 
+void ADXL345_InitializeConfigRegisters(ADXL345 *me);
+void ADXL345_Constructor(ADXL345 *me);
+
 /* Low Level */
 void ADXL345_Read(ADXL345 *me, uint8 NumberOfBytesToRead);
 void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite);
@@ -52,12 +55,12 @@ void ADXL345_WriteConfigRegister(ADXL345 *me,
                                  uint8 ByteToWrite);
 
 /* High Level */
-void ADXL345_CalculateAccelerationVector(ADXL345 *me);
-void ADXL345_Initialize(ADXL345 *me);
+void ADXL345_CalculateCurrentAcceleration(ADXL345 *me);
+
 
 /* Helper */
-int16 ADXL345_CalculateComponentMagnitude(uint8 dataReg0,
-                                          uint8 dataReg1);
+int16 ADXL345_CalculateComponentMagnitude(uint8 DataRegister0,
+                                          uint8 DataRegister1);
 
 #endif
 /* [] END OF FILE */

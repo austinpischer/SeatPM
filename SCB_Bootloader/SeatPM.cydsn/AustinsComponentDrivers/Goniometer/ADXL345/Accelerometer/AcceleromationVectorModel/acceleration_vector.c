@@ -19,8 +19,9 @@
 
 #include "acceleration_vector.h"
 
-void AccelerationVector_Initialize(AccelerationVector *me)
+void AccelerationVector_Constructor(AccelerationVector *me)
 {
+    //DEBUG_PRINT("AV Constr");
     me->x = UNDEFINED_COMPONENT_MAGNITUDE;
     me->y = UNDEFINED_COMPONENT_MAGNITUDE;
     me->z = UNDEFINED_COMPONENT_MAGNITUDE;

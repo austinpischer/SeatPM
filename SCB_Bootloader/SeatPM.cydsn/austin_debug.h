@@ -29,8 +29,9 @@
  *              When #ifndef returns false, none of the header code is compiled,
  *              and the effect is that the header code is only compiled once.
  */
-#ifndef AUSTIN_DEBUG_H 
-#define AUSTIN_DEBUG_H
+#ifndef AUSTIN_DEBUG_H // 1
+#define AUSTIN_DEBUG_H // 2
+//3:
     
 // Comment out "#define AUSTIN_DEBUG" to disable debugging output"
 // Uncomment "#define AUSTIN_DEBUG" to enable debugging output"  
@@ -42,12 +43,14 @@
  * 3) If AUSTIN_DEBUG is NOT defined...
  * 4) ...Set the DEBUG_PRINT macro function to do nothing. 
  */
-    
 #ifdef AUSTIN_DEBUG // START of preprocessor if/else statement.
-#define DEBUG_PRINT(string) (Screen_PrintString(string))
+#define DEBUG_PRINT(string) ({Screen_PrintString(string);\
+                              CyDelay(1000); \
+                              Screen_ClearDisplay();\
+                            })
 #else 
 #define DEBUG_PRINT(string) ()
 #endif // END of preprocessor if/else statement.
 
-#endif
+#endif // 4
 /* [] END OF FILE */
