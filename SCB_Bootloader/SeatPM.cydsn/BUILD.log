@@ -1,5 +1,15 @@
---------------- Build Started: 02/24/2020 21:08:35 Project: SeatPM, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
-The code generation step is up to date.
-The compile step is up to date, no work needs to be done.
-The link step is up to date, no work needs to be done.
---------------- Build Succeeded: 02/24/2020 21:08:35 ---------------
+--------------- Build Started: 03/05/2020 16:08:02 Project: SeatPM, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+cydsfit.exe -.appdatapath "C:\Users\austi\AppData\Local\Cypress Semiconductor\PSoC Creator\4.2" -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn\SeatPM.cyprj -d CY8C4245AXI-483 -s C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn\Generated_Source\PSoC4 -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE
+Elaborating Design...
+ADD: fit.M0015: information: One or more rows of flash have been configured to be protected; however, debugging has been enabled in the System DWR Editor. This means that while write restrictions are honored flash rows can still be read via SWD or JTAG. To prevent any ability to read the flash rows, disable debugging in the System DWR Editor.
+ * C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn\SeatPM.cydwr (Chip Protection)
+HDL Generation...
+Synthesis...
+Tech Mapping...
+Error: mpr.M0143: Too many clocks allocated for SCB components. (App=cydsfit)
+ADD: pft.M0040: information: The following 3 pin(s) will be assigned a location by the fitter: \IC2_B:scl(0)\, \IC2_B:sda(0)\, \PuTTY:tx(0)\
+Error: mpr.M0014: Resource limit: Maximum number of Serial Communication (SCB) exceeded (max=2, needed=3). (App=cydsfit)
+Dependency Generation...
+Cleanup...
+Error: fit.M0050: The fitter aborted due to errors, please address all errors and rebuild. (App=cydsfit)
+--------------- Build Failed: 03/05/2020 16:08:07 ---------------

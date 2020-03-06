@@ -62,14 +62,13 @@ int main(void)
         
         // 1) Get the accelerometer data for both accelerometers
         ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_A));
-        ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_B));
+        //ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_B));
         // 2) Calculate the acceleration vectors 
         //      from the data of both accelerometers
         ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_A));
         
-        DEBUG_PRINT("A Accel:");
         sprintf(accelstring,
-                "x:%.2lf, y:%.2lf, z:%.2lf",
+                "x:%.2lf y:%.2lf z:%.2lf",
                 g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.x,
                 g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.y,
                 g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.z);
@@ -77,6 +76,7 @@ int main(void)
         
         ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_B));
         
+        /*
         DEBUG_PRINT("B Accel:");
         sprintf(accelstring,
                 "x:%.2lf, y:%.2lf, z:%.2lf",
@@ -84,18 +84,19 @@ int main(void)
                 g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.y,
                 g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.z);
         DEBUG_PRINT(accelstring);
+        */
         
         // 3) Calculate the knee angle based on the acceleration vectors
-        Goniometer_CalculateCurrentAngle(&g_KneeGoniometer);
+        //Goniometer_CalculateCurrentAngle(&g_KneeGoniometer);
         
-        UserInterface_FSM_UpdateCurrentKneeAngleString(&g_UserInterface, &g_KneeGoniometer);
-        DEBUG_PRINT(g_UserInterface.KneeAngleString);
+        //UserInterface_FSM_UpdateCurrentKneeAngleString(&g_UserInterface, &g_KneeGoniometer);
+        //DEBUG_PRINT(g_UserInterface.KneeAngleString);
     }
 }
 
 CY_ISR(Reset_ISR_Handler)
 {
-    Bootloadable_Load(); /* Force a bootloader restart */
+    //Bootloadable_Load(); /* Force a bootloader restart */
 }
 
 CY_ISR(Goniometer_Sample_ISR_Handle)

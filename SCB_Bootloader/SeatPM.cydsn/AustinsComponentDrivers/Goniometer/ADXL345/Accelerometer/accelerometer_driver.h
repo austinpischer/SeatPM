@@ -27,18 +27,27 @@
     
 #define FILTER_DATA_SET_SIZE 5
 
-    
-typedef struct Accelerometer_VectorTable Accelerometer_VectorTable;
-    
+//==================== Accelerometer_VirtualFunctionTable Structure =================
+typedef void (*CalculateCurrentAcceleration)(Accelerometer Base);
+typedef struct Accelerometer_VirtualFunctionTable Accelerometer_VirtualFunctionTable;
+struct Accelerometer_VirtualFunctionTable
+{
+    CalculateCurrentAcceleration CalculateCurrentAcceleration_FunctionPointer;
+};
+
+//==================== Accelerometer Structure =================
+// Define the type "struct <tag>" as type "<tag>"
 typedef struct Accelerometer Accelerometer;
 struct Accelerometer
 {
+    Accelerometer_VirtualFunctionTable VirtualFunctionTable;
     AccelerationVector CurrentAcceleration;
     AccelerationVector FilterData[FILTER_DATA_SET_SIZE]; 
     AccelerationVector FilteredAcceleration;
     uint MovingAverageFilter_OldestIndex;
 };
 
+//==================== Accelerometer Method Prototypes =================
 void Accelerometer_Constructor(Accelerometer *me);
 void Accelerometer_UpdateFilterData_MovingAverageFilter(Accelerometer *me);
 void Accelerometer_CalculateFilteredAcceleration(Accelerometer *me);

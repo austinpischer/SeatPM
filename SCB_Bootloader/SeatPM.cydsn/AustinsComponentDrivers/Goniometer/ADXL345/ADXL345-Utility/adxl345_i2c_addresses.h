@@ -16,11 +16,12 @@
 #ifndef ADXL345_ADDRESSES_H
 #define ADXL345_ADDRESSES_H
     
-/* Alternate I2C Addresses */   
+/* Default I2C Addresses */   
 #define DEFAULT_ADDRESS 0x1D
 #define DEFAULT_WRITE_ADDRESS 0x3A
 #define DEFAULT_READ_ADDRESS 0x3B 
 /* Alternate I2C Addresses */
+    // Set the adxl345 address to the alternate by grounding the sdo pin
 #define ALTERNATE_ADDRESS 0x53
 #define ALTERNATE_WRITE_ADDRESS 0xA6
 #define ALTERNATE_READ_ADDRESS 0xA7 

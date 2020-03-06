@@ -44,10 +44,7 @@
  * 4) ...Set the DEBUG_PRINT macro function to do nothing. 
  */
 #ifdef AUSTIN_DEBUG // START of preprocessor if/else statement.
-#define DEBUG_PRINT(string) ({Screen_PrintString(string);\
-                              CyDelay(1000); \
-                              Screen_ClearDisplay();\
-                            })
+#define DEBUG_PRINT(string) (PuTTY_UartPutString(string))
 #else 
 #define DEBUG_PRINT(string) ()
 #endif // END of preprocessor if/else statement.

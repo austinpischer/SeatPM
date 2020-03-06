@@ -24,7 +24,6 @@
  */
 void Accelerometer_Constructor(Accelerometer *me)
 {
-    DEBUG_PRINT("Accel Constr");
     unsigned int Index;
     for(Index = 0; Index < FILTER_DATA_SET_SIZE; Index++)
     {
