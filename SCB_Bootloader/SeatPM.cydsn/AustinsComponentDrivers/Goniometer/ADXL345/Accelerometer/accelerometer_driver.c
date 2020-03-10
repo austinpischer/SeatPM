@@ -24,6 +24,7 @@
  */
 void Accelerometer_Constructor(Accelerometer *me)
 {
+    DEBUG_PRINT("Accelerometer constructor called...\r\n");
     unsigned int Index;
     for(Index = 0; Index < FILTER_DATA_SET_SIZE; Index++)
     {
@@ -34,7 +35,6 @@ void Accelerometer_Constructor(Accelerometer *me)
     AccelerationVector_Constructor(&(me->FilteredAcceleration));
     
     me->MovingAverageFilter_OldestIndex = 0;
-   
 }
 
 void Accelerometer_UpdateFilterData_MovingAverageFilter(Accelerometer *me)

@@ -19,6 +19,7 @@
       <Data key="3dbba19d-7851-4a83-b204-a0a386fe8d68/5382e105-1382-4a2e-b9f4-3bb2feba71e0" value="I2C_sda" />
       <Data key="3dbba19d-7851-4a83-b204-a0a386fe8d68/22863ebe-a37b-476f-b252-6e49a8c00b12" value="I2C_scl" />
       <Data key="8a4cac9e-3bc4-4d5c-b305-e3f5c0fa704e/52f31aa9-2f0a-497d-9a1f-1424095e13e6" value="PuTTY_tx" />
+      <Data key="43ec2fa1-bf22-4b71-9477-b6ca7b97f0b0/23b8206d-1c77-4e61-be4a-b4037d5de5fc" value="PuTTY_tx" />
       <Data key="77715107-f8d5-47e5-a629-0fb83101ac6b" value="SW1" />
       <Data key="c9b6b883-5dd6-4186-99cd-b39d7290fcac/5382e105-1382-4a2e-b9f4-3bb2feba71e0" value="IC2_B_sda" />
       <Data key="c9b6b883-5dd6-4186-99cd-b39d7290fcac/22863ebe-a37b-476f-b252-6e49a8c00b12" value="IC2_B_scl" />
@@ -1257,6 +1258,11 @@
         <Data key="Port Format" value="4,1" />
       </Group>
     </Group>
+    <Group key="43ec2fa1-bf22-4b71-9477-b6ca7b97f0b0/23b8206d-1c77-4e61-be4a-b4037d5de5fc">
+      <Group key="0">
+        <Data key="Port Format" value="4,1" />
+      </Group>
+    </Group>
     <Group key="77715107-f8d5-47e5-a629-0fb83101ac6b">
       <Group key="0">
         <Data key="Port Format" value="0,7" />
@@ -1310,7 +1316,7 @@
     <Data key="CYDEV_CONFIG_UNUSED_IO" value="Disallowed" />
     <Data key="CYDEV_CONFIGURATION_MODE" value="COMPRESSED" />
     <Data key="CYDEV_DEBUG_PROTECT" value="OPEN" />
-    <Data key="CYDEV_DEBUGGING_DPS" value="SWD" />
+    <Data key="CYDEV_DEBUGGING_DPS" value="Disable" />
     <Data key="CYDEV_HEAP_SIZE" value="0x80" />
     <Data key="CYDEV_STACK_SIZE" value="0x0400" />
     <Data key="CYDEV_TEMPERATURE" value="-40C - 85C" />

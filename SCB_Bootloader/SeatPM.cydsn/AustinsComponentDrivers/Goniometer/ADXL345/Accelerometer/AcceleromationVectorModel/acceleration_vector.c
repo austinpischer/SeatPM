@@ -21,7 +21,7 @@
 
 void AccelerationVector_Constructor(AccelerationVector *me)
 {
-    //DEBUG_PRINT("AV Constr");
+    DEBUG_PRINT("Acceleration Vector constructor called...\r\n");
     me->x = UNDEFINED_COMPONENT_MAGNITUDE;
     me->y = UNDEFINED_COMPONENT_MAGNITUDE;
     me->z = UNDEFINED_COMPONENT_MAGNITUDE;

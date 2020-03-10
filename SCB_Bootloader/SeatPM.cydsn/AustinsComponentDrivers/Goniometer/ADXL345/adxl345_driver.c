@@ -22,6 +22,7 @@
 
 void ADXL345_Constructor(ADXL345 *me)
 {
+    DEBUG_PRINT("ADXL345 constructor called...\r\n");
     Accelerometer_Constructor(&(me->Base));
     ADXL345_InitializeConfigurationRegisters(me);
 }
@@ -73,12 +74,14 @@ void ADXL345_WriteConfigRegister(ADXL345 *me,
 
 void ADXL345_InitializeConfigurationRegisters(ADXL345 *me)
 {
+    DEBUG_PRINT("ADXL345 initializing configuration registers...\r\n");
     /* A setting of 0 in the measure bit places the part into standby mode,
      * and a setting of 1 places the part into measurement mode. The
      * ADXL345 powers up in standby mode with minimum power consumption.
      */
     const uint8 MeasurementMode = 0b00001000;
     ADXL345_WriteConfigRegister(me, POWER_CTL, MeasurementMode);
+    DEBUG_PRINT("ADXL345 measurement mode register set...\r\n");
     /*  
      *  Setting
      *  D1  D0  g Range
@@ -105,6 +108,7 @@ void ADXL345_InitializeConfigurationRegisters(ADXL345 *me)
      */
     uint8 DataRange = 0b00000011;
     ADXL345_WriteConfigRegister(me, DATA_FORMAT, DataRange);
+    DEBUG_PRINT("ADXL345 data format register set.\r\n");
 }
 
 int16 ADXL345_CalculateComponentMagnitude(uint8 DataRegister0,

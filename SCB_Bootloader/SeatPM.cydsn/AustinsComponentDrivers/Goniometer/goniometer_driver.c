@@ -21,6 +21,7 @@
 
 void Goniometer_Constructor(Goniometer *me)
 {
+    DEBUG_PRINT("Goniometer constructor called\r\n");
     me->Angle = INVALID_ANGLE;
     ADXL345_Constructor(&(me->Accelerometer_A));
     ADXL345_Constructor(&(me->Accelerometer_B));

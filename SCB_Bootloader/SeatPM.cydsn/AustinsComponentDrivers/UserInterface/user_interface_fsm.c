@@ -12,7 +12,7 @@ void UserInterface_FSM_UpdateCurrentKneeAngleString (
                                             UserInterface_FSM *UI_FSM, 
                                             Goniometer* KneeGoniometer)
 {
-    if(KneeGoniometer->CurrentAngle == INVALID_ANGLE)
+    if(KneeGoniometer->Angle == INVALID_ANGLE)
     {
         // Convert invaid angle to string 0123456789123456
         sprintf(UI_FSM->KneeAngleString, "Crnt=INVALID deg");
@@ -27,7 +27,7 @@ void UserInterface_FSM_UpdateCurrentKneeAngleString (
         // lf means that we are printing a double (i.e. long float)
         sprintf(UI_FSM->KneeAngleString,
                 "Crnt=%6.5lf deg",
-                KneeGoniometer->CurrentAngle);
+                KneeGoniometer->Angle);
     }
 }
 
