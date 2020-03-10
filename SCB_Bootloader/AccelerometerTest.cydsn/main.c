@@ -18,7 +18,7 @@
 
 #define DEFAULT_ADDRESS 0x1D
 #define ALTERNATE_ADDRESS 0x53
-#define TEST_ADDRESS ALTERNATE_ADDRESS
+#define TEST_ADDRESS DEFAULT_ADDRESS
 
 
 /* Device ID Registers */
@@ -95,6 +95,8 @@ void ADXL345_WriteConfigRegister(const uint8 ConfigRegisterAddress,
 void ADXL345_Initialize();
 void ADXL345_ReadDataRegisters();
 int16 convert(uint8 upper, uint8 lower);
+void StartExecutionTimer();
+uint32 StopExecutionTimer();
 
 //===============================Global Variables=====================================
 uint8 g_ReadBuffer[ACCELEROMETER_READ_BUFFER_SIZE];
@@ -110,9 +112,10 @@ int main(void)
     char TestString[17];
     int16 x,y,z;
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+   //DEBUG_PRINT("Start\r\n");
     for(;;)
     {
-        
+        //DEBUG_PRINT("Test\r\n");
         /* Place your application code here. */
         ADXL345_ReadDataRegisters();
         x = convert(g_ReadBuffer[1], g_ReadBuffer[0]);
@@ -137,7 +140,13 @@ int16 convert(uint8 upper, uint8 lower)
 
 void ADXL345_Write(uint8 NumberOfBytesToWrite)
 {
+    /*
+    uint32 executiontime = 0;
+    char executiontimestring[32];
     //TODO: DEBUG_WRITE_PRINT
+    DEBUG_PRINT("Writing...\r\n");
+    */
+    StartExecutionTimer();
     I2C_I2CMasterClearStatus(); 
     I2C_I2CMasterWriteBuf(TEST_ADDRESS, // ======================= Point of interest
                           &(g_WriteBuffer[0]), // pointer to start of buffer
@@ -145,11 +154,24 @@ void ADXL345_Write(uint8 NumberOfBytesToWrite)
                           I2C_I2C_MODE_COMPLETE_XFER);
     // Wait until read is complete
     while(!(I2C_I2CMasterStatus() & I2C_I2C_MSTAT_WR_CMPLT));
+    
+    /*
+    executiontime = StopExecutionTimer();
+    DEBUG_PRINT("Write Complete.\r\n");
+    sprintf(executiontimestring, "Execution time: %lu\r\n", executiontime);
+    DEBUG_PRINT(executiontimestring);
+    */
 }
 
 void ADXL345_Read(uint8 NumberOfBytesToRead)
 {
+    /*
+    uint32 executiontime = 0;
+    char executiontimestring[32];
+    DEBUG_PRINT("Reading...\r\n");
+    StartExecutionTimer();
     //TODO: DEBUG_READ_PRINT
+    */
     I2C_I2CMasterClearStatus();
     I2C_I2CMasterReadBuf(TEST_ADDRESS,  // ======================= Point of interest
                          &(g_ReadBuffer[0]), // pointer to start of buffer
@@ -158,6 +180,12 @@ void ADXL345_Read(uint8 NumberOfBytesToRead)
     
     //Wait until write is complete
     while(!(I2C_I2CMasterStatus() & I2C_I2C_MSTAT_RD_CMPLT));
+    /*
+    executiontime = StopExecutionTimer();
+    DEBUG_PRINT("Read Complete.\r\n");
+    sprintf(executiontimestring, "Execution time: %lu\r\n", executiontime);
+    DEBUG_PRINT(executiontimestring);
+    */
 }
 
 void ADXL345_ReadDataRegisters()
@@ -215,5 +243,16 @@ void ADXL345_Initialize()
      */
     uint8 DataRange = 0b00000010;
     ADXL345_WriteConfigRegister(DATA_FORMAT, DataRange);
+}
+
+void StartExecutionTimer()
+{
+    ExecutionTimer_WriteCounter(0);
+    ExecutionTimer_Start();
+}
+uint32 StopExecutionTimer()
+{
+    ExecutionTimer_Stop();
+    return(ExecutionTimer_ReadCounter());  
 }
 /* [] END OF FILE */

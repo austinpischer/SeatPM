@@ -9,37 +9,39 @@
  *
  * ========================================
 */
+
+// ========================== Includes ========================================
 #include "project.h"
 #include "austin_debug.h"
 #include "goniometer_driver.h"
 #include "user_interface_fsm.h"
 #include <stdio.h>
 
+// ========================== Global Variables ================================
 // g_ prefix means that variable is global: can be accessed from all files
 Goniometer g_KneeGoniometer;
 UserInterface_FSM g_UserInterface;
 
+// ========================== Function Prototypes =============================
 CY_ISR_PROTO(Reset_ISR_Handler); 
 CY_ISR_PROTO(Goniometer_Sample_ISR_Handle);
+void Debugging_Components_Startup();
+void UserInterface_Components_Startup();
+void Bootloader_Components_Startup();
+void Goniometer_Components_Startup();
 
+
+// ========================== Main ============================================
 int main(void)
 {
-    CyGlobalIntEnable; /* Enable global interrupts. */
-
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */    
-    
-    /* Hardware Startup */
-    Clock_1kHz_Start();
-    Clock_12kHz_Start();
-    //Components
-    I2C_Start();
-    Screen_Start();
-    //Timers
-    Reset_Timer_Start();
-    Goniometer_Sample_Timer_Start();
+    CyGlobalIntEnable; /* Enable global interrupts. */    
+    /* Component Startup */
+    Debugging_Components_Startup();
+    UserInterface_Components_Startup();
+    Bootloader_Components_Startup();
+    Goniometer_Components_Startup();
 
     /* Goniometer Setup */
-    DEBUG_PRINT("Init Goni");
     Goniometer_Constructor(&g_KneeGoniometer);
     g_KneeGoniometer.Accelerometer_A.I2C_Address = THIGH_ACCELEROMETER_ADDRESS;
     g_KneeGoniometer.Accelerometer_B.I2C_Address = SHANK_ACCELEROMETER_ADDRESS;
@@ -94,6 +96,7 @@ int main(void)
     }
 }
 
+// ========================== Function Implementations ========================
 CY_ISR(Reset_ISR_Handler)
 {
     //Bootloadable_Load(); /* Force a bootloader restart */
@@ -116,6 +119,28 @@ CY_ISR(Goniometer_Sample_ISR_Handle)
     ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_A));
     ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_B));
     // 3) Calculate the knee angle based on the acceleration vectors
-    Goniometer_CalculateCurrentAngle(&g_KneeGoniometer);
+    Goniometer_CalculateAngle(&g_KneeGoniometer, 
+                    g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration,
+                    g_KneeGoniometer.Accelerometer_B.Base.CurrentAcceleration);
+}
+
+void Debugging_Components_Startup()
+{
+    PuTTY_Start();
+}
+void UserInterface_Components_Startup()
+{
+    Screen_Start();
+}
+void Bootloader_Components_Startup()
+{
+    Clock_12kHz_Start();
+    Reset_Timer_Start();
+}
+void Goniometer_Components_Startup()
+{
+    Clock_1kHz_Start();
+    Goniometer_Sample_Timer_Start();
+    
 }
 /* [] END OF FILE */

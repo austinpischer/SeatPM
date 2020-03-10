@@ -6,7 +6,7 @@
     <Toolchain Name="ARM GCC Generic" Selected="True">
       <Tool Name="prebuild" Command="" Options="" />
       <Tool Name="assembler" Command="arm-none-eabi-as.exe" Options="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=${OutputDir}/${CompileFile}.lst -g -W" />
-      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I.\AustinsComponentDrivers -I.\AustinsComponentDrivers\Goniometer -I.\AustinsComponentDrivers\Goniometer\ADXL345 -I.\AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer -I.\AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer\AcceleromationVectorModel -I.\AustinsComponentDrivers\UserInterface\FiniteStateMachine -I.\AustinsComponentDrivers\UserInterface -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Og" />
+      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I.\AustinsComponentDrivers -I.\AustinsComponentDrivers\Goniometer -I.\AustinsComponentDrivers\Goniometer\ADXL345 -I.\AustinsComponentDrivers\Goniometer\ADXL345\ADXL345-Utility -I.\AustinsComponentDrivers\Goniometer\ADXL345\ADXL345_A -I.\AustinsComponentDrivers\Goniometer\ADXL345\ADXL345_B -I.\AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer -I.\AustinsComponentDrivers\Goniometer\ADXL345\Accelerometer\AcceleromationVectorModel -I.\AustinsComponentDrivers\UserInterface -I.\AustinsComponentDrivers\UserInterface\FiniteStateMachine -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Og" />
       <Tool Name="linker" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -l m -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects" />
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
@@ -147,6 +147,25 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Blue_LED.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Blue_LED_aliases.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Blue_LED_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_PVT.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_SPI_UART.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_SPI_UART.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_SPI_UART_INT.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_UART.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_BOOT.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_UART_BOOT.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_PINS.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_SPI_UART_PVT.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_BOOT.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_SCBCLK.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_SCBCLK.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_tx.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_tx.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_tx_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_tx_PM.c</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
@@ -170,7 +189,6 @@
         <Files Root="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\SeatPM.cydsn">
           <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\adxl345_driver.c</File>
           <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\adxl345_driver.h</File>
-          <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\adxl345_i2c_addresses.h</File>
           <File BuildType="BUILD" Toolchain="">AustinsComponentDrivers\Goniometer\ADXL345\adxl345_registers.h</File>
         </Files>
       </Folder>

@@ -25,7 +25,16 @@
 
 #ifndef ADXL345_REGISTERS_H
 #define ADXL345_REGISTERS_H
+ 
+//============= I2C Addresses ===================
+// These aren't registers, but are necessary for I2C communication
+/* Default I2C Addresses (SDO Pin HIGH)*/   
+#define DEFAULT_ADDRESS 0x1D
+/* Alternate I2C Address (SDO Pin LOW) */
+#define ALTERNATE_ADDRESS 0x53
 
+    
+//============ Registers =====================
 /* Device ID Registers */
 #define DEVID 0x00 // R, Device ID.
 

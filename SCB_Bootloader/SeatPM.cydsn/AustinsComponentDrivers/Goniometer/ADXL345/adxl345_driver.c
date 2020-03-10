@@ -12,13 +12,66 @@
  * File Name: 
  *      adxl345_driver.c
  * File Description:
- *      TODO
+ *      This file contains the implementations for each method
+ *      in the ADXL345 "class" (object-oriented C).
+ *      Further information can be found in the  file "adxl345_driver.h"
  *      
  * ============================================================================
 */
 #include "adxl345_driver.h"
 
-void ADXL345_Initialize(ADXL345 *me)
+void ADXL345_Constructor(ADXL345 *me)
+{
+    Accelerometer_Constructor(&(me->Base));
+    ADXL345_InitializeConfigurationRegisters(me);
+}
+
+void ADXL345_Read(ADXL345 *me, uint8 NumberOfBytesToRead)
+{
+    I2C_I2CMasterClearStatus();
+    I2C_I2CMasterReadBuf(me->I2C_Address,
+                         &(me->ReadBuffer[0]), // pointer to start of buffer
+                         NumberOfBytesToRead,
+                         I2C_I2C_MODE_COMPLETE_XFER);
+    
+    //Wait until write is complete
+    while(!(I2C_I2CMasterStatus() & I2C_I2C_MSTAT_RD_CMPLT));
+}
+
+void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite)
+{
+
+    I2C_I2CMasterClearStatus(); 
+    I2C_I2CMasterWriteBuf(me->I2C_Address,
+                          &(me->WriteBuffer[0]), // pointer to start of buffer
+                          NumberOfBytesToWrite,
+                          I2C_I2C_MODE_COMPLETE_XFER);
+    // Wait until read is complete
+    while(!(I2C_I2CMasterStatus() & I2C_I2C_MSTAT_WR_CMPLT));
+}
+
+void ADXL345_ReadDataRegisters(ADXL345 *me)
+{
+    // First, write first ADXL345 Register Number you want to read
+    me->WriteBuffer[0] = DATAX0;
+    ADXL345_Write(me, 1); // Write 1 byte
+
+    // Then, read as many bytes of data as needed:
+    // (address increments automatically, as data registers are subsequent)
+    // DATAX0 through DATAZ1, 6 total bytes to read
+    ADXL345_Read(me, 6);
+}
+
+void ADXL345_WriteConfigRegister(ADXL345 *me,
+                                 const uint8 ConfigRegisterAddress,
+                                 uint8 ByteToWrite)
+{
+    me->WriteBuffer[0] = ConfigRegisterAddress;
+    me->WriteBuffer[1] = ByteToWrite;
+    ADXL345_Write(me, 2); // Write 2 bytes
+}
+
+void ADXL345_InitializeConfigurationRegisters(ADXL345 *me)
 {
     /* A setting of 0 in the measure bit places the part into standby mode,
      * and a setting of 1 places the part into measurement mode. The
@@ -54,71 +107,17 @@ void ADXL345_Initialize(ADXL345 *me)
     ADXL345_WriteConfigRegister(me, DATA_FORMAT, DataRange);
 }
 
-void ADXL345_Constructor(ADXL345 *me)
-{
-    ADXL345_Initialize(me);
-    Accelerometer_Constructor(&(me->Base));
-}
-
-int16 AccelerationVector_CalculateComponentMagnitude(uint8 dataReg0,
-                                                     uint8 dataReg1)
+int16 ADXL345_CalculateComponentMagnitude(uint8 DataRegister0,
+                                          uint8 DataRegister1)
 {
     // "The output data is twos complement,
     //      with DATAx0 as the least significant byte
     //      and DATAx1 as the most significant byte,
     //      where x represent X, Y, or Z."
     // Thus, left shift upper byte and OR in the lower.
-    return ((int16)((dataReg1 << 8) | dataReg0));
+    return ((int16)((DataRegister1 << 8) | DataRegister0));
 }
 
-void ADXL345_Read(ADXL345 *me, uint8 NumberOfBytesToRead)
-{
-    //TODO: DEBUG_READ_PRINT
-    I2C_I2CMasterClearStatus();
-    I2C_I2CMasterReadBuf(me->I2C_Address,
-                         &(me->ReadBuffer[0]), // pointer to start of buffer
-                         NumberOfBytesToRead,
-                         I2C_I2C_MODE_COMPLETE_XFER);
-
-    //Wait until write is complete
-    while (!(I2C_I2CMasterStatus() & I2C_I2C_MSTAT_RD_CMPLT))
-        ;
-}
-
-void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite)
-{
-    //TODO: DEBUG_WRITE_PRINT
-    I2C_I2CMasterClearStatus();
-    I2C_I2CMasterWriteBuf(me->I2C_Address,
-                          &(me->WriteBuffer[0]), // pointer to start of buffer
-                          NumberOfBytesToWrite,
-                          I2C_I2C_MODE_COMPLETE_XFER);
-    // Wait until read is complete
-    while (!(I2C_I2CMasterStatus() & I2C_I2C_MSTAT_WR_CMPLT))
-        ;
-}
-
-void ADXL345_ReadDataRegisters(ADXL345 *me)
-{
-
-    // First, write first ADXL345 Register Number you want to read
-    me->WriteBuffer[0] = DATAX0;
-    ADXL345_Write(me, 1); // Write 1 byte
-
-    // Then, read as many bytes of data as needed:
-    // (address increments automatically, as data registers are subsequent)
-    // DATAX0 through DATAZ1, 6 total bytes to read
-    ADXL345_Read(me, 6);
-}
-
-void ADXL345_WriteConfigRegister(ADXL345 *me,
-                                 const uint8 ConfigRegisterAddress,
-                                 uint8 ByteToWrite)
-{
-    me->WriteBuffer[0] = ConfigRegisterAddress;
-    me->WriteBuffer[1] = ByteToWrite;
-    ADXL345_Write(me, 2); // Write 2 bytes
-}
 
 void ADXL345_CalculateCurrentAcceleration(ADXL345 *me)
 {
@@ -138,10 +137,4 @@ void ADXL345_CalculateCurrentAcceleration(ADXL345 *me)
     me->Base.CurrentAcceleration.z = ADXL345_CalculateComponentMagnitude(z0, z1);
 }
 
-int16 ADXL345_CalculateComponentMagnitude(uint8 DataRegister0,
-                                          uint8 DataRegister1)
-{
-    return ((DataRegister1 << 8) | DataRegister0);
-    // Puts upper register (DataRegister1) in upper byte and lower register in lower byte
-}
 /* [] END OF FILE */

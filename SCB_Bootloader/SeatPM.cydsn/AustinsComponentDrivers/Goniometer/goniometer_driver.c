@@ -21,63 +21,38 @@
 
 void Goniometer_Constructor(Goniometer *me)
 {
-    me->CurrentAngle = INVALID_ANGLE;
+    me->Angle = INVALID_ANGLE;
     ADXL345_Constructor(&(me->Accelerometer_A));
     ADXL345_Constructor(&(me->Accelerometer_B));
 }
 
-void Goniometer_CalculateCurrentAngle(Goniometer *me)
+void Goniometer_CalculateAngle(Goniometer *me, 
+                               AccelerationVector VectorA, 
+                                AccelerationVector VectorB)
 {    
     // Vector Components
     double ax, ay, az;
     double bx, by, bz;
     
     // Intermediate Steps
-    double dotProduct;
-    double aMagnitude, bMagnitude;
+    double DotProduct;
+    double MagnitudeA, MagnitudeB;
     
     // Getting Vector Components
-    ax = (double) me->Accelerometer_A.Base.CurrentAcceleration.x;
-    ay = (double) me->Accelerometer_A.Base.CurrentAcceleration.y;
-    az = (double) me->Accelerometer_A.Base.CurrentAcceleration.z;
+    ax = (double) VectorA.x;
+    ay = (double) VectorA.y;
+    az = (double) VectorA.z;
     
-    bx = (double) me->Accelerometer_B.Base.CurrentAcceleration.x;
-    by = (double) me->Accelerometer_B.Base.CurrentAcceleration.y;
-    bz = (double) me->Accelerometer_B.Base.CurrentAcceleration.z;
-    
-    // Algorithm Starts HERE
-    dotProduct = (ax*bx)+(ay*by)+(az*bz);
-    aMagnitude = sqrt((ax*ax)+(ay*ay)+(az*az));
-    bMagnitude = sqrt((bx*bx)+(by*by)+(bz*bz));
-    
-    me->CurrentAngle = acos(dotProduct/(aMagnitude*bMagnitude));
-}
-
-void Goniometer_CalculateCurrentAngle(Goniometer *me)
-{    
-    // Vector Components
-    double ax, ay, az;
-    double bx, by, bz;
-    
-    // Intermediate Steps
-    double dotProduct;
-    double aMagnitude, bMagnitude;
-    
-    // Getting Vector Components
-    ax = (double) me->Accelerometer_A.Base.FilteredAcceleration.x;
-    ay = (double) me->Accelerometer_A.Base.FilteredAcceleration.y;
-    az = (double) me->Accelerometer_A.Base.FilteredAcceleration.z;
-    
-    bx = (double) me->Accelerometer_B.Base.FilteredAcceleration.x;
-    by = (double) me->Accelerometer_B.Base.FilteredAcceleration.y;
-    bz = (double) me->Accelerometer_B.Base.FilteredAcceleration.z;
+    bx = (double) VectorB.x;
+    by = (double) VectorB.y;
+    bz = (double) VectorB.z;
     
     // Algorithm Starts HERE
-    dotProduct = (ax*bx)+(ay*by)+(az*bz);
-    aMagnitude = sqrt((ax*ax)+(ay*ay)+(az*az));
-    bMagnitude = sqrt((bx*bx)+(by*by)+(bz*bz));
+    DotProduct = (ax*bx)+(ay*by)+(az*bz);       // Dot product is sum of products
+    MagnitudeA = sqrt((ax*ax)+(ay*ay)+(az*az)); // Magnitude is square root of sum of squares
+    MagnitudeB = sqrt((bx*bx)+(by*by)+(bz*bz)); 
     
-    me->CurrentAngle = acos(dotProduct/(aMagnitude*bMagnitude));
+    me->Angle = acos(DotProduct/(MagnitudeA*MagnitudeB)); // Angle between two vectors
 }
 
 /* [] END OF FILE */
