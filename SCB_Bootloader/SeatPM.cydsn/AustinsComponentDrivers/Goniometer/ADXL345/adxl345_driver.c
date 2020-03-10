@@ -19,11 +19,11 @@
  * ============================================================================
 */
 #include "adxl345_driver.h"
+#include "austin_debug.h"
 
 void ADXL345_Constructor(ADXL345 *me)
 {
     DEBUG_PRINT("ADXL345 constructor called...\r\n");
-    Accelerometer_Constructor(&(me->Base));
     ADXL345_InitializeConfigurationRegisters(me);
 }
 
@@ -136,9 +136,9 @@ void ADXL345_CalculateCurrentAcceleration(ADXL345 *me)
     z0 = me->ReadBuffer[4];
     z1 = me->ReadBuffer[5];
 
-    me->Base.CurrentAcceleration.x = ADXL345_CalculateComponentMagnitude(x0, x1);
-    me->Base.CurrentAcceleration.y = ADXL345_CalculateComponentMagnitude(y0, y1);
-    me->Base.CurrentAcceleration.z = ADXL345_CalculateComponentMagnitude(z0, z1);
+    me->currentX = ADXL345_CalculateComponentMagnitude(x0, x1);
+    me->currentY = ADXL345_CalculateComponentMagnitude(y0, y1);
+    me->currentZ = ADXL345_CalculateComponentMagnitude(z0, z1);
 }
 
 /* [] END OF FILE */

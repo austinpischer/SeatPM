@@ -42,9 +42,7 @@ struct Goniometer
 
 //========================= Goniometer Method Prototypes =================================
 void Goniometer_Constructor(Goniometer *me);
-void Goniometer_CalculateAngle(Goniometer *me,
-                               AccelerationVector VectorA,
-                               AccelerationVector VectorB);
+void Goniometer_CalculateAngle(Goniometer *me);
 #endif
 
 /* [] END OF FILE */

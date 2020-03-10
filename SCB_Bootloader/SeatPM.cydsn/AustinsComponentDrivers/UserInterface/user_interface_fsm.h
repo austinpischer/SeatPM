@@ -1,7 +1,6 @@
 #ifndef USER_INTERFACE_FSM_H
 #define USER_INTERFACE_FSM_H
 
-#include "finite_state_machine.h"
 #include "goniometer_driver.h"
 #include "project.h"
 #include "stdio.h"

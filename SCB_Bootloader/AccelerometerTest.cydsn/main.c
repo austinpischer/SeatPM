@@ -11,120 +11,68 @@
 */
 //====================================Includes and Defines=========================================
 #include "project.h"
+#include "adxl345_registers.h"
+#include "austin_debug.h"
 #include <stdio.h>
 
 #define ACCELEROMETER_READ_BUFFER_SIZE 10
 #define ACCELEROMETER_WRITE_BUFFER_SIZE 10
 
-#define DEFAULT_ADDRESS 0x1D
-#define ALTERNATE_ADDRESS 0x53
-#define TEST_ADDRESS DEFAULT_ADDRESS
-
-
-/* Device ID Registers */
-#define DEVID 0x00 // R, Device ID.
-
-/* Tap Registers */ 
-#define THRESH_TAP 0x1D // R/W, Tap threshold.
-#define DUR 0x21 // R/W, Tap duration.
-#define LATENT 0x22 // R/W, Tap latency.
-#define WINDOW 0x23 // R/W, Tap window.
-#define TAP_AXES 0x2A // R/W, Axis control for tap/double tap.
-#define ACT_TAP_STATUS 0x2B // R, Source of tap/double tap.
-
-/* Offset Registers */
-#define OFSX 0x1E // R/W, X-axis offset.
-#define OFSY 0x1F // R/W, Y-axis offset.
-#define OFSZ 0x20 // R/W, Z-axis offset.
-
-/* Activity Registers */
-#define THRESH_ACT 0x24 // R/W, Activity threshold.
-#define THRESH_INACT 0x25 // R/W, Inactivity threshold.
-#define TIME_INACT 0x26 // R/W, Inactivity time.
-#define ACT_INACT_CTL 0x27 // R/W, Axis enable control for activity and inactivity detection.
-
-/* Free Fall Registers */
-#define THRESH_FF 0x28 // R/W, Free-fall threshold.
-#define TIME_FF 0x29 // R/W, Free-fall time.
-
-/* Power Registers */ 
-#define BW_RATE 0x2C // R/W, Data rate and power mode control.
-#define POWER_CTL 0x2D // R/W, Power-saving features control.
-
-/* Interrupt Registers */
-#define INT_ENABLE 0x2E // R/W, Interrupt enable control.
-#define INT_MAP 0x2F // R/W, Interrupt mapping control.
-#define INT_SOURCE 0x30 // R, Source of interrupts.
-
-/* Data Registers */ 
-#define DATA_FORMAT 0x31 // R/W, Data format control.
-#define DATAX0 0x32 // R, X-Axis Data 0.
-#define DATAX1 0x33 // R, X-Axis Data 1.
-#define DATAY0 0x34 // R, Y-Axis Data 0.
-#define DATAY1 0x35 // R, Y-Axis Data 1.
-#define DATAZ0 0x36 // R, Z-Axis Data 0.
-#define DATAZ1 0x37 // R, Z-Axis Data 1.
-
-/* FIFO Registers */
-#define FIFO_CTL 0x38 // R/W, FIFO control.
-#define FIFO_STATUS 0x39 // R, FIFO
-
-
-//===================================DEBUG PRINT==========================================
-// Comment out "#define AUSTIN_DEBUG" to disable debugging output"
-// Uncomment "#define AUSTIN_DEBUG" to enable debugging output"  
-#define AUSTIN_DEBUG
-
-/* Pseudocode for debug print:
- * 1) If AUSTIN_DEBUG is defined...
- * 2) ...Set the DEBUG_PRINT() macro function to print to the LCD.
- * 3) If AUSTIN_DEBUG is NOT defined...
- * 4) ...Set the DEBUG_PRINT macro function to do nothing. 
- */
-#ifdef AUSTIN_DEBUG // START of preprocessor if/else statement.
-#define DEBUG_PRINT(string) (PuTTY_UartPutString(string))
-#else 
-#define DEBUG_PRINT(string) ()
-#endif // END of preprocessor if/else statement.
-
 //==============================Function Prototypes==================================
-void ADXL345_Write(uint8 NumberOfBytesToWrite);
-void ADXL345_Read(uint8 NumberOfBytesToRead);
-void ADXL345_WriteConfigRegister(const uint8 ConfigRegisterAddress,
-                                 uint8 ByteToWrite);
+void ADXL345_Write(uint8 NumberOfBytesToWrite, uint8 I2C_Address, uint8 *WriteBuffer);
+void ADXL345_Read(uint8 NumberOfBytesToRead, uint8 I2C_Address, uint8 *ReadBuffer);
+void ADXL345_ReadDataRegisters(uint8 *WriteBuffer,uint8 *ReadBuffer, uint8 I2C_Address);
+void ADXL345_WriteConfigRegister(const uint8 ConfigRegisterAddress, uint8 ByteToWrite, uint8 I2C_Address, uint8 *WriteBuffer);
 void ADXL345_Initialize();
-void ADXL345_ReadDataRegisters();
 int16 convert(uint8 upper, uint8 lower);
 void StartExecutionTimer();
 uint32 StopExecutionTimer();
 
 //===============================Global Variables=====================================
-uint8 g_ReadBuffer[ACCELEROMETER_READ_BUFFER_SIZE];
-uint8 g_WriteBuffer[ACCELEROMETER_WRITE_BUFFER_SIZE];
-
+uint8 g_A_ReadBuffer[ACCELEROMETER_READ_BUFFER_SIZE];
+uint8 g_A_WriteBuffer[ACCELEROMETER_WRITE_BUFFER_SIZE];
+uint8 g_B_ReadBuffer[ACCELEROMETER_READ_BUFFER_SIZE];
+uint8 g_B_WriteBuffer[ACCELEROMETER_WRITE_BUFFER_SIZE];
+char DebugString[64];
 int main(void)
 {
+    DEBUG_PRINT("Start\r\n");
     Screen_Start();
     PuTTY_Start();
     I2C_Start();
     CyGlobalIntEnable; /* Enable global interrupts. */
+    DEBUG_PRINT("\r\n");
     ADXL345_Initialize();
-    char TestString[17];
-    int16 x,y,z;
+    int16 ax,ay,az,bx,by,bz;
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-   //DEBUG_PRINT("Start\r\n");
+   DEBUG_PRINT("Start\r\n");
     for(;;)
     {
-        //DEBUG_PRINT("Test\r\n");
+        DEBUG_PRINT("Cycle\r\n");
         /* Place your application code here. */
-        ADXL345_ReadDataRegisters();
-        x = convert(g_ReadBuffer[1], g_ReadBuffer[0]);
-        y = convert(g_ReadBuffer[3], g_ReadBuffer[2]);
-        z = convert(g_ReadBuffer[5], g_ReadBuffer[4]);
-        sprintf(TestString, "x%3d y%3d z%3d\r\n", x,y,z);
-        Screen_PrintString(TestString);
-        DEBUG_PRINT(TestString);
-        CyDelay(250);
+        ADXL345_ReadDataRegisters(g_A_WriteBuffer, g_A_ReadBuffer, DEFAULT_ADDRESS);
+        ax = convert(g_A_ReadBuffer[1], g_A_ReadBuffer[0]);
+        ay = convert(g_A_ReadBuffer[3], g_A_ReadBuffer[2]);
+        az = convert(g_A_ReadBuffer[5], g_A_ReadBuffer[4]);
+        
+        sprintf(DebugString, "ax%2d ay%2d az%2d", ax,ay,az);
+        Screen_PrintString(DebugString);
+        Screen_Position(1,0); 
+        strcat(DebugString, "\r\n"); 
+        DEBUG_PRINT(DebugString);
+        
+        ADXL345_ReadDataRegisters(g_B_WriteBuffer, g_B_ReadBuffer, ALTERNATE_ADDRESS);
+        bx = convert(g_B_ReadBuffer[1], g_B_ReadBuffer[0]);
+        by = convert(g_B_ReadBuffer[3], g_B_ReadBuffer[2]);
+        bz = convert(g_B_ReadBuffer[5], g_B_ReadBuffer[4]);
+        
+        sprintf(DebugString, "bx%2d by%2d bz%2d", bx,by,bz);
+        Screen_PrintString(DebugString);
+        Screen_Position(0,0);
+        strcat(DebugString, "\r\n");
+        DEBUG_PRINT(DebugString);
+        
+        CyDelay(500);
         Screen_ClearDisplay();
     }
 }
@@ -138,75 +86,50 @@ int16 convert(uint8 upper, uint8 lower)
     return(temp);
 }
 
-void ADXL345_Write(uint8 NumberOfBytesToWrite)
+void ADXL345_Write(uint8 NumberOfBytesToWrite, uint8 I2C_Address, uint8 *WriteBuffer)
 {
-    /*
-    uint32 executiontime = 0;
-    char executiontimestring[32];
-    //TODO: DEBUG_WRITE_PRINT
-    DEBUG_PRINT("Writing...\r\n");
-    */
-    StartExecutionTimer();
+    DEBUG_PRINT(DebugString);
+    
     I2C_I2CMasterClearStatus(); 
-    I2C_I2CMasterWriteBuf(TEST_ADDRESS, // ======================= Point of interest
-                          &(g_WriteBuffer[0]), // pointer to start of buffer
+    I2C_I2CMasterWriteBuf(I2C_Address, 
+                          WriteBuffer,
                           NumberOfBytesToWrite,
                           I2C_I2C_MODE_COMPLETE_XFER);
     // Wait until read is complete
     while(!(I2C_I2CMasterStatus() & I2C_I2C_MSTAT_WR_CMPLT));
-    
-    /*
-    executiontime = StopExecutionTimer();
-    DEBUG_PRINT("Write Complete.\r\n");
-    sprintf(executiontimestring, "Execution time: %lu\r\n", executiontime);
-    DEBUG_PRINT(executiontimestring);
-    */
+    DEBUG_PRINT(DebugString);
 }
 
-void ADXL345_Read(uint8 NumberOfBytesToRead)
+void ADXL345_Read(uint8 NumberOfBytesToRead, uint8 I2C_Address, uint8 *ReadBuffer)
 {
-    /*
-    uint32 executiontime = 0;
-    char executiontimestring[32];
-    DEBUG_PRINT("Reading...\r\n");
-    StartExecutionTimer();
-    //TODO: DEBUG_READ_PRINT
-    */
+    DEBUG_PRINT(DebugString);
     I2C_I2CMasterClearStatus();
-    I2C_I2CMasterReadBuf(TEST_ADDRESS,  // ======================= Point of interest
-                         &(g_ReadBuffer[0]), // pointer to start of buffer
+    I2C_I2CMasterReadBuf(I2C_Address,
+                         ReadBuffer,
                          NumberOfBytesToRead,
                          I2C_I2C_MODE_COMPLETE_XFER);
-    
     //Wait until write is complete
     while(!(I2C_I2CMasterStatus() & I2C_I2C_MSTAT_RD_CMPLT));
-    /*
-    executiontime = StopExecutionTimer();
-    DEBUG_PRINT("Read Complete.\r\n");
-    sprintf(executiontimestring, "Execution time: %lu\r\n", executiontime);
-    DEBUG_PRINT(executiontimestring);
-    */
 }
 
-void ADXL345_ReadDataRegisters()
+void ADXL345_ReadDataRegisters(uint8 *WriteBuffer,uint8 *ReadBuffer, uint8 I2C_Address)
 {
     // First, write first ADXL345 Register Number you want to read
-    g_WriteBuffer[0] = DATAX0;
-    ADXL345_Write(1); // Write 1 byte
+    WriteBuffer[0] = DATAX0;
+    ADXL345_Write(1, I2C_Address, WriteBuffer); // Write 1 byte
     
     // Then, read as many bytes of data as needed:
     // (address increments automatically, as data registers are subsequent)
     // DATAX0 through DATAZ1, 6 total bytes to read
-    ADXL345_Read(6);
+    ADXL345_Read(6, I2C_Address, ReadBuffer);
     // Accel data is now in ReadBuffer[0], … , ReadBuffer[5]
 }
 
-void ADXL345_WriteConfigRegister(const uint8 ConfigRegisterAddress,
-                                 uint8 ByteToWrite)
+void ADXL345_WriteConfigRegister(const uint8 ConfigRegisterAddress, uint8 ByteToWrite, uint8 I2C_Address, uint8 *WriteBuffer)
 {
-    g_WriteBuffer[0] = ConfigRegisterAddress;
-    g_WriteBuffer[1] = ByteToWrite;
-    ADXL345_Write(2); // Write 2 bytes
+    WriteBuffer[0] = ConfigRegisterAddress;
+    WriteBuffer[1] = ByteToWrite;
+    ADXL345_Write(2, I2C_Address, WriteBuffer); // Write 2 bytes
 }
 
 void ADXL345_Initialize()
@@ -216,7 +139,8 @@ void ADXL345_Initialize()
      * ADXL345 powers up in standby mode with minimum power consumption.
      */
     const uint8 MeasurementMode = 0b00001000;
-    ADXL345_WriteConfigRegister(POWER_CTL, MeasurementMode);
+    ADXL345_WriteConfigRegister(POWER_CTL, MeasurementMode, DEFAULT_ADDRESS, g_A_WriteBuffer);
+    ADXL345_WriteConfigRegister(POWER_CTL, MeasurementMode, ALTERNATE_ADDRESS, g_B_WriteBuffer);
     /*  
      *  Setting
      *  D1  D0  g Range
@@ -242,17 +166,7 @@ void ADXL345_Initialize()
      * 
      */
     uint8 DataRange = 0b00000010;
-    ADXL345_WriteConfigRegister(DATA_FORMAT, DataRange);
-}
-
-void StartExecutionTimer()
-{
-    ExecutionTimer_WriteCounter(0);
-    ExecutionTimer_Start();
-}
-uint32 StopExecutionTimer()
-{
-    ExecutionTimer_Stop();
-    return(ExecutionTimer_ReadCounter());  
+    ADXL345_WriteConfigRegister(DATA_FORMAT, DataRange, DEFAULT_ADDRESS, g_A_WriteBuffer);
+    ADXL345_WriteConfigRegister(DATA_FORMAT, DataRange, ALTERNATE_ADDRESS, g_B_WriteBuffer);
 }
 /* [] END OF FILE */

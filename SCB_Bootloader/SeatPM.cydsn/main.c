@@ -14,19 +14,14 @@
 #include "project.h"
 #include "austin_debug.h"
 #include "goniometer_driver.h"
-#include "user_interface_fsm.h"
 #include <stdio.h>
 
 // ========================== Global Variables ================================
 // g_ prefix means that variable is global: can be accessed from all files
 Goniometer g_KneeGoniometer;
-UserInterface_FSM g_UserInterface;
 
 // ========================== Function Prototypes =============================
-CY_ISR_PROTO(Reset_ISR_Handler); 
-CY_ISR_PROTO(Goniometer_Sample_ISR_Handle);
 void Debugging_Components_Startup();
-void UserInterface_Components_Startup();
 void Bootloader_Components_Startup();
 void Goniometer_Components_Startup();
 
@@ -39,7 +34,6 @@ int main(void)
     
     /* Component Startup */
     Debugging_Components_Startup();
-    UserInterface_Components_Startup();
     Bootloader_Components_Startup();
     Goniometer_Components_Startup();
     DEBUG_PRINT("Component startup complete\r\n");
@@ -49,10 +43,6 @@ int main(void)
     g_KneeGoniometer.Accelerometer_A.I2C_Address = THIGH_ACCELEROMETER_ADDRESS;
     g_KneeGoniometer.Accelerometer_B.I2C_Address = SHANK_ACCELEROMETER_ADDRESS;
     DEBUG_PRINT("Goniometer setup complete\r\n");
-    
-    /* User Interface Setup */
-    UserInterface_FSM_Constructor(&g_UserInterface);
-    DEBUG_PRINT("User Interface setup complete \r\n");
     
     /* Interrupt Startup */
     // Goniometer Sample Interrupt
@@ -95,9 +85,7 @@ int main(void)
         
         
         // 3) Calculate the knee angle based on the acceleration vectors
-        Goniometer_CalculateAngle(&g_KneeGoniometer,
-                                  g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration,
-                                  g_KneeGoniometer.Accelerometer_B.Base.CurrentAcceleration);
+        Goniometer_CalculateAngle(&g_KneeGoniometer);
         
     }
 }
@@ -106,28 +94,6 @@ int main(void)
 CY_ISR(Reset_ISR_Handler)
 {
     Bootloadable_Load(); /* Force a bootloader restart */
-}
-
-CY_ISR(Goniometer_Sample_ISR_Handle)
-{
-    /* Pseudocode:
-     * 1) Get the accelerometer data for both accelerometers
-     * 2) Calculate the acceleration vectors 
-     *      from the data of both accelerometers
-     * 3) Calculate the knee angle based on the acceleration vectors
-     */
-    
-    // 1) Get the accelerometer data for both accelerometers
-    ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_A));
-    ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_B));
-    // 2) Calculate the acceleration vectors 
-    //      from the data of both accelerometers
-    ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_A));
-    ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_B));
-    // 3) Calculate the knee angle based on the acceleration vectors
-    Goniometer_CalculateAngle(&g_KneeGoniometer, 
-                    g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration,
-                    g_KneeGoniometer.Accelerometer_B.Base.CurrentAcceleration);
 }
 
 void Debugging_Components_Startup()

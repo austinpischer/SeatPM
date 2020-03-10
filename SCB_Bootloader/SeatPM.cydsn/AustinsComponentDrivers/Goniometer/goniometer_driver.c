@@ -27,9 +27,7 @@ void Goniometer_Constructor(Goniometer *me)
     ADXL345_Constructor(&(me->Accelerometer_B));
 }
 
-void Goniometer_CalculateAngle(Goniometer *me, 
-                               AccelerationVector VectorA, 
-                                AccelerationVector VectorB)
+void Goniometer_CalculateAngle(Goniometer *me)
 {    
     // Vector Components
     double ax, ay, az;
@@ -40,13 +38,13 @@ void Goniometer_CalculateAngle(Goniometer *me,
     double MagnitudeA, MagnitudeB;
     
     // Getting Vector Components
-    ax = (double) VectorA.x;
-    ay = (double) VectorA.y;
-    az = (double) VectorA.z;
+    ax = (double) me->Accelerometer_A.currentX;
+    ay = (double) me->Accelerometer_A.currentY;
+    az = (double) me->Accelerometer_A.currentZ;
     
-    bx = (double) VectorB.x;
-    by = (double) VectorB.y;
-    bz = (double) VectorB.z;
+    bx = (double) me->Accelerometer_B.currentX;
+    by = (double) me->Accelerometer_B.currentY;
+    bz = (double) me->Accelerometer_B.currentZ;
     
     // Algorithm Starts HERE
     DotProduct = (ax*bx)+(ay*by)+(az*bz);       // Dot product is sum of products

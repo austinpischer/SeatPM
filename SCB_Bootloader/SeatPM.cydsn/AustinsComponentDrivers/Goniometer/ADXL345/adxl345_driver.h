@@ -33,7 +33,6 @@
 
 #include "project.h"               // For type definitions, etc.
 #include "adxl345_registers.h"     // Datasheet macros
-#include "accelerometer_driver.h"  // ADXL345 *is an* accelerometer
 #include <stdio.h>                 // For sprintf
 
 #define ACCELEROMETER_READ_BUFFER_SIZE 10
@@ -48,7 +47,7 @@ typedef struct ADXL345 ADXL345;
 //========================= ADXL345 Data Members =================================
 struct ADXL345
 {
-    Accelerometer Base;
+    uint8 currentX, currentY, currentZ;
     uint8 I2C_Address;
     uint8 ReadBuffer[ACCELEROMETER_READ_BUFFER_SIZE];
     uint8 WriteBuffer[ACCELEROMETER_WRITE_BUFFER_SIZE];
