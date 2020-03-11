@@ -32,18 +32,8 @@ void Goniometer_CalculateAngle(Goniometer *me, AccelerationVector a, Acceleratio
         
     // Algorithm Starts HERE
     DotProduct = (a.x*b.x)+(a.y*b.y)+(a.z*b.z);       // Dot product is sum of products
-    DotProduct = 0;
-    sprintf(dbg, "Dot Product = %f\r\n", DotProduct);
-    DEBUG_PRINT(dbg);
-    
     MagnitudeA = sqrt((a.x*a.x)+(a.y*a.y)+(a.z*a.z)); // Magnitude is square root of sum of squares
-    sprintf(dbg, "Magnitude of vector A = %f\r\n", MagnitudeA);
-    DEBUG_PRINT(dbg);
-    
     MagnitudeB = sqrt((b.x*b.x)+(b.y*b.y)+(b.z*b.z)); 
-     sprintf(dbg, "Magnitude of vector B = %f\r\n", MagnitudeB);
-    DEBUG_PRINT(dbg);
-    
-    me->Angle = acos(DotProduct/(MagnitudeA*MagnitudeB)); // Angle between two vectors
+    me->Angle = 57.2958*acos(DotProduct/(MagnitudeA*MagnitudeB)); // Angle between two vectors, with radians->degrees approximation
 }
 /* [] END OF FILE */
