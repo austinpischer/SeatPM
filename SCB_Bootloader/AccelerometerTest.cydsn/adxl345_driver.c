@@ -13,6 +13,13 @@
 #include "adxl345_registers.h"
 #include "austin_debug.h"
 
+void ADXL345_Constructor(ADXL345 *me, uint8 My_I2C_Address)
+{
+    me->I2C_Address = My_I2C_Address;
+    me->CurrentAcceleration.x = me->CurrentAcceleration.y = me->CurrentAcceleration.z = INVALID_COMPONENT_VALUE;
+    ADXL345_InitializeConfigRegisters(me); 
+}
+
 void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite)
 {
     I2C_I2CMasterClearStatus(); 
@@ -89,5 +96,18 @@ void ADXL345_InitializeConfigRegisters(ADXL345 *me)
      */
     uint8 DataRange = 0b00000010;
     ADXL345_WriteConfigRegister(me, DATA_FORMAT, DataRange);
+}
+
+int16 ADXL345_ConvertDataToComponent(uint8 ComponentDataRegister1, uint8 ComponentDataRegister0)
+{
+    return((ComponentDataRegister1<<8)|ComponentDataRegister0);
+}
+
+void ADXL345_UpdateCurrentAcceleration(ADXL345 *me)
+{
+    ADXL345_ReadDataRegisters(me);
+    me->CurrentAcceleration.x = ADXL345_ConvertDataToComponent(me->ReadBuffer[1], me->ReadBuffer[0]);
+    me->CurrentAcceleration.y = ADXL345_ConvertDataToComponent(me->ReadBuffer[3], me->ReadBuffer[2]);
+    me->CurrentAcceleration.z = ADXL345_ConvertDataToComponent(me->ReadBuffer[5], me->ReadBuffer[4]);
 }
 /* [] END OF FILE */
