@@ -8,7 +8,6 @@
 <files />
 <projects>
 <v>.\UART_Bootloader.cydsn\UART_Bootloader.cyprj</v>
-<v>.\SeatPM.cydsn\SeatPM.cyprj</v>
 <v>.\AccelerometerTest.cydsn\AccelerometerTest.cyprj</v>
 </projects>
 <workspace_id v="1d2476d5-8597-4394-acd1-a47e92388f0d" />

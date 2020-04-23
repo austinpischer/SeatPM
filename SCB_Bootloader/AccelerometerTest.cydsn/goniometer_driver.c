@@ -26,14 +26,16 @@ void Goniometer_Constructor(Goniometer *me)
 void Goniometer_CalculateAngle(Goniometer *me, AccelerationVector a, AccelerationVector b)
 {    
     // printing doubles https://community.cypress.com/docs/DOC-9389
-    char dbg[64];
+    // enabled "use newlib-nano Float formatting" under Project->Build Settings->Linker->General (set to true)
+    // also increased heap size from 0x8 to 0x500 under Design Wide Resources->System->Heap Size(bytes) 
+    
     // Variables for intermediate steps
     double DotProduct, MagnitudeA, MagnitudeB;
         
     // Algorithm Starts HERE
     DotProduct = (a.x*b.x)+(a.y*b.y)+(a.z*b.z);       // Dot product is sum of products
     MagnitudeA = sqrt((a.x*a.x)+(a.y*a.y)+(a.z*a.z)); // Magnitude is square root of sum of squares
-    MagnitudeB = sqrt((b.x*b.x)+(b.y*b.y)+(b.z*b.z)); 
-    me->Angle = 57.2958*acos(DotProduct/(MagnitudeA*MagnitudeB)); // Angle between two vectors, with radians->degrees approximation
+    MagnitudeB = sqrt((b.x*b.x)+(b.y*b.y)+(b.z*b.z)); // Magnitude is square root of sum of squares
+    me->FilteredAngle = 57.2958*acos(DotProduct/(MagnitudeA*MagnitudeB)); // Angle between two vectors, with radians->degrees approximation
 }
 /* [] END OF FILE */

@@ -10,7 +10,7 @@
  * ========================================
 */
 #ifndef GONIOMETER_DRIVER_H
-#define GONIOMETER_DRIVER H
+#define GONIOMETER_DRIVER_H
     
 #include "project.h"
 #include "adxl345_driver.h"   
@@ -23,6 +23,7 @@ struct Goniometer
 {
     ADXL345 Accelerometer_A, Accelerometer_B;
     double Angle;
+    double FilteredAngle;
 };
 
 void Goniometer_Constructor(Goniometer *me);

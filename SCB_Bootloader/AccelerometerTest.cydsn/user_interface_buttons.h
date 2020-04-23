@@ -9,18 +9,17 @@
  *
  * ========================================
 */
-#ifndef ACCELERATION_VECTOR
-#define ACCELERATION_VECTOR
 
+#ifndef USER_INTERFACE_BUTTONS_H
+#define USER_INTERFACE_BUTTONS_H
+  
 #include "project.h"
-      
-#define INVALID_COMPONENT_VALUE -32768
-typedef int16 Component;
-typedef struct AccelerationVector AccelerationVector;
-struct AccelerationVector 
-{
-    Component x,y,z;
-};
-void AccelerationVector_Constructor(AccelerationVector *me);
+    
+CY_ISR_PROTO(Button_Confirm_ISR_Handler_Austin);
+CY_ISR_PROTO(Button_Back_ISR_Handler_Austin);
+CY_ISR_PROTO(Button_Increment_ISR_Handler_Austin);
+CY_ISR_PROTO(Button_Decrement_ISR_Handler_Austin);
+    
 #endif
+
 /* [] END OF FILE */

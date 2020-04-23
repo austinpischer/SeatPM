@@ -6,8 +6,8 @@
     <Toolchain Name="ARM GCC Generic" Selected="True">
       <Tool Name="prebuild" Command="" Options="" />
       <Tool Name="assembler" Command="arm-none-eabi-as.exe" Options="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=${OutputDir}/${CompileFile}.lst -g -W" />
-      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Og" />
-      <Tool Name="linker" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -l m -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -u _printf_float -Wl,--gc-sections -g -ffunction-sections -Og -ffat-lto-objects" />
+      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os" />
+      <Tool Name="linker" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -l m -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -u _printf_float -Wl,--gc-sections -g -ffunction-sections -Os -ffat-lto-objects" />
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
     <Toolchain Name="ARM MDK Generic" Selected="False">
@@ -40,6 +40,8 @@
           <File BuildType="BUILD" Toolchain="">adxl345_driver.c</File>
           <File BuildType="BUILD" Toolchain="">goniometer_driver.c</File>
           <File BuildType="BUILD" Toolchain="">moving_average_filter.c</File>
+          <File BuildType="BUILD" Toolchain="">acceleration_vector.c</File>
+          <File BuildType="BUILD" Toolchain="">user_interface_buttons.c</File>
           <File BuildType="BUILD" Toolchain="">cyapicallbacks.h</File>
           <File BuildType="BUILD" Toolchain="">adxl345_registers.h</File>
           <File BuildType="BUILD" Toolchain="">austin_debug.h</File>
@@ -47,6 +49,9 @@
           <File BuildType="BUILD" Toolchain="">goniometer_driver.h</File>
           <File BuildType="BUILD" Toolchain="">acceleration_vector.h</File>
           <File BuildType="BUILD" Toolchain="">moving_average_filter.h</File>
+          <File BuildType="BUILD" Toolchain="">finite_state_machine.h</File>
+          <File BuildType="BUILD" Toolchain="">user_interface_fsm.h</File>
+          <File BuildType="BUILD" Toolchain="">user_interface_buttons.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SCB_Bootloader\AccelerometerTest.cydsn\Generated_Source\PSoC4">
@@ -151,6 +156,30 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_tx_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_SCB_IRQ.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\PuTTY_SCB_IRQ.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Confirm_Button.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Confirm_Button.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Confirm_Button_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Confirm_Button_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Back_Button.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Back_Button.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Back_Button_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Back_Button_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Increment_Button.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Increment_Button.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Increment_Button_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Increment_Button_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Decrement_Button.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Decrement_Button.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Decrement_Button_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Decrement_Button_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Confirm_ISR.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Confirm_ISR.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Back_ISR.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Back_ISR.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Increment_ISR.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Increment_ISR.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Decrement_ISR.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Decrement_ISR.h</File>
         </Files>
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\codegentemp">

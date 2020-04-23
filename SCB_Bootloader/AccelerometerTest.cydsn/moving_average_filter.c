@@ -12,17 +12,14 @@
 #include "moving_average_filter.h"
 void MovingAverageFilter_Constructor(MovingAverageFilter *me)
 {
-    me->Average.x = INVALID_COMPONENT_VALUE;
-    me->Average.y = INVALID_COMPONENT_VALUE;
-    me->Average.z = INVALID_COMPONENT_VALUE;
+    AccelerationVector_Constructor(&(me->Average));
     
     unsigned int DataSetIndex;
     for(DataSetIndex = 0; DataSetIndex < DATA_SET_SIZE; DataSetIndex++)
     {
-        me->DataSet[DataSetIndex].x = INVALID_COMPONENT_VALUE;
-        me->DataSet[DataSetIndex].y = INVALID_COMPONENT_VALUE;
-        me->DataSet[DataSetIndex].z = INVALID_COMPONENT_VALUE;
+        AccelerationVector_Constructor(&(me->DataSet[DataSetIndex]));
     }
+    
     me->DataSet_IndexOfOldestData = 0;
     
 }

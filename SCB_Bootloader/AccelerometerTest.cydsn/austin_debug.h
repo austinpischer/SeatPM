@@ -11,10 +11,23 @@
 */
 #ifndef AUSTIN_DEBUG_H
 #define AUSTIN_DEBUG_H
+    
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// NOTE: This project requires that the caller of a macro funtion place a semicolon (;) after calling it in code.
+//       As such, any new macro function must not place a semicolon on the last line of the macro function.
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+// Function constants
+    
+#define SCREEN_DEBUG_DURATION_IN_MILLISECONDS 1000
+    
 // Comment out "#define AUSTIN_DEBUG" to disable debugging output"
-// Uncomment "#define AUSTIN_DEBUG" to enable debugging output"  
+// Uncomment "#define AUSTIN_DEBUG" to enable debugging output" 
 #define AUSTIN_DEBUG
+//#define AUSTIN_CSV
+#define AUSTIN_SCREEN_DEBUG
+//#define AUSTIN_ACCELEROMETER_DEBUG
+//#define AUSTIN_GONIOMETER_DEBUG
 
 /* Pseudocode for debug print:
  * 1) If AUSTIN_DEBUG is defined...
@@ -23,10 +36,42 @@
  * 4) ...Set the DEBUG_PRINT macro function to do nothing. 
  */
 #ifdef AUSTIN_DEBUG // START of preprocessor if/else statement.
-#define DEBUG_PRINT(string) (PuTTY_UartPutString(string))
+    #define DEBUG_PRINT(string) (PuTTY_UartPutString(string))   // Macro function replaces left statement with right before compiling
 #else 
-#define DEBUG_PRINT(string) ()
-#endif // END of preprocessor if/else statement.
+    #define DEBUG_PRINT(string) ({})                            // {} is included to specify empty statement, otherwise compiler throws error
+#endif                                                          // END of preprocessor if/else statement.
+
+
+#ifdef AUSTIN_CSV
+#define CSV_PRINT(string) (PuTTY_UartPutString(string))
+#else
+    #define CSV_PRINT(string) ({})
+#endif
+
+
+#ifdef AUSTIN_SCREEN_DEBUG
+   #define SCREEN_DEBUG(string) {\
+                                 Screen_PrintString(string); \
+                                 CyDelay(SCREEN_DEBUG_DURATION_IN_MILLISECONDS);\
+                                 Screen_ClearDisplay();\
+                                }
+#else
+    #define SCREEN_DEBUG(string) ({})
+#endif
+
+
+#ifdef AUSTIN_ACCELEROMETER_DEBUG
+    #define ACCELEROMETER_DEBUG(string) (PuTTY_UartPutString(string)) 
+#else
+    #define ACCELEROMETER_DEBUG(string) ({})
+#endif
+
+#ifdef AUSTIN_GONIOMETER_DEBUG
+    #define GONIOMETER_DEBUG(string) (PuTTY_UartPutString(string)) 
+#else
+    #define GONIOMETER_DEBUG(string) ({})
+#endif
+    
 
 #endif
 /* [] END OF FILE */

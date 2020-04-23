@@ -16,8 +16,10 @@
 void ADXL345_Constructor(ADXL345 *me, uint8 My_I2C_Address)
 {
     me->I2C_Address = My_I2C_Address;
-    me->CurrentAcceleration.x = me->CurrentAcceleration.y = me->CurrentAcceleration.z = INVALID_COMPONENT_VALUE;
     ADXL345_InitializeConfigRegisters(me); 
+    AccelerationVector_Constructor(&(me->CurrentAcceleration));
+    MovingAverageFilter_Constructor(&(me->Filter));
+    
 }
 
 void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite)
@@ -109,5 +111,11 @@ void ADXL345_UpdateCurrentAcceleration(ADXL345 *me)
     me->CurrentAcceleration.x = ADXL345_ConvertDataToComponent(me->ReadBuffer[1], me->ReadBuffer[0]);
     me->CurrentAcceleration.y = ADXL345_ConvertDataToComponent(me->ReadBuffer[3], me->ReadBuffer[2]);
     me->CurrentAcceleration.z = ADXL345_ConvertDataToComponent(me->ReadBuffer[5], me->ReadBuffer[4]);
+}
+
+void ADXL345_UpdateFilteredAcceleration(ADXL345 *me)
+{
+    ADXL345_UpdateCurrentAcceleration(me);
+    MovingAverageFilter_UpdateAverage(&(me->Filter), me->CurrentAcceleration);
 }
 /* [] END OF FILE */
