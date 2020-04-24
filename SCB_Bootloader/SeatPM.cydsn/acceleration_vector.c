@@ -9,20 +9,10 @@
  *
  * ========================================
 */
+#include "acceleration_vector.h"
 
-/* Multiple inclusion protection. See: austin_debug.h */
-#ifndef GENERIC_UTILITY_H
-#define GENERIC_UTILITY_H
-    
-typedef unsigned int uint;
-
-typedef enum bool bool;
-enum bool
-{   
-    FALSE = 0,
-    TRUE = 1,
-};
-    
-#endif 
-
+void AccelerationVector_Constructor(AccelerationVector *me)
+{
+     me->x = me->y = me->z = INVALID_COMPONENT_VALUE;
+}
 /* [] END OF FILE */

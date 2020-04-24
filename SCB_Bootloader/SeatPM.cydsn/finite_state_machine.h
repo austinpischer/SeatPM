@@ -52,3 +52,4 @@ struct Event
         ((FSM)->currentState = (State)(targetState))
         
 #endif
+/* [] END OF FILE */

@@ -90,3 +90,4 @@ void UserInterface_FSM_ConfirmSpeedChange_State(
                                 UserInterface_FSM_Event const *event);
                                 
 #endif
+/* [] END OF FILE */

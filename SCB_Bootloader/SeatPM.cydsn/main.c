@@ -9,112 +9,115 @@
  *
  * ========================================
 */
+//====================================Includes and Defines=====================
 #include "project.h"
+#include "adxl345_registers.h"
 #include "austin_debug.h"
+#include "adxl345_driver.h"
 #include "goniometer_driver.h"
+#include "moving_average_filter.h"
 #include "user_interface_fsm.h"
+#include "user_interface_buttons.h"
 #include <stdio.h>
 
-// g_ prefix means that variable is global: can be accessed from all files
-Goniometer g_KneeGoniometer;
-UserInterface_FSM g_UserInterface;
+#define ACCELEROMETER_READ_BUFFER_SIZE 10
+#define ACCELEROMETER_WRITE_BUFFER_SIZE 10
 
-CY_ISR_PROTO(Reset_ISR_Handler); 
-CY_ISR_PROTO(Goniometer_Sample_ISR_Handle);
+//===============================Global Variables==============================
+char DebugString[64];
+char CSV_String[64];
 
+void printaccelerometerreadouts(AccelerationVector myvector);
+//===============================Main Function=================================
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
-
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */    
     
-    /* Hardware Startup */
-    Clock_1kHz_Start();
-    Clock_12kHz_Start();
-    //Components
-    I2C_Start();
     Screen_Start();
-    //Timers
-    Reset_Timer_Start();
-    Goniometer_Sample_Timer_Start();
-
-    /* Goniometer Setup */
-    DEBUG_PRINT("Init Goni");
-    Goniometer_Constructor(&g_KneeGoniometer);
-    g_KneeGoniometer.Accelerometer_A.I2C_Address = THIGH_ACCELEROMETER_ADDRESS;
-    g_KneeGoniometer.Accelerometer_B.I2C_Address = SHANK_ACCELEROMETER_ADDRESS;
+    PuTTY_Start();
+    I2C_Start();
+   
+    Button_Confirm_ISR_StartEx(Button_Confirm_ISR_Handler_Austin);
+    Button_Back_ISR_StartEx(Button_Back_ISR_Handler_Austin);
+    Button_Increment_ISR_StartEx(Button_Increment_ISR_Handler_Austin);
+    Button_Decrement_ISR_StartEx(Button_Decrement_ISR_Handler_Austin);
     
-    /* User Interface Setup */
-    UserInterface_FSM_Constructor(&g_UserInterface);
+    Goniometer KneeGoniometer; 
+    Goniometer_Constructor(&KneeGoniometer);
     
-    /* Interrupt Startup */
-    Goniometer_Sample_Interrupt_ClearPending();
-    //Goniometer_Sample_Interrupt_StartEx(Goniometer_Sample_ISR_Handle);
+    MovingAverageFilter Accelerometer_A_Filter, Accelerometer_B_Filter;
+    MovingAverageFilter_Constructor(&Accelerometer_A_Filter);
+    MovingAverageFilter_Constructor(&Accelerometer_B_Filter);
     
-    Reset_ISR_ClearPending();
-    Reset_ISR_StartEx(Reset_ISR_Handler);
     
-    //Debug Strings
-    char accelstring[16];
+    int16 ax,ay,az,bx,by,bz;
+    
+    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     for(;;)
     {
         /* Place your application code here. */
         
-        // 1) Get the accelerometer data for both accelerometers
-        ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_A));
-        ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_B));
-        // 2) Calculate the acceleration vectors 
-        //      from the data of both accelerometers
-        ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_A));
+        /* Current Acceleromter A Measurement */ 
+        ADXL345_UpdateFilteredAcceleration(&(KneeGoniometer.Accelerometer_A));
+        ax = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
+        ay = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
+        az = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
+        sprintf(DebugString, "Current Acceleration:\tax = %d, ay = %d, az = %d\r\n", ax,ay,az);
+        ACCELEROMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
+        CSV_PRINT(CSV_String);
         
-        DEBUG_PRINT("A Accel:");
-        sprintf(accelstring,
-                "x:%.2lf, y:%.2lf, z:%.2lf",
-                g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.x,
-                g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.y,
-                g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.z);
-        DEBUG_PRINT(accelstring);
+        /* Filtered Acceleromter A Measurement */ 
+        ax = KneeGoniometer.Accelerometer_A.Filter.Average.x;
+        ay = KneeGoniometer.Accelerometer_A.Filter.Average.y;
+        az = KneeGoniometer.Accelerometer_A.Filter.Average.z;
+        sprintf(DebugString, "Filtered Acceleration:\tax = %d, ay = %d, az = %d\r\n", ax,ay,az);
+        ACCELEROMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
+        CSV_PRINT(CSV_String);
         
-        ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_B));
+        /* Current Acceleromter B Measurement */ 
+        ADXL345_UpdateFilteredAcceleration(&(KneeGoniometer.Accelerometer_B));
+        bx = KneeGoniometer.Accelerometer_B.CurrentAcceleration.x;
+        by = KneeGoniometer.Accelerometer_B.CurrentAcceleration.y;
+        bz = KneeGoniometer.Accelerometer_B.CurrentAcceleration.z;
+        sprintf(DebugString, "Current Acceleration:\tbx = %d, by = %d, bz = %d\r\n", bx,by,bz);
+        ACCELEROMETER_DEBUG(DebugString);
+          sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
+        CSV_PRINT(CSV_String);
         
-        DEBUG_PRINT("B Accel:");
-        sprintf(accelstring,
-                "x:%.2lf, y:%.2lf, z:%.2lf",
-                g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.x,
-                g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.y,
-                g_KneeGoniometer.Accelerometer_A.Base.CurrentAcceleration.z);
-        DEBUG_PRINT(accelstring);
+        /* Filtered Acceleromter B Measurement */ 
+        bx = KneeGoniometer.Accelerometer_B.Filter.Average.x;
+        by = KneeGoniometer.Accelerometer_B.Filter.Average.y;
+        bz = KneeGoniometer.Accelerometer_B.Filter.Average.z;
+        sprintf(DebugString, "Filtered Acceleration:\tbx = %d, by = %d, bz = %d\r\n", bx,by,bz);
+        ACCELEROMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%d,%d,%d\r\n",bx,by,bz);
+        CSV_PRINT(CSV_String);
         
-        // 3) Calculate the knee angle based on the acceleration vectors
-        Goniometer_CalculateCurrentAngle(&g_KneeGoniometer);
+        /* Current Goniometer Angle */ 
+        Goniometer_CalculateAngle(&KneeGoniometer,
+                                  KneeGoniometer.Accelerometer_A.CurrentAcceleration,
+                                  KneeGoniometer.Accelerometer_B.CurrentAcceleration);
+        sprintf(DebugString, "Current Angle:\t%lf degrees\r\n", KneeGoniometer.Angle);
+        GONIOMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%lf\r\n", KneeGoniometer.Angle);
+        CSV_PRINT(CSV_String);
         
-        UserInterface_FSM_UpdateCurrentKneeAngleString(&g_UserInterface, &g_KneeGoniometer);
-        DEBUG_PRINT(g_UserInterface.KneeAngleString);
+        
+        /* Filtered Goniometer Angle */ 
+        Goniometer_CalculateAngle(&KneeGoniometer,  
+                                  KneeGoniometer.Accelerometer_A.Filter.Average,
+                                  KneeGoniometer.Accelerometer_B.Filter.Average);
+        sprintf(DebugString, "Filtered Angle:\t%lf degrees\r\n", KneeGoniometer.FilteredAngle);
+        GONIOMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%lf\r\n", KneeGoniometer.FilteredAngle);
+        CSV_PRINT(CSV_String);
+
+        /* End of cycle */
+        //DEBUG_PRINT("\r\n");    // print a new line
+        Screen_ClearDisplay();
     }
 }
 
-CY_ISR(Reset_ISR_Handler)
-{
-    Bootloadable_Load(); /* Force a bootloader restart */
-}
-
-CY_ISR(Goniometer_Sample_ISR_Handle)
-{
-    /* Pseudocode:
-     * 1) Get the accelerometer data for both accelerometers
-     * 2) Calculate the acceleration vectors 
-     *      from the data of both accelerometers
-     * 3) Calculate the knee angle based on the acceleration vectors
-     */
-    
-    // 1) Get the accelerometer data for both accelerometers
-    ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_A));
-    ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_B));
-    // 2) Calculate the acceleration vectors 
-    //      from the data of both accelerometers
-    ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_A));
-    ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_B));
-    // 3) Calculate the knee angle based on the acceleration vectors
-    Goniometer_CalculateCurrentAngle(&g_KneeGoniometer);
-}
 /* [] END OF FILE */

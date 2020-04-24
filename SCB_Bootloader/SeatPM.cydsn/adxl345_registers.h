@@ -1,30 +1,21 @@
-/* ============================================================================
+/* ========================================
  *
- * Project: 
- *     SeatPM
- *     SPU CatalyzeU / SeniorDesign
- *     Joint Effort - Team 4
- * Author: 
- *      Austin Pischer
- * Date:
- *      2020-01-31
+ * Copyright YOUR COMPANY, THE YEAR
+ * All Rights Reserved
+ * UNPUBLISHED, LICENSED SOFTWARE.
  *
- * File Name: 
- *      adxl345_registers.h
- * File Description:
- *      Each ADXL345 accelerometer has a number of registers, each with their
- *      own address. This file creates macros for each register address.
- *      The intent of these macros are to make use of register addresses
- *      more convenient and more human-readable.
- *      These macros were made according to the information on page 14 of the
- *      "ADXL345_Accelerometer_Datasheet.pdf" included in the directory
- *      "SeatPM/Microcontroller"
+ * CONFIDENTIAL AND PROPRIETARY INFORMATION
+ * WHICH IS THE PROPERTY OF your company.
  *
- * ============================================================================
+ * ========================================
 */
 
 #ifndef ADXL345_REGISTERS_H
 #define ADXL345_REGISTERS_H
+
+/* I2C Addresses */ 
+#define DEFAULT_ADDRESS 0x1D
+#define ALTERNATE_ADDRESS 0x53
 
 /* Device ID Registers */
 #define DEVID 0x00 // R, Device ID.
@@ -73,7 +64,6 @@
 /* FIFO Registers */
 #define FIFO_CTL 0x38 // R/W, FIFO control.
 #define FIFO_STATUS 0x39 // R, FIFO
-
-#endif
     
+#endif 
 /* [] END OF FILE */
