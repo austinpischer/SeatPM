@@ -37,6 +37,7 @@ int main(void)
     PuTTY_Start();
     I2C_Start();
    
+    /* Enable Button Interrupts */
     Button_Confirm_ISR_StartEx(Button_Confirm_ISR_Handler_Austin);
     Button_Back_ISR_StartEx(Button_Back_ISR_Handler_Austin);
     Button_Increment_ISR_StartEx(Button_Increment_ISR_Handler_Austin);
