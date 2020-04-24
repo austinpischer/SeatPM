@@ -9,111 +9,115 @@
  *
  * ========================================
 */
-
-// ========================== Includes ========================================
+//====================================Includes and Defines=====================
 #include "project.h"
+#include "adxl345_registers.h"
 #include "austin_debug.h"
+#include "adxl345_driver.h"
 #include "goniometer_driver.h"
+#include "moving_average_filter.h"
+#include "user_interface_fsm.h"
+#include "user_interface_buttons.h"
 #include <stdio.h>
 
-// ========================== Global Variables ================================
-// g_ prefix means that variable is global: can be accessed from all files
-Goniometer g_KneeGoniometer;
+#define ACCELEROMETER_READ_BUFFER_SIZE 10
+#define ACCELEROMETER_WRITE_BUFFER_SIZE 10
 
-// ========================== Function Prototypes =============================
-void Debugging_Components_Startup();
-void Bootloader_Components_Startup();
-void Goniometer_Components_Startup();
+//===============================Global Variables==============================
+char DebugString[64];
+char CSV_String[64];
 
-
-// ========================== Main ============================================
+void printaccelerometerreadouts(AccelerationVector myvector);
+//===============================Main Function=================================
 int main(void)
 {
-    DEBUG_PRINT("Start\r\n");
-    CyGlobalIntEnable; /* Enable global interrupts. */    
+    CyGlobalIntEnable; /* Enable global interrupts. */
     
-    /* Component Startup */
-    Debugging_Components_Startup();
-    Bootloader_Components_Startup();
-    Goniometer_Components_Startup();
-    DEBUG_PRINT("Component startup complete\r\n");
+    Screen_Start();
+    PuTTY_Start();
+    I2C_Start();
+   
+    Button_Confirm_ISR_StartEx(Button_Confirm_ISR_Handler_Austin);
+    Button_Back_ISR_StartEx(Button_Back_ISR_Handler_Austin);
+    Button_Increment_ISR_StartEx(Button_Increment_ISR_Handler_Austin);
+    Button_Decrement_ISR_StartEx(Button_Decrement_ISR_Handler_Austin);
     
-    /* Goniometer Setup */
-    Goniometer_Constructor(&g_KneeGoniometer);
-    g_KneeGoniometer.Accelerometer_A.I2C_Address = THIGH_ACCELEROMETER_ADDRESS;
-    g_KneeGoniometer.Accelerometer_B.I2C_Address = SHANK_ACCELEROMETER_ADDRESS;
-    DEBUG_PRINT("Goniometer setup complete\r\n");
+    Goniometer KneeGoniometer; 
+    Goniometer_Constructor(&KneeGoniometer);
     
-    /* Interrupt Startup */
-    // Goniometer Sample Interrupt
-    //Goniometer_Sample_Interrupt_ClearPending();
-    //Goniometer_Sample_Interrupt_StartEx(Goniometer_Sample_ISR_Handle);
-    // Reset Interrupt
-    //Reset_ISR_ClearPending();
-    //Reset_ISR_StartEx(Reset_ISR_Handler);
+    MovingAverageFilter Accelerometer_A_Filter, Accelerometer_B_Filter;
+    MovingAverageFilter_Constructor(&Accelerometer_A_Filter);
+    MovingAverageFilter_Constructor(&Accelerometer_B_Filter);
     
-    /* Variables */
-    char DebugString[64];
+    
+    int16 ax,ay,az,bx,by,bz;
+    
+    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     for(;;)
     {
         /* Place your application code here. */
         
-        // 1) Get the accelerometer data for both accelerometers
-        ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_A));
-        ADXL345_ReadDataRegisters(&(g_KneeGoniometer.Accelerometer_B));
-        sprintf(DebugString,
-                "ax0=%d, ax1=%d, ay0=%d, ay1=%d, az0=%d, az1=%d\r\n",
-                g_KneeGoniometer.Accelerometer_A.ReadBuffer[0],
-                g_KneeGoniometer.Accelerometer_A.ReadBuffer[1],
-                g_KneeGoniometer.Accelerometer_A.ReadBuffer[2],
-                g_KneeGoniometer.Accelerometer_A.ReadBuffer[3],
-                g_KneeGoniometer.Accelerometer_A.ReadBuffer[4],
-                g_KneeGoniometer.Accelerometer_A.ReadBuffer[5]);
-                sprintf(DebugString,
-                "bx0=%d, bx1=%d, by0=%d, by1=%d, bz0=%d, bz1=%d\r\n",
-                g_KneeGoniometer.Accelerometer_B.ReadBuffer[0],
-                g_KneeGoniometer.Accelerometer_B.ReadBuffer[1],
-                g_KneeGoniometer.Accelerometer_B.ReadBuffer[2],
-                g_KneeGoniometer.Accelerometer_B.ReadBuffer[3],
-                g_KneeGoniometer.Accelerometer_B.ReadBuffer[4],
-                g_KneeGoniometer.Accelerometer_B.ReadBuffer[5]);
+        /* Current Acceleromter A Measurement */ 
+        ADXL345_UpdateFilteredAcceleration(&(KneeGoniometer.Accelerometer_A));
+        ax = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
+        ay = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
+        az = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
+        sprintf(DebugString, "Current Acceleration:\tax = %d, ay = %d, az = %d\r\n", ax,ay,az);
+        ACCELEROMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
+        CSV_PRINT(CSV_String);
         
-        // 2) Calculate the acceleration vectors 
-        //      from the data of both accelerometers
-        ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_A));
-        ADXL345_CalculateCurrentAcceleration(&(g_KneeGoniometer.Accelerometer_B));
+        /* Filtered Acceleromter A Measurement */ 
+        ax = KneeGoniometer.Accelerometer_A.Filter.Average.x;
+        ay = KneeGoniometer.Accelerometer_A.Filter.Average.y;
+        az = KneeGoniometer.Accelerometer_A.Filter.Average.z;
+        sprintf(DebugString, "Filtered Acceleration:\tax = %d, ay = %d, az = %d\r\n", ax,ay,az);
+        ACCELEROMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
+        CSV_PRINT(CSV_String);
+        
+        /* Current Acceleromter B Measurement */ 
+        ADXL345_UpdateFilteredAcceleration(&(KneeGoniometer.Accelerometer_B));
+        bx = KneeGoniometer.Accelerometer_B.CurrentAcceleration.x;
+        by = KneeGoniometer.Accelerometer_B.CurrentAcceleration.y;
+        bz = KneeGoniometer.Accelerometer_B.CurrentAcceleration.z;
+        sprintf(DebugString, "Current Acceleration:\tbx = %d, by = %d, bz = %d\r\n", bx,by,bz);
+        ACCELEROMETER_DEBUG(DebugString);
+          sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
+        CSV_PRINT(CSV_String);
+        
+        /* Filtered Acceleromter B Measurement */ 
+        bx = KneeGoniometer.Accelerometer_B.Filter.Average.x;
+        by = KneeGoniometer.Accelerometer_B.Filter.Average.y;
+        bz = KneeGoniometer.Accelerometer_B.Filter.Average.z;
+        sprintf(DebugString, "Filtered Acceleration:\tbx = %d, by = %d, bz = %d\r\n", bx,by,bz);
+        ACCELEROMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%d,%d,%d\r\n",bx,by,bz);
+        CSV_PRINT(CSV_String);
+        
+        /* Current Goniometer Angle */ 
+        Goniometer_CalculateAngle(&KneeGoniometer,
+                                  KneeGoniometer.Accelerometer_A.CurrentAcceleration,
+                                  KneeGoniometer.Accelerometer_B.CurrentAcceleration);
+        sprintf(DebugString, "Current Angle:\t%lf degrees\r\n", KneeGoniometer.Angle);
+        GONIOMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%lf\r\n", KneeGoniometer.Angle);
+        CSV_PRINT(CSV_String);
         
         
-        // 3) Calculate the knee angle based on the acceleration vectors
-        Goniometer_CalculateAngle(&g_KneeGoniometer);
-        
+        /* Filtered Goniometer Angle */ 
+        Goniometer_CalculateAngle(&KneeGoniometer,  
+                                  KneeGoniometer.Accelerometer_A.Filter.Average,
+                                  KneeGoniometer.Accelerometer_B.Filter.Average);
+        sprintf(DebugString, "Filtered Angle:\t%lf degrees\r\n", KneeGoniometer.FilteredAngle);
+        GONIOMETER_DEBUG(DebugString);
+        sprintf(CSV_String, "%lf\r\n", KneeGoniometer.FilteredAngle);
+        CSV_PRINT(CSV_String);
+
+        /* End of cycle */
+        //DEBUG_PRINT("\r\n");    // print a new line
+        Screen_ClearDisplay();
     }
 }
 
-// ========================== Function Implementations ========================
-CY_ISR(Reset_ISR_Handler)
-{
-    Bootloadable_Load(); /* Force a bootloader restart */
-}
-
-void Debugging_Components_Startup()
-{
-    PuTTY_Start();
-}
-void UserInterface_Components_Startup()
-{
-    Screen_Start();
-}
-void Bootloader_Components_Startup()
-{
-    Clock_12kHz_Start();
-    Reset_Timer_Start();
-}
-void Goniometer_Components_Startup()
-{
-    Clock_1kHz_Start();
-    Goniometer_Sample_Timer_Start();
-    I2C_Start();
-    
-}
 /* [] END OF FILE */
