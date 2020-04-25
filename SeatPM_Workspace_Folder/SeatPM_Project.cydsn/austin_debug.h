@@ -37,7 +37,7 @@
  */
 #ifdef AUSTIN_DEBUG // START of preprocessor if/else statement.
     #define DEBUG_PRINT(string) (PuTTY_UartPutString(string))   // Macro function replaces left statement with right before compiling
-#else 
+#else
     #define DEBUG_PRINT(string) ({})                            // {} is included to specify empty statement, otherwise compiler throws error
 #endif                                                          // END of preprocessor if/else statement.
 
@@ -51,9 +51,8 @@
 
 #ifdef AUSTIN_SCREEN_DEBUG
    #define SCREEN_DEBUG(string) {\
-                                 Screen_PrintString(string); \
-                                 CyDelay(SCREEN_DEBUG_DURATION_IN_MILLISECONDS);\
                                  Screen_ClearDisplay();\
+                                 Screen_PrintString(string); \
                                 }
 #else
     #define SCREEN_DEBUG(string) ({})

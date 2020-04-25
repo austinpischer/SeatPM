@@ -22,20 +22,18 @@ CY_ISR_PROTO(Button_Confirm_ISR_Handler_Austin)
 CY_ISR_PROTO(Button_Back_ISR_Handler_Austin)
 {
     DEBUG_PRINT("Back Button Pressed\r\n");
-    SCREEN_DEBUG("Confirm");
+    SCREEN_DEBUG("Back");
 }
 CY_ISR_PROTO(Button_Increment_ISR_Handler_Austin)
 {
     DEBUG_PRINT("Increment Button Pressed\r\n");
-    SCREEN_DEBUG("Confirm");
+    SCREEN_DEBUG("Increment");
 }
 
 CY_ISR_PROTO(Button_Decrement_ISR_Handler_Austin)
 {
     DEBUG_PRINT("Decrement Button Pressed\r\n");
-    SCREEN_DEBUG("Confirm");
+    SCREEN_DEBUG("Decrement");
 }
-
-
 
 /* [] END OF FILE */

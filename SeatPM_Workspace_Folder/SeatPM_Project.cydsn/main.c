@@ -36,7 +36,7 @@ int main(void)
     Screen_Start();
     PuTTY_Start();
     I2C_Start();
-   
+    
     /* Enable Button Interrupts */
     Button_Confirm_ISR_StartEx(Button_Confirm_ISR_Handler_Austin);
     Button_Back_ISR_StartEx(Button_Back_ISR_Handler_Austin);
@@ -53,6 +53,7 @@ int main(void)
     
     int16 ax,ay,az,bx,by,bz;
     
+      
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     for(;;)
     {
