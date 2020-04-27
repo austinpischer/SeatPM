@@ -210,6 +210,7 @@
       <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
         <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\user_interface_fsm.h</File>
+          <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\user_interface_fsm.c</File>
         </Files>
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\codegentemp">

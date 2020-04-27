@@ -26,6 +26,7 @@
 //===============================Global Variables==============================
 char DebugString[64];
 char CSV_String[64];
+UserInterface_FSM g_UI_FSM;
 
 void printaccelerometerreadouts(AccelerationVector myvector);
 //===============================Main Function=================================
@@ -51,6 +52,7 @@ int main(void)
     MovingAverageFilter_Constructor(&Accelerometer_B_Filter);
     
     
+    
     int16 ax,ay,az,bx,by,bz;
     
       
@@ -58,9 +60,9 @@ int main(void)
     for(;;)
     {
         /* Place your application code here. */
-        
-        /* Current Acceleromter A Measurement */ 
+         
         ADXL345_UpdateFilteredAcceleration(&(KneeGoniometer.Accelerometer_A));
+        /* Current Acceleromter A Measurement */
         ax = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
         ay = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
         az = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
@@ -68,7 +70,6 @@ int main(void)
         ACCELEROMETER_DEBUG(DebugString);
         sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
         CSV_PRINT(CSV_String);
-        
         /* Filtered Acceleromter A Measurement */ 
         ax = KneeGoniometer.Accelerometer_A.Filter.Average.x;
         ay = KneeGoniometer.Accelerometer_A.Filter.Average.y;
@@ -78,8 +79,8 @@ int main(void)
         sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
         CSV_PRINT(CSV_String);
         
-        /* Current Acceleromter B Measurement */ 
         ADXL345_UpdateFilteredAcceleration(&(KneeGoniometer.Accelerometer_B));
+        /* Current Acceleromter B Measurement */ 
         bx = KneeGoniometer.Accelerometer_B.CurrentAcceleration.x;
         by = KneeGoniometer.Accelerometer_B.CurrentAcceleration.y;
         bz = KneeGoniometer.Accelerometer_B.CurrentAcceleration.z;
@@ -87,7 +88,6 @@ int main(void)
         ACCELEROMETER_DEBUG(DebugString);
           sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
         CSV_PRINT(CSV_String);
-        
         /* Filtered Acceleromter B Measurement */ 
         bx = KneeGoniometer.Accelerometer_B.Filter.Average.x;
         by = KneeGoniometer.Accelerometer_B.Filter.Average.y;

@@ -6,34 +6,38 @@
 // Define "struct <tag>" as type "<tag>"
 typedef struct FiniteStateMachine FiniteStateMachine;
 typedef struct Event Event;
+typedef short int Signal;
 
 // Define state as a function pointer with parent and event parameters
-typedef void State(FiniteStateMachine *FSM, Event const *event);
+typedef void (*State)(FiniteStateMachine *FSM, Event const *MyEvent);
 
 // Finite State Machine Base Class 
 //  should only contain the current state
 struct FiniteStateMachine
 {
-    State *currentState;
+    State currentState;
 };
-
-// In a finite state machine implementation,
-// All possible signals to the state machine should be
-// enumerated in an "enum" such that each signal has a
-// descriptive name associated with a unique short int.
-typedef short int Signal;
 
 // Event Base Class
 //  should only contain the event signal
 struct Event
 {
-    Signal signal;
+    Signal EventSignal;
 };
+
+// NOTE:
+// In a finite state machine implementation,
+// All possible signals to the state machine should be
+// enumerated in an "enum" such that each signal has a
+// descriptive name associated with a unique short int.
+
+
 
 //=============================================================================
 // Preprocessor function definitions
 
-// "FSM_Constructor" initializes the first state.
+// "FSM_Constructor" initializes the first state 
+// by casting passed initialState function pointer to a State 
 #define FSM_Constructor(FSM, initialState) \
         ((FSM)->currentState = (State)(initialState))
 
