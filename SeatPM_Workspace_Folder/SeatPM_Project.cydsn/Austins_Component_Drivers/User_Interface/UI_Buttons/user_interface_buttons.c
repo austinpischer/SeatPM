@@ -22,10 +22,18 @@ void UI_Button_Dispatch(const enum UserInterface_FSM_Signals ButtonSignal)
     FSM_Dispatch(&g_UI_FSM.Parent, &NewEvent.Parent);
 }
 
+void Enable_UI_Button_Interrupts()
+{
+    Button_Confirm_ISR_StartEx(Button_Confirm_ISR_Handler_Austin);
+    Button_Back_ISR_StartEx(Button_Back_ISR_Handler_Austin);
+    Button_Increment_ISR_StartEx(Button_Increment_ISR_Handler_Austin);
+    Button_Decrement_ISR_StartEx(Button_Decrement_ISR_Handler_Austin);
+}
+
 /* Confirm Button Interrupt Implementation*/
 CY_ISR_PROTO(Button_Confirm_ISR_Handler_Austin)
 {
-    DEBUG_PRINT("Confirm Button Pressed\r\n");
+    DEBUG_PRINT("\r\nConfirm Button Pressed\r\n");
     SCREEN_DEBUG("Confirm");
     UI_Button_Dispatch(UI_FSM_SIGNAL__BUTTON_CONFIRM_PRESSED);
 }
@@ -33,7 +41,7 @@ CY_ISR_PROTO(Button_Confirm_ISR_Handler_Austin)
 /* Back Button Interrupt Implementation*/
 CY_ISR_PROTO(Button_Back_ISR_Handler_Austin)
 {
-    DEBUG_PRINT("Back Button Pressed\r\n");
+    DEBUG_PRINT("\r\nBack Button Pressed\r\n");
     SCREEN_DEBUG("Back");
     UI_Button_Dispatch(UI_FSM_SIGNAL__BUTTON_CONFIRM_PRESSED);
 }
@@ -41,7 +49,7 @@ CY_ISR_PROTO(Button_Back_ISR_Handler_Austin)
 /* Increment Button Interrupt Implementation*/
 CY_ISR_PROTO(Button_Increment_ISR_Handler_Austin)
 {
-    DEBUG_PRINT("Increment Button Pressed\r\n");
+    DEBUG_PRINT("\r\nIncrement Button Pressed\r\n");
     SCREEN_DEBUG("Increment");
     UI_Button_Dispatch(UI_FSM_SIGNAL__BUTTON_CONFIRM_PRESSED);
 }
@@ -49,7 +57,7 @@ CY_ISR_PROTO(Button_Increment_ISR_Handler_Austin)
 /* Decrement Button Interrupt Implementation*/
 CY_ISR_PROTO(Button_Decrement_ISR_Handler_Austin)
 {
-    DEBUG_PRINT("Decrement Button Pressed\r\n");
+    DEBUG_PRINT("\r\nDecrement Button Pressed\r\n");
     SCREEN_DEBUG("Decrement");
     UI_Button_Dispatch(UI_FSM_SIGNAL__BUTTON_CONFIRM_PRESSED);
 }

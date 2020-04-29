@@ -1,14 +1,4 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
-*/
+// TODO : File header
 #include "adxl345_driver.h"
 #include "adxl345_registers.h"
 #include "austin_debug.h"
@@ -16,10 +6,8 @@
 void ADXL345_Constructor(ADXL345 *me, uint8 My_I2C_Address)
 {
     me->I2C_Address = My_I2C_Address;
-    ADXL345_InitializeConfigRegisters(me); 
-    AccelerationVector_Constructor(&(me->CurrentAcceleration));
-    MovingAverageFilter_Constructor(&(me->Filter));
-    
+    ADXL345_InitializeConfigRegisters(me);
+    Accelerometer_Constructor(&me->Parent, (Accelerometer_VirtualFunctionPointer)(&ADXL345_UpdateCurrentAcceleration));
 }
 
 void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite)
@@ -108,14 +96,8 @@ int16 ADXL345_ConvertDataToComponent(uint8 ComponentDataRegister1, uint8 Compone
 void ADXL345_UpdateCurrentAcceleration(ADXL345 *me)
 {
     ADXL345_ReadDataRegisters(me);
-    me->CurrentAcceleration.x = ADXL345_ConvertDataToComponent(me->ReadBuffer[1], me->ReadBuffer[0]);
-    me->CurrentAcceleration.y = ADXL345_ConvertDataToComponent(me->ReadBuffer[3], me->ReadBuffer[2]);
-    me->CurrentAcceleration.z = ADXL345_ConvertDataToComponent(me->ReadBuffer[5], me->ReadBuffer[4]);
-}
-
-void ADXL345_UpdateFilteredAcceleration(ADXL345 *me)
-{
-    ADXL345_UpdateCurrentAcceleration(me);
-    MovingAverageFilter_UpdateAverage(&(me->Filter), me->CurrentAcceleration);
+    me->Parent.CurrentAcceleration.x = ADXL345_ConvertDataToComponent(me->ReadBuffer[1], me->ReadBuffer[0]);
+    me->Parent.CurrentAcceleration.y = ADXL345_ConvertDataToComponent(me->ReadBuffer[3], me->ReadBuffer[2]);
+    me->Parent.CurrentAcceleration.z = ADXL345_ConvertDataToComponent(me->ReadBuffer[5], me->ReadBuffer[4]);
 }
 /* [] END OF FILE */

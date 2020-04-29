@@ -15,17 +15,17 @@
 #include "project.h"
 #include "acceleration_vector.h"
 #include "moving_average_filter.h"
- 
+#include "accelerometer_driver.h"
+    
 #define ADXL345_BUFFER_SIZE 10
-#define INVALID_COMPONENT_VALUE -32768
     
 typedef struct ADXL345 ADXL345;
-struct ADXL345{
+struct ADXL345
+{
+    Accelerometer Parent;
     uint8 I2C_Address;
     uint8 WriteBuffer[ADXL345_BUFFER_SIZE];
     uint8 ReadBuffer[ADXL345_BUFFER_SIZE];
-    AccelerationVector CurrentAcceleration;
-    MovingAverageFilter Filter;
 };
 void ADXL345_Constructor(ADXL345 *me, uint8 My_I2C_Address);
 void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite);
@@ -35,6 +35,5 @@ void ADXL345_WriteConfigRegister(ADXL345 *me, const uint8 ConfigRegisterAddress,
 void ADXL345_InitializeConfigRegisters(ADXL345 *me);
 int16 ADXL345_ConvertDataToComponent(uint8 ComponentDataRegister1, uint8 ComponentDataRegister0);
 void ADXL345_UpdateCurrentAcceleration(ADXL345 *me);
-void ADXL345_UpdateFilteredAcceleration(ADXL345 *me);
 #endif 
 /* [] END OF FILE */

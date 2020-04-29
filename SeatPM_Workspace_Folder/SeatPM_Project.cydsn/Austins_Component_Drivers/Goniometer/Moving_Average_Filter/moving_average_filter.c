@@ -12,8 +12,6 @@
 #include "moving_average_filter.h"
 void MovingAverageFilter_Constructor(MovingAverageFilter *me)
 {
-    AccelerationVector_Constructor(&(me->Average));
-    
     unsigned int DataSetIndex;
     for(DataSetIndex = 0; DataSetIndex < DATA_SET_SIZE; DataSetIndex++)
     {
@@ -35,6 +33,11 @@ void MovingAverageFilter_UpdateAverage(MovingAverageFilter *me, AccelerationVect
     {
         me->DataSet_IndexOfOldestData = 0;
     }
+}
+
+AccelerationVector MovingAverageFilter_GetAverage(MovingAverageFilter *me)
+{
+    AccelerationVector Average;
     
     // Get sum of each valid component
     Component Sum_X, Sum_Y, Sum_Z;
@@ -43,6 +46,10 @@ void MovingAverageFilter_UpdateAverage(MovingAverageFilter *me, AccelerationVect
     unsigned int SampleSize_X, SampleSize_Y, SampleSize_Z;
     SampleSize_X = SampleSize_Y = SampleSize_Z = 0; 
     
+    // Iterate through the data set,
+    // Summing up the data values for each acceleration component (x,y,z),
+    // and keeping track of the number of component values encountered (sample size)
+    // so that at the end we can take the average of each component
     unsigned int DataSetIndex;
     for(DataSetIndex = 0; DataSetIndex < DATA_SET_SIZE; DataSetIndex++)
     {
@@ -66,33 +73,34 @@ void MovingAverageFilter_UpdateAverage(MovingAverageFilter *me, AccelerationVect
         }
     }
     
-    // Calculate new average
+        // Calculate new average
     if(SampleSize_X > 0)
     {
-        me->Average.x = Sum_X / SampleSize_X;
+        Average.x = Sum_X / SampleSize_X;
     }
     else
     {
-        me->Average.x = INVALID_COMPONENT_VALUE;
+        Average.x = INVALID_COMPONENT_VALUE;
     }
     
     if(SampleSize_Y > 0)
     {
-        me->Average.y = Sum_Y / SampleSize_Y;
+        Average.y = Sum_Y / SampleSize_Y;
     }
     else
     {
-        me->Average.y = INVALID_COMPONENT_VALUE;
+        Average.y = INVALID_COMPONENT_VALUE;
     }
     
     if(SampleSize_Z > 0)
     {
-        me->Average.z = Sum_Z / SampleSize_Z;
+        Average.z = Sum_Z / SampleSize_Z;
     }
     else
     {
-        me->Average.z = INVALID_COMPONENT_VALUE;
+        Average.z = INVALID_COMPONENT_VALUE;
     }
     // Average components calculated, thus average vector calculated.
+    return(Average);
 }
 /* [] END OF FILE */

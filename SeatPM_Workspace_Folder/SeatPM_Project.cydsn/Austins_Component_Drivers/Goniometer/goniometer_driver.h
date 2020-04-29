@@ -22,11 +22,14 @@ typedef struct Goniometer Goniometer;
 struct Goniometer 
 {
     ADXL345 Accelerometer_A, Accelerometer_B;
-    double Angle;
+    double CurrentAngle;
     double FilteredAngle;
 };
 
 void Goniometer_Constructor(Goniometer *me);
-void Goniometer_CalculateAngle(Goniometer *me, AccelerationVector a, AccelerationVector b);
+double CalculateAngle(AccelerationVector a, AccelerationVector b);
+void Goniometer_CalculateFilteredAngle(Goniometer *me);
+void Goniometer_CalculateCurrentAngle(Goniometer *me);
+void Goniometer_Sample(Goniometer *me);
 #endif
 /* [] END OF FILE */

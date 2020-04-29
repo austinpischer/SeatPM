@@ -12,6 +12,10 @@
 #ifndef AUSTIN_DEBUG_H
 #define AUSTIN_DEBUG_H
     
+typedef int bool;
+#define TRUE 1
+#define FALSE 0
+    
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // NOTE: This project requires that the caller of a macro funtion place a semicolon (;) after calling it in code.
 //       As such, any new macro function must not place a semicolon on the last line of the macro function.
@@ -26,8 +30,8 @@
 #define AUSTIN_DEBUG
 //#define AUSTIN_CSV
 #define AUSTIN_SCREEN_DEBUG
-//#define AUSTIN_ACCELEROMETER_DEBUG
-//#define AUSTIN_GONIOMETER_DEBUG
+#define AUSTIN_ACCELEROMETER_DEBUG
+#define AUSTIN_GONIOMETER_DEBUG
 
 /* Pseudocode for debug print:
  * 1) If AUSTIN_DEBUG is defined...

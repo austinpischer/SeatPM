@@ -21,12 +21,12 @@ typedef struct MovingAverageFilter MovingAverageFilter;
 struct MovingAverageFilter
 {
     AccelerationVector DataSet[DATA_SET_SIZE];
-    AccelerationVector Average;
     unsigned int DataSet_IndexOfOldestData;
 };
 
 void MovingAverageFilter_Constructor(MovingAverageFilter *me);
-void MovingAverageFilter_UpdateAverage(MovingAverageFilter *me, AccelerationVector NewData);
+void MovingAverageFilter_UpdateDataSet(MovingAverageFilter *me, AccelerationVector NewData);
+AccelerationVector MovingAverageFilter_GetAverage(MovingAverageFilter *me);
 #endif
 
 /* [] END OF FILE */

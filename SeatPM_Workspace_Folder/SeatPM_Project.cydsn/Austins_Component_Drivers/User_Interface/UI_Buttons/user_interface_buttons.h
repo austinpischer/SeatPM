@@ -20,6 +20,8 @@ extern UserInterface_FSM g_UI_FSM;
     
 void UI_Button_Dispatch(const enum UserInterface_FSM_Signals ButtonSignal);
 
+void Enable_UI_Button_Interrupts();
+
 CY_ISR_PROTO(Button_Confirm_ISR_Handler_Austin);
 CY_ISR_PROTO(Button_Back_ISR_Handler_Austin);
 CY_ISR_PROTO(Button_Increment_ISR_Handler_Austin);

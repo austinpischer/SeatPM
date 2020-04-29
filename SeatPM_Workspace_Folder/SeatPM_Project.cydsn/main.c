@@ -24,11 +24,13 @@
 #define ACCELEROMETER_WRITE_BUFFER_SIZE 10
 
 //===============================Global Variables==============================
-char DebugString[64];
-char CSV_String[64];
 UserInterface_FSM g_UI_FSM;
+char g_Debug[64];
 
-void printaccelerometerreadouts(AccelerationVector myvector);
+//============================= Helper Function Prototypes ====================
+void PrintAcceleration(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, AccelerationVector CurrentAcceleration);
+void PrintGoniometerAngle(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, double GoniometerAngle);
+
 //===============================Main Function=================================
 int main(void)
 {
@@ -38,88 +40,106 @@ int main(void)
     PuTTY_Start();
     I2C_Start();
     
-    /* Enable Button Interrupts */
-    Button_Confirm_ISR_StartEx(Button_Confirm_ISR_Handler_Austin);
-    Button_Back_ISR_StartEx(Button_Back_ISR_Handler_Austin);
-    Button_Increment_ISR_StartEx(Button_Increment_ISR_Handler_Austin);
-    Button_Decrement_ISR_StartEx(Button_Decrement_ISR_Handler_Austin);
+    // Finite state machine should be constructed/initialized before button interrupts are enabled
+    // such that we don't send button signals to a state that is null.
+    UserInterface_FSM_Constructor(&g_UI_FSM);
+    Enable_UI_Button_Interrupts();
     
+    /* Declare variables */
     Goniometer KneeGoniometer; 
-    Goniometer_Constructor(&KneeGoniometer);
-    
-    MovingAverageFilter Accelerometer_A_Filter, Accelerometer_B_Filter;
-    MovingAverageFilter_Constructor(&Accelerometer_A_Filter);
-    MovingAverageFilter_Constructor(&Accelerometer_B_Filter);
-    
-    
-    
-    int16 ax,ay,az,bx,by,bz;
-    
+    Goniometer_Constructor(&KneeGoniometer);    
       
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     for(;;)
     {
         /* Place your application code here. */
+        
+        /*
+        Goniometer_Sample(&KneeGoniometer);
          
-        ADXL345_UpdateFilteredAcceleration(&(KneeGoniometer.Accelerometer_A));
-        /* Current Acceleromter A Measurement */
-        ax = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
-        ay = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
-        az = KneeGoniometer.Accelerometer_A.CurrentAcceleration.x;
-        sprintf(DebugString, "Current Acceleration:\tax = %d, ay = %d, az = %d\r\n", ax,ay,az);
-        ACCELEROMETER_DEBUG(DebugString);
-        sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
-        CSV_PRINT(CSV_String);
-        /* Filtered Acceleromter A Measurement */ 
-        ax = KneeGoniometer.Accelerometer_A.Filter.Average.x;
-        ay = KneeGoniometer.Accelerometer_A.Filter.Average.y;
-        az = KneeGoniometer.Accelerometer_A.Filter.Average.z;
-        sprintf(DebugString, "Filtered Acceleration:\tax = %d, ay = %d, az = %d\r\n", ax,ay,az);
-        ACCELEROMETER_DEBUG(DebugString);
-        sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
-        CSV_PRINT(CSV_String);
+        bool PrintCurrent = TRUE;
+        bool PrintFiltered = FALSE;
         
-        ADXL345_UpdateFilteredAcceleration(&(KneeGoniometer.Accelerometer_B));
-        /* Current Acceleromter B Measurement */ 
-        bx = KneeGoniometer.Accelerometer_B.CurrentAcceleration.x;
-        by = KneeGoniometer.Accelerometer_B.CurrentAcceleration.y;
-        bz = KneeGoniometer.Accelerometer_B.CurrentAcceleration.z;
-        sprintf(DebugString, "Current Acceleration:\tbx = %d, by = %d, bz = %d\r\n", bx,by,bz);
-        ACCELEROMETER_DEBUG(DebugString);
-          sprintf(CSV_String, "%d,%d,%d\r\n",ax,ay,az);
-        CSV_PRINT(CSV_String);
-        /* Filtered Acceleromter B Measurement */ 
-        bx = KneeGoniometer.Accelerometer_B.Filter.Average.x;
-        by = KneeGoniometer.Accelerometer_B.Filter.Average.y;
-        bz = KneeGoniometer.Accelerometer_B.Filter.Average.z;
-        sprintf(DebugString, "Filtered Acceleration:\tbx = %d, by = %d, bz = %d\r\n", bx,by,bz);
-        ACCELEROMETER_DEBUG(DebugString);
-        sprintf(CSV_String, "%d,%d,%d\r\n",bx,by,bz);
-        CSV_PRINT(CSV_String);
+        PrintAcceleration(PrintCurrent, KneeGoniometer.Accelerometer_A.Parent.CurrentAcceleration);
+        PrintAcceleration(PrintCurrent, KneeGoniometer.Accelerometer_B.Parent.CurrentAcceleration);
         
-        /* Current Goniometer Angle */ 
-        Goniometer_CalculateAngle(&KneeGoniometer,
-                                  KneeGoniometer.Accelerometer_A.CurrentAcceleration,
-                                  KneeGoniometer.Accelerometer_B.CurrentAcceleration);
-        sprintf(DebugString, "Current Angle:\t%lf degrees\r\n", KneeGoniometer.Angle);
-        GONIOMETER_DEBUG(DebugString);
-        sprintf(CSV_String, "%lf\r\n", KneeGoniometer.Angle);
-        CSV_PRINT(CSV_String);
+        PrintAcceleration(PrintFiltered, KneeGoniometer.Accelerometer_A.Parent.FilteredAcceleration);
+        PrintAcceleration(PrintFiltered, KneeGoniometer.Accelerometer_B.Parent.FilteredAcceleration);
         
+        PrintGoniometerAngle(PrintCurrent, KneeGoniometer.CurrentAngle);
+        PrintGoniometerAngle(PrintFiltered, KneeGoniometer.FilteredAngle);
+        */
         
-        /* Filtered Goniometer Angle */ 
-        Goniometer_CalculateAngle(&KneeGoniometer,  
-                                  KneeGoniometer.Accelerometer_A.Filter.Average,
-                                  KneeGoniometer.Accelerometer_B.Filter.Average);
-        sprintf(DebugString, "Filtered Angle:\t%lf degrees\r\n", KneeGoniometer.FilteredAngle);
-        GONIOMETER_DEBUG(DebugString);
-        sprintf(CSV_String, "%lf\r\n", KneeGoniometer.FilteredAngle);
-        CSV_PRINT(CSV_String);
-
-        /* End of cycle */
         //DEBUG_PRINT("\r\n");    // print a new line
-        Screen_ClearDisplay();
+        //Screen_ClearDisplay();
     }
 }
+
+void PrintAcceleration(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, AccelerationVector Acceleration)
+{
+    char DebugString[64];
+    if(SetTrueToPrintCurrent_SetFalseToPrintFiltered == TRUE)
+    {
+        sprintf(DebugString, 
+                "Current Acceleration:\tax = %d, ay = %d, az = %d\r\n", 
+                Acceleration.x,
+                Acceleration.y,
+                Acceleration.z);
+    }
+    else if (SetTrueToPrintCurrent_SetFalseToPrintFiltered == FALSE)
+    {
+        sprintf(DebugString, 
+                "Filtered Acceleration:\tax = %d, ay = %d, az = %d\r\n", 
+                Acceleration.x,
+                Acceleration.y,
+                Acceleration.z);
+    }
+    else
+    {
+        sprintf(DebugString, 
+                "Current/Filtered Acceleration Flag Set To Invalid Value: %d", 
+                SetTrueToPrintCurrent_SetFalseToPrintFiltered);
+        return; // Leave function early to avoid any following printouts
+    }
+    
+    ACCELEROMETER_DEBUG(DebugString);
+    
+    sprintf(DebugString, 
+            "%d,%d,%d\r\n",
+            Acceleration.x,
+            Acceleration.y,
+            Acceleration.z);
+    CSV_PRINT(DebugString);
+}
+
+void PrintGoniometerAngle(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, double GoniometerAngle)
+{
+    char DebugString[64];
+    if(SetTrueToPrintCurrent_SetFalseToPrintFiltered == TRUE)
+    {
+        sprintf(DebugString, 
+                "Current Goniometer Angle:\t%lf degrees\r\n",
+                GoniometerAngle);
+    }
+    else if (SetTrueToPrintCurrent_SetFalseToPrintFiltered == FALSE)
+    {
+        sprintf(DebugString, 
+                "Filtered Goniometer Angle:\t%lf degrees\r\n",
+                GoniometerAngle);
+    }
+    else
+    {
+        sprintf(DebugString, 
+                "Current/Filtered Goniometer Angle Flag Set To Invalid Value: %d", 
+                SetTrueToPrintCurrent_SetFalseToPrintFiltered);
+        return; // Leave function early to avoid any following printouts
+    }
+    
+    ACCELEROMETER_DEBUG(DebugString);
+    
+    sprintf(DebugString, "%lf\r\n", GoniometerAngle);
+    CSV_PRINT(DebugString);
+}
+
 
 /* [] END OF FILE */

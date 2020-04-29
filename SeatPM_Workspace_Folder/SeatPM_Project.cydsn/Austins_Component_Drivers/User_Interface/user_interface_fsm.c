@@ -10,6 +10,7 @@
  * ========================================
 */
 
+#include "austin_debug.h"
 #include "user_interface_fsm.h"
 
 //=============================================================================
@@ -17,7 +18,12 @@
 // 
 void UserInterface_FSM_Constructor(UserInterface_FSM *UI_FSM)
 {
+    DEBUG_PRINT("UI Constructor called");
     FSM_Constructor(&UI_FSM->Parent, &UserInterface_FSM_Initial_State);
+    DEBUG_PRINT("UI Initial state called");
+    Event InitialEvent;
+    InitialEvent.EventSignal = UI_FSM_SIGNAL__BUTTON_CONFIRM_PRESSED; // Should do nothing with this signal
+    FSM_ExecuteInitialState(&UI_FSM->Parent, &InitialEvent);
 }
                                 
 //=============================================================================
@@ -26,6 +32,7 @@ void UserInterface_FSM_Initial_State(
                                 UserInterface_FSM *UI_FSM,
                                 Event const *MyEvent)
 {
+    DEBUG_PRINT("UI Initial State Called called");
     Screen_ClearDisplay();
     sprintf(&UI_FSM->CurrentMessage[0][0], "     SeatPM     ");
     Screen_PrintString(&UI_FSM->CurrentMessage[0][0]);
