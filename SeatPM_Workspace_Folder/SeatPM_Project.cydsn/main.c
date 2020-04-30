@@ -1,15 +1,7 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
-*/
-//====================================Includes and Defines=====================
+// TODO: File header
+
+//-----------------------------------------------------------------------------
+// Inclusions
 #include "project.h"
 #include "adxl345_registers.h"
 #include "austin_debug.h"
@@ -20,40 +12,56 @@
 #include "user_interface_buttons.h"
 #include <stdio.h>
 
-#define ACCELEROMETER_READ_BUFFER_SIZE 10
-#define ACCELEROMETER_WRITE_BUFFER_SIZE 10
 
-//===============================Global Variables==============================
+//=============================================================================
+// Inclusions
+//=============================================================================
 UserInterface_FSM g_UI_FSM;
 char g_Debug[64];
 
-//============================= Helper Function Prototypes ====================
+//=============================================================================
+// Serial Output Function Prototypes
+//=============================================================================
 void PrintAcceleration(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, AccelerationVector CurrentAcceleration);
 void PrintGoniometerAngle(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, double GoniometerAngle);
 
-//===============================Main Function=================================
+//=============================================================================
+// Main Function
+//=============================================================================
 int main(void)
 {
+    //-------------------------------------------------------------------------
+    // Startup/Initialization Code
+    //-------------------------------------------------------------------------
+    
     CyGlobalIntEnable; /* Enable global interrupts. */
     
+    //-------------------------------------------------------------------------
+    // Hardware Startup
+    //-------------------------------------------------------------------------
     Screen_Start();
     PuTTY_Start();
     I2C_Start();
     
+    //-------------------------------------------------------------------------
+    // User Interface Finite State Machine Startup
+    //-------------------------------------------------------------------------
     // Finite state machine should be constructed/initialized before button interrupts are enabled
     // such that we don't send button signals to a state that is null.
     UserInterface_FSM_Constructor(&g_UI_FSM);
     Enable_UI_Button_Interrupts();
     
-    /* Declare variables */
+    //-------------------------------------------------------------------------
+    // Non-Global Variables
+    //-------------------------------------------------------------------------
     Goniometer KneeGoniometer; 
     Goniometer_Constructor(&KneeGoniometer);    
       
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+    //-------------------------------------------------------------------------
+    // Infinite Loop
+    //-------------------------------------------------------------------------
     for(;;)
     {
-        /* Place your application code here. */
-        
         /*
         Goniometer_Sample(&KneeGoniometer);
          
@@ -72,9 +80,13 @@ int main(void)
         
         //DEBUG_PRINT("\r\n");    // print a new line
         //Screen_ClearDisplay();
-    }
-}
+    } // End infinite loop
+    
+} // End main()
 
+//=============================================================================
+// Serial Output Function Implementations
+//=============================================================================
 void PrintAcceleration(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, AccelerationVector Acceleration)
 {
     char DebugString[64];

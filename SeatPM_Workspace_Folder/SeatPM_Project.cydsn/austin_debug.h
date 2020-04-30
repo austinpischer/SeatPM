@@ -1,38 +1,28 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
-*/
+// TODO: File Header
 #ifndef AUSTIN_DEBUG_H
 #define AUSTIN_DEBUG_H
     
+//=============================================================================
+// Boolean Type
+//=============================================================================
 typedef int bool;
 #define TRUE 1
 #define FALSE 0
     
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// NOTE: This project requires that the caller of a macro funtion place a semicolon (;) after calling it in code.
-//       As such, any new macro function must not place a semicolon on the last line of the macro function.
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-// Function constants
-    
-#define SCREEN_DEBUG_DURATION_IN_MILLISECONDS 1000
-    
-// Comment out "#define AUSTIN_DEBUG" to disable debugging output"
-// Uncomment "#define AUSTIN_DEBUG" to enable debugging output" 
-#define AUSTIN_DEBUG
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * Comment out "#define AUSTIN_DEBUG" to disable debugging output"
+ * Uncomment "#define AUSTIN_DEBUG" to enable debugging output"
+ *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+#define AUSTIN_DEBUG // Associated with DEBUG_PRINT
 //#define AUSTIN_CSV
 #define AUSTIN_SCREEN_DEBUG
 #define AUSTIN_ACCELEROMETER_DEBUG
 #define AUSTIN_GONIOMETER_DEBUG
 
+    
+// ============================================================================
+// DEBUG_PRINT
+// ============================================================================
 /* Pseudocode for debug print:
  * 1) If AUSTIN_DEBUG is defined...
  * 2) ...Set the DEBUG_PRINT() macro function to print to the LCD.
@@ -40,12 +30,21 @@ typedef int bool;
  * 4) ...Set the DEBUG_PRINT macro function to do nothing. 
  */
 #ifdef AUSTIN_DEBUG // START of preprocessor if/else statement.
-    #define DEBUG_PRINT(string) (PuTTY_UartPutString(string))   // Macro function replaces left statement with right before compiling
+    
+    // Note: Macro function replaces left statement with right before compiling
+    #define DEBUG_PRINT(string) (PuTTY_UartPutString(string))  
+    
 #else
-    #define DEBUG_PRINT(string) ({})                            // {} is included to specify empty statement, otherwise compiler throws error
-#endif                                                          // END of preprocessor if/else statement.
+    
+    // {} is included to specify empty statement,s 
+    // otherwise compiler throws error
+    #define DEBUG_PRINT(string) ({})                            
+    
+#endif // END of preprocessor if/else statement.
 
-
+// ============================================================================
+// CSV_PRINT
+// ============================================================================
 #ifdef AUSTIN_CSV
 #define CSV_PRINT(string) (PuTTY_UartPutString(string))
 #else
