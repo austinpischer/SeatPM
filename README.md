@@ -17,3 +17,88 @@ To contribute to the project, one must do at least the following steps:
 10. Commit your changes and push them to the GitHub servers
 11. Create a pull request and wait for my approval.
 
+Please adhere to the following practices for readability and maintainability
+and simplicity of code:
+
+1. All files written by a human author must include a "file header comment"
+   at the top of the file. These file header comments should use this template:
+
+/*==============================================================================
+ * Project: SeatPM
+ * Team: Joint Effort
+ * School: Seattle Pacific University
+ * Class: CatalyzeU Senior Design
+ * 
+ * File Name:
+ * Author: 
+ * 
+ * File Explanation:
+ *============================================================================*/
+
+2a. All major sections of a file should have a "separator comment" as follows:
+ 
+//==============================================================================
+// Section Name
+//==============================================================================
+
+2b. A preceding section should have one newline between the last line of code
+    and the following "separator comment".
+
+3. Strive to limit all lines of code to 80 characters or less,
+   unless doing so hinders readability/coherence of the code.
+
+4. Each file should have a "end of file comment" at the (you guessed it)
+   end of the file as follows:
+
+/* [] END OF FILE */
+
+5a. All header files should have multiple inclusion protection (m.i.p.).
+5b. The start of the m.i.p. should be beneath the "file header comment".
+5c. The start of the m.i.p. should utilize the header file's name in
+    UPPER_CASE_SNAKE_CASE as follows:
+    
+// Start of multiple inclusion protection
+#ifndef FILE_NAME_H
+#define FILE_NAME_H
+
+5d.The end of the m.i.p. should be before the "end of file" comment as follows:
+
+#endif // End of multiple inclusion protection.
+/* [] END OF FILE */
+
+6. All #define statements should use UPPER_CASE_SNAKE_CASE as shown in 5c.
+
+7a. The bodies of all statments (if, if else, else, for, 
+   while, do while, struct, enum, and etcetera) must be surrounded
+   by curly braces.
+7b. The leading curly brace of a statement body must be on its own line,
+    as follows:
+
+    if(AuthorDoesntLikeIt == TRUE)
+    {
+        Author.GoCryAboutIt();
+    }
+    else
+    {
+        Author.PatSelfOnBack();
+    }
+
+8. Try to avoid acronyms or contractions for words.
+   Try to make the code as close to plain english as possible.
+   Try to optimize for read-time over write-time.
+
+9. Filenames should be in "snake_case"
+
+10. Variables and whatnot should be in "PascalCase"
+
+11. This project tries to adhere to object-oriented C (OOC) principles.
+    These are self-imposed rules that are not actually part of the C language.
+    However, the size of the project is small enough that we do not need to
+    implement most object-oriented interfaces, which saves us code space on
+    the microcontroller. Please be smart about how much you adhere to OOC.
+    See the following link for some information about OOC: 
+    https://dmitryfrank.com/articles/oop_in_c
+
+    
+   
+
