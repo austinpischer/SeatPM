@@ -1,5 +1,7 @@
 # SeatPM
-This is a public repository that allows potential collaborators to
+T
+## How to Collaborate
+his is a public repository that allows potential collaborators to
 contribute to our project using "git" version control.
 
 This project structure is reflected in the file structure of this repository.
@@ -17,6 +19,7 @@ To contribute to the project, one must do at least the following steps:
 10. Commit your changes and push them to the GitHub servers
 11. Create a pull request and wait for my approval.
 
+## Rules for Code Appearance
 Please adhere to the following practices for readability and maintainability
 and simplicity of code:
 
