@@ -22,7 +22,7 @@ and simplicity of code:
 
 1. All files written by a human author must include a "file header comment"
    at the top of the file. These file header comments should use this template:
-
+```
 /*==============================================================================
  * Project: SeatPM
  * Team: Joint Effort
@@ -34,13 +34,13 @@ and simplicity of code:
  * 
  * File Explanation:
  *============================================================================*/
-
+```
 2a. All major sections of a file should have a "separator comment" as follows:
- 
+```
 //==============================================================================
 // Section Name
 //==============================================================================
-
+```
 2b. A preceding section should have one newline between the last line of code
     and the following "separator comment".
 
@@ -56,16 +56,16 @@ and simplicity of code:
 5b. The start of the m.i.p. should be beneath the "file header comment".
 5c. The start of the m.i.p. should utilize the header file's name in
     UPPER_CASE_SNAKE_CASE as follows:
-    
+```   
 // Start of multiple inclusion protection
 #ifndef FILE_NAME_H
 #define FILE_NAME_H
-
+```
 5d.The end of the m.i.p. should be before the "end of file" comment as follows:
-
+```
 #endif // End of multiple inclusion protection.
 /* [] END OF FILE */
-
+```
 6. All #define statements should use UPPER_CASE_SNAKE_CASE as shown in 5c.
 
 7a. The bodies of all statments (if, if else, else, for, 
@@ -73,7 +73,7 @@ and simplicity of code:
    by curly braces.
 7b. The leading curly brace of a statement body must be on its own line,
     as follows:
-
+```
     if(AuthorDoesntLikeIt == TRUE)
     {
         Author.GoCryAboutIt();
@@ -82,7 +82,7 @@ and simplicity of code:
     {
         Author.PatSelfOnBack();
     }
-
+```
 8. Try to avoid acronyms or contractions for words.
    Try to make the code as close to plain english as possible.
    Try to optimize for read-time over write-time.
