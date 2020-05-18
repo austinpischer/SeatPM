@@ -1,7 +1,7 @@
 # SeatPM
-T
+
 ## How to Collaborate
-his is a public repository that allows potential collaborators to
+This is a public repository that allows potential collaborators to
 contribute to our project using "git" version control.
 
 This project structure is reflected in the file structure of this repository.
@@ -77,13 +77,13 @@ and simplicity of code:
 7b. The leading curly brace of a statement body must be on its own line,
     as follows:
 ```
-    if(AuthorDoesntLikeIt == TRUE)
+    if(Author->DoesntLikeIt == TRUE)
     {
-        Author.GoCryAboutIt();
+        Author_GoCryAboutIt(&Author);
     }
     else
     {
-        Author.PatSelfOnBack();
+        Author_PatSelfOnBack(&Author);
     }
 ```
 8. Try to avoid acronyms or contractions for words.

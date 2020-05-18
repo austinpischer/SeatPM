@@ -1,15 +1,18 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
-*/
-
+/*==============================================================================
+ * Project: SeatPM
+ * Team: Joint Effort
+ * School: Seattle Pacific University
+ * Class: CatalyzeU Senior Design
+ * 
+ * File Name: moving_average_filter.h
+ * Author: Austin Pischer
+ * 
+ * File Explanation:
+ * The Moving Average Filter Class is intended to reduce noise in the
+ * accelerometer readings. We acheive this by averaging the last *n* readings
+ * that fed into the filter, updating the average every time
+ * that we are fed a new reading.
+ *============================================================================*/
 #ifndef MOVING_AVERAGE_FILTER_H
 #define MOVING_AVERAGE_FILTER_H
 
