@@ -1,7 +1,8 @@
 // TODO: File header
 
-//-----------------------------------------------------------------------------
+//=============================================================================
 // Inclusions
+//=============================================================================
 #include "project.h"
 #include "adxl345_registers.h"
 #include "austin_debug.h"
@@ -10,20 +11,36 @@
 #include "moving_average_filter.h"
 #include "user_interface_fsm.h"
 #include "user_interface_buttons.h"
+#include "austin_parameter.h" // For Parameter Class
 #include <stdio.h>
 
 
 //=============================================================================
-// Inclusions
+// Definitions
+//=============================================================================
+#define ABSOLUTE_MINIMUM_KNEE_ANGLE 90
+#define ABSOLUTE_MAXIMUM_KNEE_ANGLE 180
+
+//=============================================================================
+// Global Variables
 //=============================================================================
 UserInterface_FSM g_UI_FSM;
 char g_Debug[64];
+Parameter g_MinimumAngle, g_MaximumAngle, g_CPM_Speed, g_CableReleasedPercent;
+double g_KneeAngle;
 
 //=============================================================================
 // Serial Output Function Prototypes
 //=============================================================================
-void PrintAcceleration(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, AccelerationVector CurrentAcceleration);
-void PrintGoniometerAngle(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, double GoniometerAngle);
+void PrintAcceleration(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered,
+                       AccelerationVector CurrentAcceleration);
+void PrintGoniometerAngle(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, 
+                          double GoniometerAngle);
+
+//=============================================================================
+// Initialization Function Prototypes
+//=============================================================================
+void InitializeParamters();
 
 //=============================================================================
 // Main Function
@@ -42,7 +59,12 @@ int main(void)
     Screen_Start();
     PuTTY_Start();
     I2C_Start();
-    
+
+    //-------------------------------------------------------------------------
+    // Global Parameter Constructors
+    //-------------------------------------------------------------------------
+    InitializeParamters();
+
     //-------------------------------------------------------------------------
     // User Interface Finite State Machine Startup
     //-------------------------------------------------------------------------
@@ -151,6 +173,73 @@ void PrintGoniometerAngle(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, do
     
     sprintf(DebugString, "%lf\r\n", GoniometerAngle);
     CSV_PRINT(DebugString);
+}
+
+//=============================================================================
+// Initialization Function Implementations
+//=============================================================================
+
+void InitializeParamters()
+{
+        // The minimum angle can be between the absolute minmum and the maximum angle
+    // Since maximum angle value isn't set yet, just use maximum possible angle
+    double MinValue = ABSOLUTE_MINIMUM_KNEE_ANGLE;
+    double MaxValue = ABSOLUTE_MAXIMUM_KNEE_ANGLE;
+    double Value = ABSOLUTE_MINIMUM_KNEE_ANGLE;
+
+    bool IsValidConstructor =
+        Parameter_Constructor(&g_MinimumAngle,
+                              MinValue,
+                              MaxValue,
+                              Value);
+
+    if(IsValidConstructor == FALSE)
+    {
+        // TODO: Should probably put more detailed error in the parameter code
+        DEBUG_PRINT("Invalid Minimum Angle Constructor");
+        // Knee angle settings are critical to user safety.
+        // Shut off the device to prevent injuring the user.
+        // TODO: Turn off device here.
+    }
+    // Otherwise, constructor called with valid min, max and value
+    
+    // The maximum angle can be between the absolute maximum and the minimum
+    MinValue = Parameter_GetValue(&g_MinimumAngle);
+    MaxValue = ABSOLUTE_MAXIMUM_KNEE_ANGLE;
+    Value = ABSOLUTE_MAXIMUM_KNEE_ANGLE;
+
+    IsValidConstructor =
+     Parameter_Constructor(&g_MaximumAngle,
+                            MinValue,
+                            MaxValue,
+                            Value);
+
+    
+    if(IsValidConstructor == FALSE)
+    {
+        // TODO: Should probably put more detailed error in the parameter code
+        DEBUG_PRINT("Invalid Maximum Angle Constructor");
+        // Knee angle settings are critical to user safety.
+        // Shut off the device to prevent injuring the user.
+        // TODO: Turn off device here.
+    }
+    // Otherwise, constructor called with valid min, max and value
+
+
+    //Speed
+    MinValue = 0;
+    MaxValue = 100;
+    Value = 0;
+    IsValidConstructor = 
+        Parameter_Constructor(&g_CPM_Speed,
+                              MinValue,
+                              MaxValue,
+                              Value);
+
+    if(IsValidConstructor == FALSE)
+    {
+        DEBUG_PRINT("Invalid CPM Speed Constructor");
+    }
 }
 
 
