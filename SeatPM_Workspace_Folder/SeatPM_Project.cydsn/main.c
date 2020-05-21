@@ -24,7 +24,7 @@
 //=============================================================================
 // Global Variables
 //=============================================================================
-UserInterface_FSM g_UI_FSM;
+UI_FSM g_UserInterface;
 char g_Debug[64];
 Parameter g_MinimumAngle, g_MaximumAngle, g_CPM_Speed, g_CableReleasedPercent;
 double g_KneeAngle;
@@ -70,20 +70,30 @@ int main(void)
     //-------------------------------------------------------------------------
     // Finite state machine should be constructed/initialized before button interrupts are enabled
     // such that we don't send button signals to a state that is null.
-    UserInterface_FSM_Constructor(&g_UI_FSM);
+    UI_FSM_Constructor(&g_UserInterface);
     Enable_UI_Button_Interrupts();
     
     //-------------------------------------------------------------------------
     // Non-Global Variables
     //-------------------------------------------------------------------------
     Goniometer KneeGoniometer; 
-    Goniometer_Constructor(&KneeGoniometer);    
+    Goniometer_Constructor(&KneeGoniometer);   
+    double LastKneeAngle = INVALID_ANGLE; 
       
     //-------------------------------------------------------------------------
     // Infinite Loop
     //-------------------------------------------------------------------------
     for(;;)
     {
+        if(g_UserInterface.ShallMainLoopUpdateAngleReading == TRUE
+           && g_KneeAngle != LastKneeAngle)
+        {
+            sprintf(&g_UserInterface.Message[0][0],
+                    "Current %4.1lf deg",
+                    g_KneeAngle);
+            Screen_PrintString(&g_UserInterface.Message[0][0]);
+            LastKneeAngle = g_KneeAngle;
+        }
         /*
         Goniometer_Sample(&KneeGoniometer);
          

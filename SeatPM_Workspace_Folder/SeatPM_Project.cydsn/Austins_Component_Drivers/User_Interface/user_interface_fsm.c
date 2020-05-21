@@ -16,7 +16,6 @@
 //=============================================================================
 #include "user_interface_fsm.h"
 
-
 //=============================================================================
 // Method Implementations - User Interface Finite State Machine Class
 //
@@ -28,462 +27,485 @@
 //=============================================================================
 // Constructor
 //=============================================================================
-void UserInterface_FSM_Constructor(UserInterface_FSM *UI_FSM)
+void UI_FSM_Constructor(UI_FSM *me)
 {
     DEBUG_PRINT("UI Constructor called");
-    FSM_Constructor(&UI_FSM->Parent, &UserInterface_FSM_Initial_State);
+    FSM_Constructor(&me->Parent, &UI_FSM_Initial_State);
     DEBUG_PRINT("UI Initial state called");
 
-    UI_FSM->IsFirstTimeSettingMinAngle = TRUE;
-    UI_FSM->IsFirstTimeSettingMaxAngle = TRUE;
-    UI_FSM->IsFirstSetup = TRUE;
-    
-    // One should not expect for the initial state to do anything with this signal
+    // Initialized in the order they appear in state flow
+    me->IsFirstTimeSettingMinAngle = TRUE;
+    me->IsFirstTimeSettingMaxAngle = TRUE;
+    me->HasUserSeenAttachGoniometerMessage = FALSE;
+    me->ShallMainLoopUpdateAngleReading = FALSE;
+    me->HasUserSeenAttachAnkleStrapMessage = FALSE;
+    me->ShallDisplayCableReleasedPercent = FALSE
+
+    // One should not expect for the initial state
+    // to do anything with this signal
     Event InitialEvent;
-    InitialEvent.EventSignal = CONFIRM_BUTTON_PRESSED; 
-    FSM_ExecuteInitialState(&UI_FSM->Parent, &InitialEvent);
+    InitialEvent.EventSignal = CONFIRM_BUTTON_PRESSED;
+    FSM_ExecuteInitialState(&me->Parent, &InitialEvent);
 }
 
 //=============================================================================
 // Print Message
 //=============================================================================
-void UserInterface_FSM_PrintMessage(
-                    char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW+1])
+void UI_FSM_PrintMessage(
+    char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW + 1])
 {
     Screen_ClearDisplay();
     Screen_PrintString(&Message[0][0]);
     Screen_PrintString(&Message[1][0]);
 }
-                                
+
+//=============================================================================
+// Validate Current Goniometer Measurement
+//=============================================================================
+bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
+{
+    double MaxAngle = Parameter_GetValue(&g_MaximumAngle);
+    double MinAngle = Parameter_GetValue(&g_MinimumAngle);
+
+    // Below case is reading within range of user-set parameters (valid)
+    if(g_KneeAngle <= MaxAngle && 
+       g_KneeAngle >= MinAngle &&
+       g_KneeAngle != INVALID_ANGLE)
+    {
+        // Don't need to print anything if valid
+        return(TRUE);
+    }
+    
+    // All below cases are outside of range of user-set parameters
+    // or invalid.
+    else if(g_KneeAngle > MaxAngle)
+    {
+        // Print knee angle too large error
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Knee Angle above");
+        sprintf(&me->Message[0][0], "maximum limit!  ");
+        UI_FSM_PrintMessage(me->Message);
+    }
+    else if(g_KneeAngle < MinAngle)
+    {
+        // Print knee angle too small error
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Knee Angle below ");
+        sprintf(&me->Message[0][0], "minimum limit!  ");
+        UI_FSM_PrintMessage(me->Message);
+    }
+    else if(g_KneeAngle == INVALID_ANGLE)
+    {
+        // Print knee angle invalid error
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Knee Angle is   ");
+        sprintf(&me->Message[0][0], "INVALID_ANGLE ! ");
+        UI_FSM_PrintMessage(me->Message);
+    }
+    else
+    {
+        // Print knee angle invalid error
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Knee Angle is   ");
+        sprintf(&me->Message[0][0], "unspecified!   ");
+        UI_FSM_PrintMessage(me->Message);
+    }
+    CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
+    return(FALSE);
+}
 //=============================================================================
 // State Function Implementations -- User Interface Finite State Machine Class
-
+//
 
 //=============================================================================
 // Initial State
 //=============================================================================
-void UserInterface_FSM_Initial_State(
-                                UserInterface_FSM *UI_FSM,
-                                Event const *MyEvent)
+void UI_FSM_Initial_State(UI_FSM *me, Event const *MyEvent)
 {
     DEBUG_PRINT("UI Initial State Called called");
-    
+
     // Print welcome message while UI starts up
-    //                               1234567890123456
-    sprintf(&UI_FSM->Message[0][0], "   Welcome to   ");
-    sprintf(&UI_FSM->Message[1][0], "     SeatPM     ");
-    UserInterface_FSM_PrintMessage(UI_FSM->Message);
-    
+    //                           1234567890123456
+    sprintf(&me->Message[0][0], "   Welcome to   ");
+    sprintf(&me->Message[1][0], "     SeatPM     ");
+    UI_FSM_PrintMessage(me->Message);
+
     // UI Startup Code Goes Here
-    
+
     // Transition to Setting Minimum Angle
-    FSM_Transition(&UI_FSM->Parent,
-                   &UserInterface_FSM_SetMinimumAngle_State);
+    FSM_Transition(&me->Parent,
+                   &UI_FSM_SetMinimumAngle_State);
 }
- 
+
 //=============================================================================
 // Goniometer Configuration States
 
 //=============================================================================
 // Set Minimum Angle State
 //=============================================================================
-void UserInterface_FSM_SetMinimumAngle_State(
-                                UserInterface_FSM *UI_FSM, 
-                                Event const *MyEvent)
-{ 
+void UI_FSM_SetMinimumAngle_State(UI_FSM *me, Event const *MyEvent)
+{
 
-    switch(MyEvent->EventSignal)
+    switch (MyEvent->EventSignal)
     {
-        case CONFIRM_BUTTON_PRESSED :
-            FSM_Transition(&UI_FSM->Parent,
-                           &UserInterface_FSM_SetMaximumAngle_State);
+    case CONFIRM_BUTTON_PRESSED:
+        FSM_Transition(&me->Parent,
+                       &UI_FSM_SetMaximumAngle_State);
         break;
-        
-        case BACK_BUTTON_PRESSED :
-            // Do nothing... this is the first user-accessible state
-        break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            Parameter_SetValue(&g_MinimumAngle, Parameter_GetValue(&g_MinimumAngle)+1);
-        break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            Parameter_SetValue(&g_MinimumAngle, Parameter_GetValue(&g_MinimumAngle)-1);
-        break;
-        
-        default :
-            // TODO
-        break;
-    } // End of switch statmenet
 
-    if(UI_FSM->IsFirstTimeSettingMinAngle == TRUE)
+    case BACK_BUTTON_PRESSED:
+        // Do nothing... this is the first user-accessible state
+        break;
+
+    case INCREMENT_BUTTON_PRESSED:
+        Parameter_SetValue(&g_MinimumAngle,
+                           Parameter_GetValue(&g_MinimumAngle) + 1);
+        break;
+
+    case DECREMENT_BUTTON_PRESSED:
+        Parameter_SetValue(&g_MinimumAngle, 
+                           Parameter_GetValue(&g_MinimumAngle) - 1);
+        break;
+
+    default:
+        // TODO
+        break;
+    } // End of signal processing
+
+    if (me->IsFirstTimeSettingMinAngle == TRUE)
     {
         // Prompt user to set the minimum angle of the device
-        //                               1234567890123456
-        sprintf(&UI_FSM->Message[0][0], "Please set min. ");
-        sprintf(&UI_FSM->Message[1][0], "knee angle...   ");
-        UserInterface_FSM_PrintMessage(UI_FSM->Message);
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Please set min. ");
+        sprintf(&me->Message[1][0], "knee angle...   ");
+        UI_FSM_PrintMessage(me->Message);
 
-        UI_FSM->IsFirstTimeSettingMinAngle = FALSE;
+        me->IsFirstTimeSettingMinAngle = FALSE;
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     }
 
     // Print current minimum angle
-    //                               1234567890123456
-    sprintf(&UI_FSM->Message[0][0], "Min. knee angle");
-    sprintf(&UI_FSM->Message[1][0], "= %4.1lf degrees", Parameter_GetValue(&g_MinimumAngle));
-    UserInterface_FSM_PrintMessage(UI_FSM->Message);
+    //                           1234567890123456
+    sprintf(&me->Message[0][0], "Min. knee angle ");
+    sprintf(&me->Message[1][0], "= %4.1lf degrees",
+            Parameter_GetValue(&g_MinimumAngle));
+    UI_FSM_PrintMessage(me->Message);
 }
- 
+
 //=============================================================================
 // Set Maximum Angle State
 //=============================================================================
-void UserInterface_FSM_SetMaximumAngle_State(
-                                UserInterface_FSM *UI_FSM, 
-                                Event const *MyEvent)
+void UI_FSM_SetMaximumAngle_State(UI_FSM *me, Event const *MyEvent)
 {
-    switch(MyEvent->EventSignal)
+    switch (MyEvent->EventSignal)
     {
-        case CONFIRM_BUTTON_PRESSED :
-            if(IsFirstSetup == TRUE)
-            {
-                 // Go to attach goniometer state
-                FSM_Transition(&UI_FSM->Parent,
-                            &UserInterface_FSM_AttachAnkleStrapMessage_State);
-            }
-            else
-            {
-                // Skip attach goniometer message state
-                FSM_Transition(&UI_FSM->Parent,
-                               &UserInterface_FSM_GoniometerReadingCheck_State);
-            }
+    case CONFIRM_BUTTON_PRESSED:
+        FSM_Transition(&me->Parent,
+                       &UI_FSM_GoniometerReadingCheck_State);
         break;
-        
-        case BACK_BUTTON_PRESSED :
-        // Go back to minimum angle state
-            FSM_Transition(&UI_FSM->Parent,
-                           &UserInterface_FSM_SetMinimumAngle_State);
-        break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            Parameter_SetValue(&g_MaximumAngle, Parameter_GetValue(&g_MaximumAngle)+1);
-        break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            Parameter_SetValue(&g_MaximumAngle, Parameter_GetValue(&g_MaximumAngle)-1);
-        break;
-        
-        default :
-            // TODO
-        break;
-    }
 
-        if(UI_FSM->IsFirstTimeSettingMaxAngle == TRUE)
+    case BACK_BUTTON_PRESSED:
+        // Go back to minimum angle state
+        FSM_Transition(&me->Parent,
+                       &UI_FSM_SetMinimumAngle_State);
+        break;
+
+    case INCREMENT_BUTTON_PRESSED:
+        Parameter_SetValue(&g_MaximumAngle,
+                           Parameter_GetValue(&g_MaximumAngle) + 1);
+        break;
+
+    case DECREMENT_BUTTON_PRESSED:
+        Parameter_SetValue(&g_MaximumAngle,
+                           Parameter_GetValue(&g_MaximumAngle) - 1);
+        break;
+
+    default:
+        // TODO
+        break;
+    } // End of signal processing
+
+    if (me->IsFirstTimeSettingMaxAngle == TRUE)
     {
         // Prompt user to set the max angle of the device
         //                               1234567890123456
-        sprintf(&UI_FSM->Message[0][0], "Please set max. ");
-        sprintf(&UI_FSM->Message[1][0], "knee angle...   ");
-        UserInterface_FSM_PrintMessage(UI_FSM->Message);
+        sprintf(&me->Message[0][0], "Please set max. ");
+        sprintf(&me->Message[1][0], "knee angle...   ");
+        UI_FSM_PrintMessage(me->Message);
 
-        UI_FSM->IsFirstTimeSettingMinAngle = FALSE;
+        me->IsFirstTimeSettingMinAngle = FALSE;
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     }
 
     // Print current maximum angle
     //                               1234567890123456
-    sprintf(&UI_FSM->Message[0][0], "Max. knee angle");
-    sprintf(&UI_FSM->Message[1][0], "= %4.1lf degrees", Parameter_GetValue(&g_MaximumAngle));
-    UserInterface_FSM_PrintMessage(UI_FSM->Message);
+    sprintf(&me->Message[0][0], "Max. knee angle");
+    sprintf(&me->Message[1][0],
+            "= %4.1lf degrees",
+            Parameter_GetValue(&g_MaximumAngle));
+    UI_FSM_PrintMessage(me->Message);
 }
 
-//=============================================================================
-// Attach Goniometer Message
-//============================================================================= 
-void UserInterface_FSM_AttachGoniometerMessage_State(
-                                UserInterface_FSM *UI_FSM, 
-                                Event const *MyEvent)
-{
-    switch(MyEvent->EventSignal)
-    {
-        case CONFIRM_BUTTON_PRESSED :
-            // Go to goniometer reading check state
-            FSM_Transition(&(UI_FSM->Parent), UserInterface_FSM_GoniometerReadingCheck_State);
-        break;
-        
-        case BACK_BUTTON_PRESSED :
-            FSM_Transition(&(UI_FSM->Parent), UserInterface_FSM_SetMaximumAngle_State);
-        break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            // Do nothing
-        break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            // Do nothing
-        break;
-        
-        default :
-            // TODO
-        break;
-
-            // Prompt user to attach goniometer
-            //                               1234567890123456
-            sprintf(&UI_FSM->Message[0][0], "Please attach   ");
-            sprintf(&UI_FSM->Message[1][0], "the knee brace. ");
-            UserInterface_FSM_PrintMessage(UI_FSM->Message);
-    }
-}
- 
 //=============================================================================
 // Goniometer Reading Check State
 //=============================================================================
-void UserInterface_FSM_GoniometerReadingCheck_State(
-                                UserInterface_FSM *UI_FSM, 
-                                Event const *MyEvent)
+void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
 {
-    switch(MyEvent->EventSignal)
+    /*Event Handling*/
+    switch (MyEvent->EventSignal)
     {
-        case CONFIRM_BUTTON_PRESSED :
-            bool KneeAngleIsValid = 
-             !(g_KneeAngle > Parameter_GetValue(&g_MaximumAngle) || 
-               g_KneeAngle < Parameter_GetValue(&g_MinimumAngle) ||
-               g_KneeAngle == INVALID_ANGLE)
-            if(KneeAngleIsValid != TRUE)
-            {
-                FSM_Transition(&UI_FSM->Parent, UserInterface_FSM_InvalidGoniometerReading_State)
-            }
+    case CONFIRM_BUTTON_PRESSED:
+        // Print invalid message if invalid
+        if (UI_FSM_IsKneeAngleValid(me) == TRUE)
+        {
+            // If knee angle is valid, tell user to attach ankle strap
+            FSM_Transition(&me->Parent, UI_FSM_AnkleStrapRetractRelease_State);
+        }
+        // Else, knee angle is invalid, so do nothing.
         break;
-        
-        case BACK_BUTTON_PRESSED :
-            // TODO
+
+    case BACK_BUTTON_PRESSED:
+        // Go back to set maximum angle
+        FSM_Transition(&me->Parent, UI_FSM_SetMaximumAngle_State);
         break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case INCREMENT_BUTTON_PRESSED:
+        // Do nothing
         break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case DECREMENT_BUTTON_PRESSED:
+        // Do nothing
         break;
-        
-        default :
-            // TODO
+
+    default:
+        // TODO
         break;
+    } // End of signal processing
+
+    // Skip attach goniometer message if user has already seen it
+    if (me->HasUserSeenAttachGoniometerMessage == FALSE)
+    {
+        // Prompt user to attach goniometer
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Please attach   ");
+        sprintf(&me->Message[1][0], "the knee brace. ");
+        UI_FSM_PrintMessage(me->Message);
+        CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
+        me->HasUserSeenAttachGoniometerMessage = TRUE;
     }
 
     // Print current vs max and min
-    //                               1234567890123456
-    sprintf(&UI_FSM->Message[0][0], "Current %4.1lf deg");
-    sprintf(&UI_FSM->Message[1][0], "Min=%3lf Max=%3lf");
-    UserInterface_FSM_PrintMessage(UI_FSM->Message);
-}
- 
-//=============================================================================
-// Invalid Goniometer Reading State
-//=============================================================================
-void UserInterface_FSM_InvalidGoniometerReading_State(
-                                UserInterface_FSM *UI_FSM, 
-                                Event const *MyEvent)
-{
-    switch(MyEvent->EventSignal)
-    {
-        case CONFIRM_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        case BACK_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        default :
-            // TODO
-        break;
-    }
-}
- 
+    //                           1234567890123456
+    sprintf(&me->Message[0][0], "Current %4.1lf deg", g_KneeAngle);
+    sprintf(&me->Message[1][0],
+            "Min=%3lf Max=%3lf",
+            Parameter_GetValue(&g_MinimumAngle),
+            Parameter_GetValue(&g_MaximumAngle));
+    UI_FSM_PrintMessage(me->Message);
 
-//-----------------------------------------------------------------------------
-// Ankle Strap Configuration States 
-void UserInterface_FSM_AttachAnkleStrapMessage_State(
-                                UserInterface_FSM *UI_FSM,
-                                Event const *MyEvent)
-{
-        switch(MyEvent->EventSignal)
+    // Turn off main loop updating current angle line
+    // Only have effect if this state has already been executed
+    me->ShallMainLoopUpdateAngleReading = FALSE; // Maybe not the right place
+
+    // Make the main loop update the current angle measurement.
+    if(me->Parent.currentState == &UI_FSM_GoniometerReadingCheck_State)
     {
-        case CONFIRM_BUTTON_PRESSED :
-            // TODO
+        me->ShallMainLoopUpdateAngleReading = TRUE;
+    }
+} // End of Goniometer Reading Check State
+
+//=============================================================================
+// Ankle Strap Configuration States
+//
+
+//=============================================================================
+// Ankle Strap Retract/Release State
+//=============================================================================
+void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
+                                           Event const *MyEvent)
+{
+    switch (MyEvent->EventSignal)
+    {
+    case CONFIRM_BUTTON_PRESSED:
+        if (UI_FSM_IsKneeAngleValid(me) == TRUE)
+        {
+            // If knee angle is valid, go to CPM startup state
+            FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
+        }
+        // Else, knee angle is invalid, so do nothing.
         break;
-        
-        case BACK_BUTTON_PRESSED :
-            // TODO
+
+    case BACK_BUTTON_PRESSED:
+        FSM_Transition(&me->Parent, UI_FSM_GoniometerReadingCheck_State);
         break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case INCREMENT_BUTTON_PRESSED:
+        Parameter_SetValue(&g_CableReleasedPercent,
+                           Parameter_GetValue(&g_CableReleasedPercent)+1);
+        //??? Not sure if any of this will even work in the long rung
+        if(UI_FSM_IsKneeAngleValid(me) == FALSE )
+        {
+
+        }
         break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case DECREMENT_BUTTON_PRESSED:
+        Parameter_SetValue(&g_CableReleasedPercent,
+                           Parameter_GetValue(&g_CableReleasedPercent)-1);
         break;
+
+    default:
+        // TODO
+        break;
+    }
+
+    if(me->ShallDisplayCableReleasedPercent == TRUE)
+    {
+        // Display Cable ReleasedPercent
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Cable Released %%"); // Double % shows "%"
+        sprintf(&me->Message[1][0], 
+                "%lf %%",
+                Parameter_GetValue(&g_CableReleasedPercent));
+        UI_FSM_PrintMessage(me->Message);
+        CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
+
+    }
+
+    if(me->HasUserSeenAttachAnkleStrapMessage == FALSE)
+    {
+        // Prompt user to attach goniometer
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Please attach   ");
+        sprintf(&me->Message[1][0], "the ankle strap. ");
+        UI_FSM_PrintMessage(me->Message);
+        CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
+        me->HasUserSeenAttachAnkleStrapMessage = TRUE;
+    }
+
+    // Prompt user to retract/release the cable
+    //                           1234567890123456
+    sprintf(&me->Message[0][0], "Release Cable[+]");
+    sprintf(&me->Message[1][0], "Retract Cable[-]");
+    UI_FSM_PrintMessage(me->Message);
+}
+
+//=============================================================================
+// Display Cable Release Amount State
+//=============================================================================
+void UI_FSM_DisplayCableReleaseAmount_State(UI_FSM *me,
+                                            Event const *MyEvent)
+{
+    /* Handle Events */
+    switch (MyEvent->EventSignal)
+    {
+    case CONFIRM_BUTTON_PRESSED:
+        //TODO
         
-        default :
-            // TODO
+        break;
+
+    case BACK_BUTTON_PRESSED:
+        //TODO
+        break;
+
+    case INCREMENT_BUTTON_PRESSED:
+        
+        break;
+
+    case DECREMENT_BUTTON_PRESSED:
+        // TODO
+        break;
+
+    default:
+        // TODO
         break;
     }
 }
- 
-void UserInterface_FSM_AnkleStrapRetractRelease_State(
-                                UserInterface_FSM *UI_FSM,
-                                Event const *MyEvent)
-{
-    switch(MyEvent->EventSignal)
-    {
-        case CONFIRM_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        case BACK_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        default :
-            // TODO
-        break;
-    }
-}
- 
-void UserInterface_FSM_DisplayCableReleaseAmount_State(
-                                UserInterface_FSM *UI_FSM,
-                                Event const *MyEvent)
-{
-        switch(MyEvent->EventSignal)
-    {
-        case CONFIRM_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        case BACK_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            // TODO
-        break;
-        
-        default :
-            // TODO
-        break;
-    }
-}
- 
 
 //-----------------------------------------------------------------------------
 // CPM Use States
-void UserInterface_FSM_ConfirmCPMStartup_State(
-                                UserInterface_FSM *UI_FSM,
-                                Event const *MyEvent)
+void UI_FSM_ConfirmCPMStartup_State(
+    UI_FSM *me,
+    Event const *MyEvent)
 {
-        switch(MyEvent->EventSignal)
+    switch (MyEvent->EventSignal)
     {
-        case CONFIRM_BUTTON_PRESSED :
-            // TODO
+    case CONFIRM_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        case BACK_BUTTON_PRESSED :
-            // TODO
+
+    case BACK_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case INCREMENT_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case DECREMENT_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        default :
-            // TODO
+
+    default:
+        // TODO
         break;
     }
 }
- 
-void UserInterface_FSM_ContinuousPassiveMotion_State(
-                                UserInterface_FSM *UI_FSM,
-                                Event const *MyEvent)
+
+void UI_FSM_ContinuousPassiveMotion_State(
+    UI_FSM *me,
+    Event const *MyEvent)
 {
-    switch(MyEvent->EventSignal)
+    switch (MyEvent->EventSignal)
     {
-        case CONFIRM_BUTTON_PRESSED :
-            // TODO
+    case CONFIRM_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        case BACK_BUTTON_PRESSED :
-            // TODO
+
+    case BACK_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case INCREMENT_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case DECREMENT_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        default :
-            // TODO
+
+    default:
+        // TODO
         break;
     }
 }
- 
-void UserInterface_FSM_ConfirmSpeedChange_State(
-                                UserInterface_FSM *UI_FSM,
-                                Event const *MyEvent)
+
+void UI_FSM_ConfirmSpeedChange_State(
+    UI_FSM *me,
+    Event const *MyEvent)
 {
-    switch(MyEvent->EventSignal)
+    switch (MyEvent->EventSignal)
     {
-        case CONFIRM_BUTTON_PRESSED :
-            // TODO
+    case CONFIRM_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        case BACK_BUTTON_PRESSED :
-            // TODO
+
+    case BACK_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        case INCREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case INCREMENT_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        case DECREMENT_BUTTON_PRESSED :
-            // TODO
+
+    case DECREMENT_BUTTON_PRESSED:
+        // TODO
         break;
-        
-        default :
-            // TODO
+
+    default:
+        // TODO
         break;
     }
 }
- 
-                                
 
 /* [] END OF FILE */
