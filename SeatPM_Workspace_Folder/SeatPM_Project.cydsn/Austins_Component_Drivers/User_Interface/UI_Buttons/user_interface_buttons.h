@@ -16,7 +16,7 @@
 #include "project.h"
 #include "user_interface_fsm.h"
 
-extern UI_FSM g_me;
+extern UI_FSM g_UserInterface;
     
 void UI_Button_Dispatch(const enum UI_FSM_Signals ButtonSignal);
 

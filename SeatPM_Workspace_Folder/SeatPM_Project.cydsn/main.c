@@ -79,6 +79,8 @@ int main(void)
     Goniometer KneeGoniometer; 
     Goniometer_Constructor(&KneeGoniometer);   
     double LastKneeAngle = INVALID_ANGLE; 
+    int RunTime_Hours, RunTime_Minutes, RunTime_Seconds;
+    RunTime_Hours = RunTime_Minutes = RunTime_Seconds = 0;
       
     //-------------------------------------------------------------------------
     // Infinite Loop
@@ -93,6 +95,19 @@ int main(void)
                     g_KneeAngle);
             Screen_PrintString(&g_UserInterface.Message[0][0]);
             LastKneeAngle = g_KneeAngle;
+        }
+        else if(g_UserInterface.ShallMainLoopHandleCPMMessage == TRUE)
+        {
+            // TODO Implement time updates
+            sprintf(&g_UserInterface.Message[0][0],
+                    "RT: %2dh %2dm %2ds",
+                    RunTime_Hours,
+                    RunTime_Minutes,
+                    RunTime_Seconds);
+            sprintf(&g_UserInterface.Message[0][1],
+                    "Angle = %4.1lfdeg",
+                    g_KneeAngle);
+            UI_FSM_PrintMessage(g_UserInterface.Message);
         }
         /*
         Goniometer_Sample(&KneeGoniometer);
@@ -197,7 +212,8 @@ void InitializeParamters()
     double MaxValue = ABSOLUTE_MAXIMUM_KNEE_ANGLE;
     double Value = ABSOLUTE_MINIMUM_KNEE_ANGLE;
 
-    bool IsValidConstructor =
+    bool IsValidConstructor;
+    IsValidConstructor = 
         Parameter_Constructor(&g_MinimumAngle,
                               MinValue,
                               MaxValue,

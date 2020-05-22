@@ -31,6 +31,7 @@
 #define MESSAGE_ROWS 2
 #define MESSAGE_CHARACTERS_PER_ROW 16
 #define MESSAGE_ON_SCREEN_TIME_MS 500
+#define CPM_START_SPEED_DEGREES_PER_MINUTE 30
 
 //=============================================================================
 // Type definitions
@@ -73,8 +74,9 @@ struct UI_FSM
     bool HasUserSeenAttachGoniometerMessage;
     bool ShallMainLoopUpdateAngleReading;
     bool HasUserSeenAttachAnkleStrapMessage;
-    bool ShallDisplayCableReleasedPercent;
+    bool ShallMainLoopHandleCPMMessage;
 
+    Parameter New_CPM_Speed;
 };
 
 //=============================================================================
@@ -100,8 +102,8 @@ void UI_FSM_Constructor(UI_FSM *me);
 // Clears the UI Screen and then prints
 void UI_FSM_PrintMessage(
     char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW + 1]);
-
-bool UI_FSM_ValidateCurrentGoniometerMeasurement(UI_FSM *me);
+bool UI_FSM_IsKneeAngleValid(UI_FSM *me);
+void UI_FSM_DisplayCableReleasedPercent(UI_FSM *me);
 
 //=============================================================================
 // State Functions -- User Interface Finite State Machine Class
@@ -112,15 +114,10 @@ bool UI_FSM_ValidateCurrentGoniometerMeasurement(UI_FSM *me);
 void UI_FSM_Initial_State(UI_FSM *me, Event const *event);
 //-----------------------------------------------------------------------------
 // Goniometer Configuration States
-void UI_FSM_SetMinimumAngle_State(UI_FSM *me,Event const *event);
-void UI_FSM_SetMaximumAngle_State(UI_FSM *me, Event const *event);
+void UI_UI_FSM_SetMinimumKneeAngle_StateFSM(UI_FSM *me,Event const *event);
+void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *event);
 void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me,Event const *event);
-void UI_FSM_InvalidGoniometerReading_State(UI_FSM *me, Event const *event);
-
-//-----------------------------------------------------------------------------
-// Ankle Strap Configuration States
 void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me, Event const *event);
-void UI_FSM_DisplayCableReleaseAmount_State(UI_FSM *me, Event const *event);
 
 //-----------------------------------------------------------------------------
 // CPM Use States

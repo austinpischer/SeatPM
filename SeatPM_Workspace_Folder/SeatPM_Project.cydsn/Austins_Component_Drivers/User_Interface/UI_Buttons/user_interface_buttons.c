@@ -9,7 +9,7 @@ void UI_Button_Dispatch(const enum UI_FSM_Signals ButtonSignal)
 {
     UI_FSM_Event NewEvent;
     NewEvent.Parent.EventSignal = ButtonSignal;
-    FSM_Dispatch(&g_me.Parent, &NewEvent.Parent);
+    FSM_Dispatch(&g_UserInterface.Parent, &NewEvent.Parent);
 }
 
 void Enable_UI_Button_Interrupts()
