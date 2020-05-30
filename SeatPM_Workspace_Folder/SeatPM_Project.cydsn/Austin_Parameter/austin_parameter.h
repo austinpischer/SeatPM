@@ -58,6 +58,9 @@ bool Parameter_SetMinimumValue(Parameter *me, double NewMinimumValue);
 double Parameter_GetMinimumValue(Parameter *me);
 bool Parameter_SetMaximumValue(Parameter *me, double NewMaximumValue);
 double Parameter_GetMaximumValue(Parameter *me);
+bool Parameter_IncrementValue(Parameter *me);
+bool Parameter_DecrementValue(Parameter *me);
+
 
 #endif // End of multiple inclusion protection
 /* [] END OF FILE */

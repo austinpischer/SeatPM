@@ -88,7 +88,7 @@ enum UI_FSM_Signals
     BACK_BUTTON_PRESSED,
     INCREMENT_BUTTON_PRESSED,
     DECREMENT_BUTTON_PRESSED,
-    NO_OPERATION, //???
+    NO_OPERATION,
 };
 
 //=============================================================================
@@ -104,6 +104,8 @@ void UI_FSM_PrintMessage(
     char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW + 1]);
 bool UI_FSM_IsKneeAngleValid(UI_FSM *me);
 void UI_FSM_DisplayCableReleasedPercent(UI_FSM *me);
+void UI_FSM_ExecuteCurrentStateFunction(UI_FSM *me);
+void UI_FSM_PrintInvalidSignalMessage(UI_FSM *me);
 
 //=============================================================================
 // State Functions -- User Interface Finite State Machine Class

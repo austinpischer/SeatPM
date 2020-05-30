@@ -29,9 +29,8 @@
 //=============================================================================
 void UI_FSM_Constructor(UI_FSM *me)
 {
-    DEBUG_PRINT("UI Constructor called");
+    DEBUG_PRINT("UI Constructor called\r\n");
     FSM_Constructor(&me->Parent, &UI_FSM_Initial_State);
-    DEBUG_PRINT("UI Initial state called");
 
     // Initialized in the order they appear in state flow
     me->IsFirstTimeSettingMinAngle = TRUE;
@@ -46,10 +45,12 @@ void UI_FSM_Constructor(UI_FSM *me)
                           Parameter_GetMinimumValue(&g_CPM_Speed),
                           Parameter_GetValue(&g_CPM_Speed));
 
-        // One should not expect for the initial state
-        // to do anything with this signal
-        Event InitialEvent;
+    // One should not expect for the initial state
+    // to do anything with this signal
+    Event InitialEvent;
     InitialEvent.EventSignal = CONFIRM_BUTTON_PRESSED;
+
+    DEBUG_PRINT("Executing Initial State\r\n");
     FSM_ExecuteInitialState(&me->Parent, &InitialEvent);
 }
 
@@ -61,6 +62,7 @@ void UI_FSM_PrintMessage(
 {
     Screen_ClearDisplay();
     Screen_PrintString(&Message[0][0]);
+    Screen_Position(1,0);
     Screen_PrintString(&Message[1][0]);
 }
 
@@ -119,6 +121,9 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
     return (FALSE);
 }
 
+//=============================================================================
+// Display Cable Released Percent
+//=============================================================================
 void UI_FSM_DisplayCableReleasedPercent(UI_FSM *me)
 {
     //                           1234567890123456
@@ -130,6 +135,24 @@ void UI_FSM_DisplayCableReleasedPercent(UI_FSM *me)
 }
 
 //=============================================================================
+// Execute Current State Function 
+//=============================================================================
+void UI_FSM_ExecuteCurrentStateFunction(UI_FSM *me)
+{
+    Event NoOperationEvent;
+    NoOperationEvent.EventSignal = NO_OPERATION;
+    FSM_Dispatch(&me->Parent, &NoOperationEvent);
+}
+
+//=============================================================================
+// Print Invalid Signal Message
+//=============================================================================
+void UI_FSM_PrintInvalidSignalMessage(UI_FSM *me)
+{
+
+}
+
+//=============================================================================
 // State Function Implementations -- User Interface Finite State Machine Class
 //
 
@@ -138,7 +161,7 @@ void UI_FSM_DisplayCableReleasedPercent(UI_FSM *me)
 //=============================================================================
 void UI_FSM_Initial_State(UI_FSM *me, Event const *MyEvent)
 {
-    DEBUG_PRINT("UI Initial State Called called");
+    DEBUG_PRINT("UI Initial State Called\r\n");
 
     // Print welcome message while UI starts up
     //                           1234567890123456
@@ -151,7 +174,9 @@ void UI_FSM_Initial_State(UI_FSM *me, Event const *MyEvent)
     // Transition to Setting Minimum Angle
     FSM_Transition(&me->Parent,
                    &UI_UI_FSM_SetMinimumKneeAngle_StateFSM);
-}
+    // Update display in next function without any inputs
+    UI_FSM_ExecuteCurrentStateFunction(me);
+} // End of initial state
 
 //=============================================================================
 // Goniometer Configuration States
@@ -167,6 +192,8 @@ void UI_UI_FSM_SetMinimumKneeAngle_StateFSM(UI_FSM *me, Event const *MyEvent)
     case CONFIRM_BUTTON_PRESSED:
         FSM_Transition(&me->Parent,
                        &UI_FSM_SetMaximumKneeAngle_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case BACK_BUTTON_PRESSED:
@@ -174,13 +201,15 @@ void UI_UI_FSM_SetMinimumKneeAngle_StateFSM(UI_FSM *me, Event const *MyEvent)
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        Parameter_SetValue(&g_MinimumAngle,
-                           Parameter_GetValue(&g_MinimumAngle) + 1);
+        Parameter_IncrementValue(&g_MinimumAngle);
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        Parameter_SetValue(&g_MinimumAngle,
-                           Parameter_GetValue(&g_MinimumAngle) - 1);
+        Parameter_DecrementValue(&g_MinimumAngle);
+        break;
+
+    case NO_OPERATION:
+        // Do nothing
         break;
 
     default:
@@ -206,7 +235,7 @@ void UI_UI_FSM_SetMinimumKneeAngle_StateFSM(UI_FSM *me, Event const *MyEvent)
     sprintf(&me->Message[1][0], "= %4.1lf degrees",
             Parameter_GetValue(&g_MinimumAngle));
     UI_FSM_PrintMessage(me->Message);
-}
+} // End of set minimum knee angle state
 
 //=============================================================================
 // Set Maximum Knee Angle State
@@ -218,22 +247,28 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
     case CONFIRM_BUTTON_PRESSED:
         FSM_Transition(&me->Parent,
                        &UI_FSM_GoniometerReadingCheck_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case BACK_BUTTON_PRESSED:
         // Go back to minimum angle state
         FSM_Transition(&me->Parent,
                        &UI_UI_FSM_SetMinimumKneeAngle_StateFSM);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        Parameter_SetValue(&g_MaximumAngle,
-                           Parameter_GetValue(&g_MaximumAngle) + 1);
+        Parameter_IncrementValue(&g_MaximumAngle);
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        Parameter_SetValue(&g_MaximumAngle,
-                           Parameter_GetValue(&g_MaximumAngle) - 1);
+        Parameter_DecrementValue(&g_MaximumAngle);
+        break;
+
+    case NO_OPERATION:
+        // Do nothing
         break;
 
     default:
@@ -260,7 +295,7 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
             "= %4.1lf degrees",
             Parameter_GetValue(&g_MaximumAngle));
     UI_FSM_PrintMessage(me->Message);
-}
+}// End of Set Maximum Knee Angle State
 
 //=============================================================================
 // Goniometer Reading Check State
@@ -276,6 +311,8 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
         {
             // If knee angle is valid, tell user to attach ankle strap
             FSM_Transition(&me->Parent, UI_FSM_AnkleStrapRetractRelease_State);
+            // Update display in next function without any inputs
+            UI_FSM_ExecuteCurrentStateFunction(me);
         }
         // Else, knee angle is invalid, so do nothing.
         break;
@@ -283,6 +320,8 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
     case BACK_BUTTON_PRESSED:
         // Go back to set maximum angle
         FSM_Transition(&me->Parent, UI_FSM_SetMaximumKneeAngle_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case INCREMENT_BUTTON_PRESSED:
@@ -290,6 +329,10 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     case DECREMENT_BUTTON_PRESSED:
+        // Do nothing
+        break;
+
+    case NO_OPERATION:
         // Do nothing
         break;
 
@@ -343,12 +386,16 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
         {
             // If knee angle is valid, go to CPM startup state
             FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
+            // Update display in next function without any inputs
+            UI_FSM_ExecuteCurrentStateFunction(me);
         }
         // Else, knee angle is invalid, so do nothing.
         break;
 
     case BACK_BUTTON_PRESSED:
         FSM_Transition(&me->Parent, UI_FSM_GoniometerReadingCheck_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case INCREMENT_BUTTON_PRESSED:
@@ -377,6 +424,10 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
             UI_FSM_DisplayCableReleasedPercent(me);
             CyDelay(100);//TODO
         }
+        break;
+    
+    case NO_OPERATION:
+        // Do nothing
         break;
 
     default:
@@ -421,12 +472,16 @@ void UI_FSM_ConfirmCPMStartup_State(
         {   
             Parameter_SetValue(&g_CPM_Speed, 30);
             FSM_Transition(&me->Parent, UI_FSM_ContinuousPassiveMotion_State);
+            // Update display in next function without any inputs
+            UI_FSM_ExecuteCurrentStateFunction(me);
         }
         break;
 
     case BACK_BUTTON_PRESSED:
         // Go to Attach Ankle Strap State
         FSM_Transition(&me->Parent, UI_FSM_AnkleStrapRetractRelease_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case INCREMENT_BUTTON_PRESSED:
@@ -435,6 +490,10 @@ void UI_FSM_ConfirmCPMStartup_State(
 
     case DECREMENT_BUTTON_PRESSED:
         // Do Nothing
+        break;
+
+    case NO_OPERATION:
+        // Do nothing
         break;
 
     default:
@@ -463,25 +522,35 @@ void UI_FSM_ContinuousPassiveMotion_State(
     case CONFIRM_BUTTON_PRESSED:
         Parameter_SetValue(&g_CPM_Speed, 0);
         FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case BACK_BUTTON_PRESSED:
         Parameter_SetValue(&g_CPM_Speed, 0);
         FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case INCREMENT_BUTTON_PRESSED:
         // Go to change speed state
-        Parameter_SetValue(&me->New_CPM_Speed,
-                           Parameter_GetValue(&g_CPM_Speed)+1);
+        Parameter_IncrementValue(&me->New_CPM_Speed);
         FSM_Transition(&me->Parent, UI_FSM_ConfirmSpeedChange_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case DECREMENT_BUTTON_PRESSED:
         // Go to change speed state
-        Parameter_SetValue(&me->New_CPM_Speed,
-                           Parameter_GetValue(&g_CPM_Speed)-1);
+        Parameter_DecrementValue(&me->New_CPM_Speed);
         FSM_Transition(&me->Parent, UI_FSM_ConfirmSpeedChange_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
+        break;
+
+    case NO_OPERATION:
+        // Do nothing
         break;
 
     default:
@@ -509,6 +578,8 @@ void UI_FSM_ConfirmSpeedChange_State(
         Parameter_SetValue(&g_CPM_Speed, Parameter_GetValue(&me->New_CPM_Speed));
         // Go to CPM state
         FSM_Transition(&me->Parent, UI_FSM_ContinuousPassiveMotion_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case BACK_BUTTON_PRESSED:
@@ -516,16 +587,20 @@ void UI_FSM_ConfirmSpeedChange_State(
         Parameter_SetValue(&me->New_CPM_Speed, Parameter_GetValue(&g_CPM_Speed));
         // Go to CPM state
         FSM_Transition(&me->Parent, UI_FSM_ContinuousPassiveMotion_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        Parameter_SetValue(&me->New_CPM_Speed,
-                           Parameter_GetValue(&me->New_CPM_Speed)+1);
+        Parameter_IncrementValue(&me->New_CPM_Speed);
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        Parameter_SetValue(&me->New_CPM_Speed,
-                           Parameter_GetValue(&me->New_CPM_Speed)-1);
+        Parameter_DecrementValue(&me->New_CPM_Speed);
+        break;
+
+    case NO_OPERATION:
+        // Do nothing
         break;
 
     default:

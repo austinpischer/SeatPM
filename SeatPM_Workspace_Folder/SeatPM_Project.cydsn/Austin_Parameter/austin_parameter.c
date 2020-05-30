@@ -54,6 +54,7 @@ bool Parameter_SetValue(Parameter* me, double NewValue)
     if(NewValue <= me->MaximumValue && NewValue >= me->MinimumValue)
     {
         me->Value = NewValue;
+        return TRUE;
     }
     else
     {
@@ -122,4 +123,20 @@ bool Parameter_SetMaximumValue(Parameter *me, double NewMaximumValue)
 double Parameter_GetMaximumValue(Parameter *me)
 {
     return(me->MaximumValue);
+}
+
+//=============================================================================
+// Get Maximum Value 
+//=============================================================================
+bool Parameter_IncrementValue(Parameter *me)
+{
+    return(Parameter_SetValue(me, Parameter_GetValue(me)+1));
+}
+
+//=============================================================================
+// Get Maximum Value 
+//=============================================================================
+bool Parameter_DecrementValue(Parameter *me)
+{
+    return(Parameter_SetValue(me, Parameter_GetValue(me)-1));
 }

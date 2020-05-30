@@ -61,7 +61,7 @@ struct AccelerationVector
 //==============================================================================
 void AccelerationVector_Constructor(AccelerationVector *me);
 
-// TODO: add deconstructor
+// TODO: add deconstructor?
 
 #endif // End of multiple inclusion protection.
 /* [] END OF FILE */

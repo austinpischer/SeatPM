@@ -4,14 +4,16 @@
 // Inclusions
 //=============================================================================
 #include "project.h"
-#include "adxl345_registers.h"
 #include "austin_debug.h"
-#include "adxl345_driver.h"
 #include "goniometer_driver.h"
-#include "moving_average_filter.h"
+
+
+#ifndef GONIOMETER_TEST
 #include "user_interface_fsm.h"
 #include "user_interface_buttons.h"
 #include "austin_parameter.h" // For Parameter Class
+#endif 
+
 #include <stdio.h>
 
 
@@ -24,29 +26,37 @@
 //=============================================================================
 // Global Variables
 //=============================================================================
+#ifndef GONIOMETER_TEST
 UI_FSM g_UserInterface;
-char g_Debug[64];
 Parameter g_MinimumAngle, g_MaximumAngle, g_CPM_Speed, g_CableReleasedPercent;
+#endif
+
+char g_Debug[64];
 double g_KneeAngle;
 
 //=============================================================================
-// Serial Output Function Prototypes
+// Function Prototypes
 //=============================================================================
+#ifdef GONIOMETER_TEST
 void PrintAcceleration(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered,
                        AccelerationVector CurrentAcceleration);
 void PrintGoniometerAngle(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, 
                           double GoniometerAngle);
+#endif
 
-//=============================================================================
-// Initialization Function Prototypes
-//=============================================================================
+#ifndef GONIOMETER_TEST
 void InitializeParamters();
+#endif
+
+CY_ISR_PROTO(Reset_Interrupt_Handle);
+void Setup_Reset();
 
 //=============================================================================
 // Main Function
 //=============================================================================
 int main(void)
 {
+    CyDelay(1000);
     //-------------------------------------------------------------------------
     // Startup/Initialization Code
     //-------------------------------------------------------------------------
@@ -56,37 +66,55 @@ int main(void)
     //-------------------------------------------------------------------------
     // Hardware Startup
     //-------------------------------------------------------------------------
+    #ifndef GONIOMETER_TEST
     Screen_Start();
+    #endif
+    
+    // Debug startup 
     PuTTY_Start();
-    I2C_Start();
+    Setup_Reset();
+    
+    // Goniometer startup
+    //I2C_Start();
+    
+    // UI Startup
+    #ifndef GONIOMETER_TEST
+    Screen_Start();
+    UI_FSM_Constructor(&g_UserInterface);
+    Enable_UI_Button_Interrupts();
+    #endif
 
     //-------------------------------------------------------------------------
     // Global Parameter Constructors
     //-------------------------------------------------------------------------
+    #ifndef GONIOMETER_TEST
     InitializeParamters();
+    #endif
 
     //-------------------------------------------------------------------------
     // User Interface Finite State Machine Startup
     //-------------------------------------------------------------------------
-    // Finite state machine should be constructed/initialized before button interrupts are enabled
-    // such that we don't send button signals to a state that is null.
-    UI_FSM_Constructor(&g_UserInterface);
-    Enable_UI_Button_Interrupts();
     
     //-------------------------------------------------------------------------
     // Non-Global Variables
     //-------------------------------------------------------------------------
-    Goniometer KneeGoniometer; 
-    Goniometer_Constructor(&KneeGoniometer);   
+    //Goniometer KneeGoniometer; 
+    //GONIOMETER_DEBUG("Goniometer Constructor\n\r");
+    //Goniometer_Constructor(&KneeGoniometer);
+    
+    #ifndef GONIOMETER_TEST
     double LastKneeAngle = INVALID_ANGLE; 
     int RunTime_Hours, RunTime_Minutes, RunTime_Seconds;
     RunTime_Hours = RunTime_Minutes = RunTime_Seconds = 0;
-      
+    #endif
+    
     //-------------------------------------------------------------------------
     // Infinite Loop
     //-------------------------------------------------------------------------
     for(;;)
     {
+        #ifndef GONIOMETER_TEST
+        // User interface flags
         if(g_UserInterface.ShallMainLoopUpdateAngleReading == TRUE
            && g_KneeAngle != LastKneeAngle)
         {
@@ -96,6 +124,7 @@ int main(void)
             Screen_PrintString(&g_UserInterface.Message[0][0]);
             LastKneeAngle = g_KneeAngle;
         }
+        // User interface flags
         else if(g_UserInterface.ShallMainLoopHandleCPMMessage == TRUE)
         {
             // TODO Implement time updates
@@ -109,7 +138,10 @@ int main(void)
                     g_KneeAngle);
             UI_FSM_PrintMessage(g_UserInterface.Message);
         }
-        /*
+        #endif
+        
+        #ifdef GONIOMETER_TEST
+        GONIOMETER_DEBUG("Sampling Goniometer...\r\n");
         Goniometer_Sample(&KneeGoniometer);
          
         bool PrintCurrent = TRUE;
@@ -123,10 +155,10 @@ int main(void)
         
         PrintGoniometerAngle(PrintCurrent, KneeGoniometer.CurrentAngle);
         PrintGoniometerAngle(PrintFiltered, KneeGoniometer.FilteredAngle);
-        */
+        #endif 
         
-        //DEBUG_PRINT("\r\n");    // print a new line
-        //Screen_ClearDisplay();
+        
+        CyDelay(10);// used for putty printing properly?
     } // End infinite loop
     
 } // End main()
@@ -134,6 +166,7 @@ int main(void)
 //=============================================================================
 // Serial Output Function Implementations
 //=============================================================================
+#ifdef GONIOMETER_TEST
 void PrintAcceleration(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, AccelerationVector Acceleration)
 {
     char DebugString[64];
@@ -170,6 +203,7 @@ void PrintAcceleration(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, Accel
             Acceleration.z);
     CSV_PRINT(DebugString);
 }
+#endif
 
 void PrintGoniometerAngle(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, double GoniometerAngle)
 {
@@ -203,7 +237,7 @@ void PrintGoniometerAngle(bool SetTrueToPrintCurrent_SetFalseToPrintFiltered, do
 //=============================================================================
 // Initialization Function Implementations
 //=============================================================================
-
+#ifndef GONIOMETER_TEST
 void InitializeParamters()
 {
         // The minimum angle can be between the absolute minmum and the maximum angle
@@ -267,6 +301,18 @@ void InitializeParamters()
         DEBUG_PRINT("Invalid CPM Speed Constructor");
     }
 }
+#endif
 
+CY_ISR(Reset_Interrupt_Handle)
+{
+    Bootloadable_Load();
+}
 
+void Setup_Reset()
+{
+    Reset_Clock_Start();
+    Reset_Timer_Start();
+    Reset_Interrupt_ClearPending();
+    Reset_Interrupt_StartEx(Reset_Interrupt_Handle);
+}
 /* [] END OF FILE */

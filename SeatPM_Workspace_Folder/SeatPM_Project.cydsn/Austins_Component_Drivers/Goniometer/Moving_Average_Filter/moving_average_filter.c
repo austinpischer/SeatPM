@@ -1,15 +1,13 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
-*/
+// TODO: File header
+
+//=============================================================================
+// Associated Header File
+//=============================================================================
 #include "moving_average_filter.h"
+
+//=============================================================================
+// Constructor
+//=============================================================================
 void MovingAverageFilter_Constructor(MovingAverageFilter *me)
 {
     unsigned int DataSetIndex;
@@ -22,6 +20,9 @@ void MovingAverageFilter_Constructor(MovingAverageFilter *me)
     
 }
 
+//=============================================================================
+// Data Members - Update Average
+//=============================================================================
 void MovingAverageFilter_UpdateAverage(MovingAverageFilter *me, AccelerationVector NewData)
 {
     // Replace oldest data with new data
@@ -35,6 +36,9 @@ void MovingAverageFilter_UpdateAverage(MovingAverageFilter *me, AccelerationVect
     }
 }
 
+//=============================================================================
+// Data Members - Get Average
+//=============================================================================
 AccelerationVector MovingAverageFilter_GetAverage(MovingAverageFilter *me)
 {
     AccelerationVector Average;

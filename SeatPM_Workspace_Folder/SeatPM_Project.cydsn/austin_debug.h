@@ -14,11 +14,11 @@ typedef int bool;
  * Uncomment "#define AUSTIN_DEBUG" to enable debugging output"
  *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 #define AUSTIN_DEBUG // Associated with DEBUG_PRINT
-//#define AUSTIN_CSV
+#define AUSTIN_CSV
 #define AUSTIN_SCREEN_DEBUG
 #define AUSTIN_ACCELEROMETER_DEBUG
 #define AUSTIN_GONIOMETER_DEBUG
-
+//#define GONIOMETER_TEST
     
 // ============================================================================
 // DEBUG_PRINT
@@ -63,13 +63,19 @@ typedef int bool;
 
 
 #ifdef AUSTIN_ACCELEROMETER_DEBUG
-    #define ACCELEROMETER_DEBUG(string) (PuTTY_UartPutString(string)) 
+    #define ACCELEROMETER_DEBUG(string) {\
+                                         PuTTY_UartPutString(string);\
+                                         CyDelay(100); \
+                                        } 
 #else
     #define ACCELEROMETER_DEBUG(string) ({})
 #endif
 
 #ifdef AUSTIN_GONIOMETER_DEBUG
-    #define GONIOMETER_DEBUG(string) (PuTTY_UartPutString(string)) 
+    #define GONIOMETER_DEBUG(string) {\
+                                      PuTTY_UartPutString(string);\
+                                      CyDelay(100); \
+                                     } 
 #else
     #define GONIOMETER_DEBUG(string) ({})
 #endif

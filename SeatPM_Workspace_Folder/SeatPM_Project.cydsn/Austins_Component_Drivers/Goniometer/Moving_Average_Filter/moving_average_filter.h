@@ -16,17 +16,33 @@
 #ifndef MOVING_AVERAGE_FILTER_H
 #define MOVING_AVERAGE_FILTER_H
 
+//=============================================================================
+// Inclusions
+//=============================================================================
 #include "acceleration_vector.h"
 
+//=============================================================================
+// Definitions
+//=============================================================================
 #define DATA_SET_SIZE 5
-    
+
+//=============================================================================
+// Type Definitions
+//=============================================================================
 typedef struct MovingAverageFilter MovingAverageFilter;
+    
+//=============================================================================
+// Data Members - Moving Average Filter Class
+//=============================================================================
 struct MovingAverageFilter
 {
     AccelerationVector DataSet[DATA_SET_SIZE];
     unsigned int DataSet_IndexOfOldestData;
 };
 
+//=============================================================================
+// Method Members - Moving Average Filter Class
+//=============================================================================
 void MovingAverageFilter_Constructor(MovingAverageFilter *me);
 void MovingAverageFilter_UpdateDataSet(MovingAverageFilter *me, AccelerationVector NewData);
 AccelerationVector MovingAverageFilter_GetAverage(MovingAverageFilter *me);

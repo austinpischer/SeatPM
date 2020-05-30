@@ -32,6 +32,7 @@
 // Inclusions
 //==============================================================================
 #include "project.h"
+#include "austin_debug.h"
 #include "acceleration_vector.h"
 #include "moving_average_filter.h"
 

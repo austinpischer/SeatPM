@@ -1,5 +1,4 @@
 // TODO: File header
-#include "project.h"
 #include "goniometer_driver.h"
 #include "adxl345_registers.h"
 #include "austin_debug.h"
@@ -10,8 +9,10 @@ void Goniometer_Constructor(Goniometer *me)
 {
     me->CurrentAngle = INVALID_ANGLE;
     me->FilteredAngle = INVALID_ANGLE;
-    ADXL345_Constructor(&(me->Accelerometer_A), DEFAULT_ADDRESS);
+    GONIOMETER_DEBUG("ADXL345 Constructor B\r\n");
     ADXL345_Constructor(&(me->Accelerometer_B), ALTERNATE_ADDRESS); 
+    GONIOMETER_DEBUG("ADXL345 Constructor A\r\n");
+    ADXL345_Constructor(&(me->Accelerometer_A), DEFAULT_ADDRESS);
 }
 
 // Helper Function
