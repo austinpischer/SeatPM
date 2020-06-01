@@ -29,6 +29,8 @@
 // Inclusions
 //=============================================================================
 #include "austin_debug.h" // For bool 
+#include <stdio.h> // For sprintf()
+#include "project.h" // For PuTTY_UartPutString()
 
 //=============================================================================
 // Type definitions

@@ -30,7 +30,7 @@
 //=============================================================================
 #define MESSAGE_ROWS 2
 #define MESSAGE_CHARACTERS_PER_ROW 16
-#define MESSAGE_ON_SCREEN_TIME_MS 500
+#define MESSAGE_ON_SCREEN_TIME_MS 2000
 #define CPM_START_SPEED_DEGREES_PER_MINUTE 30
 
 //=============================================================================
@@ -116,7 +116,7 @@ void UI_FSM_PrintInvalidSignalMessage(UI_FSM *me);
 void UI_FSM_Initial_State(UI_FSM *me, Event const *event);
 //-----------------------------------------------------------------------------
 // Goniometer Configuration States
-void UI_UI_FSM_SetMinimumKneeAngle_StateFSM(UI_FSM *me,Event const *event);
+void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me,Event const *event);
 void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *event);
 void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me,Event const *event);
 void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me, Event const *event);

@@ -1,4 +1,4 @@
---------------- Rebuild Started: 05/29/2020 09:26:05 Project: SeatPM_Project, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Rebuild Started: 05/31/2020 12:26:47 Project: SeatPM_Project, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\main.o"
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\adxl345_driver.o"
 Deleting file ".\CortexM0\ARM_GCC_541\Debug\moving_average_filter.o"
@@ -86,7 +86,6 @@ ADD: fit.M0015: information: One or more rows of flash have been configured to b
 HDL Generation...
 Synthesis...
 Tech Mapping...
-ADD: pft.M0040: information: The following 1 pin(s) will be assigned a location by the fitter: Button_Confirm(0)
 Analog Placement...
 Analog Routing...
 Analog Code Generation...
@@ -107,11 +106,11 @@ arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\Austins_Component_Drivers\Goniometer -I.\Austins_Component_Drivers\Goniometer\Acceleration_Vector -I.\Austins_Component_Drivers\Goniometer\ADXL345 -I.\Austins_Component_Drivers\Goniometer\Moving_Average_Filter -I.\Austins_Component_Drivers\User_Interface -I.\Austins_Component_Drivers\User_Interface\Finite_State_Machine -I.\Austins_Component_Drivers\User_Interface\UI_Buttons -I.\Austins_Component_Drivers\Goniometer\Accelerometer -I.\Austin_Parameter -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/user_interface_buttons.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os -c Austins_Component_Drivers\User_Interface\UI_Buttons\user_interface_buttons.c -o .\CortexM0\ARM_GCC_541\Debug\user_interface_buttons.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\Austins_Component_Drivers\Goniometer -I.\Austins_Component_Drivers\Goniometer\Acceleration_Vector -I.\Austins_Component_Drivers\Goniometer\ADXL345 -I.\Austins_Component_Drivers\Goniometer\Moving_Average_Filter -I.\Austins_Component_Drivers\User_Interface -I.\Austins_Component_Drivers\User_Interface\Finite_State_Machine -I.\Austins_Component_Drivers\User_Interface\UI_Buttons -I.\Austins_Component_Drivers\Goniometer\Accelerometer -I.\Austin_Parameter -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/user_interface_fsm.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os -c Austins_Component_Drivers\User_Interface\user_interface_fsm.c -o .\CortexM0\ARM_GCC_541\Debug\user_interface_fsm.o
 Austins_Component_Drivers\User_Interface\user_interface_fsm.c: In function 'UI_FSM_GoniometerReadingCheck_State':
-Austins_Component_Drivers\User_Interface\user_interface_fsm.c:327:33: warning: comparison of distinct pointer types lacks a cast
+Austins_Component_Drivers\User_Interface\user_interface_fsm.c:374:33: warning: comparison of distinct pointer types lacks a cast
      if (me->Parent.currentState == &UI_FSM_GoniometerReadingCheck_State)
                                  ^
 Austins_Component_Drivers\User_Interface\user_interface_fsm.c: In function 'UI_FSM_ContinuousPassiveMotion_State':
-Austins_Component_Drivers\User_Interface\user_interface_fsm.c:492:33: warning: comparison of distinct pointer types lacks a cast
+Austins_Component_Drivers\User_Interface\user_interface_fsm.c:565:33: warning: comparison of distinct pointer types lacks a cast
      if (me->Parent.currentState == &UI_FSM_ContinuousPassiveMotion_State)
                                  ^
 arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\Austins_Component_Drivers\Goniometer -I.\Austins_Component_Drivers\Goniometer\Acceleration_Vector -I.\Austins_Component_Drivers\Goniometer\ADXL345 -I.\Austins_Component_Drivers\Goniometer\Moving_Average_Filter -I.\Austins_Component_Drivers\User_Interface -I.\Austins_Component_Drivers\User_Interface\Finite_State_Machine -I.\Austins_Component_Drivers\User_Interface\UI_Buttons -I.\Austins_Component_Drivers\Goniometer\Accelerometer -I.\Austin_Parameter -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/austin_parameter.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os -c Austin_Parameter\austin_parameter.c -o .\CortexM0\ARM_GCC_541\Debug\austin_parameter.o
@@ -184,6 +183,6 @@ No ELF section .cychecksum found, creating one
 Application checksum calculated and stored in ELF section .cychecksum
 Checksum calculated and stored in ELF section .cymeta
 cyelftool.exe -S C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn\CortexM0\ARM_GCC_541\Debug\SeatPM_Project.elf
-Flash used: 25228 of 32768 bytes (77.0%). Bootloader: 4992 bytes. Application: 20108 bytes. Metadata: 128 bytes.
-SRAM used: 1796 of 4096 bytes (43.8%). Stack: 1024 bytes. Heap: 256 bytes.
---------------- Rebuild Succeeded: 05/29/2020 09:26:27 ---------------
+Flash used: 30032 of 32768 bytes (91.7%). Bootloader: 4992 bytes. Application: 24912 bytes. Metadata: 128 bytes.
+SRAM used: 2020 of 4096 bytes (49.3%). Stack: 1024 bytes. Heap: 256 bytes.
+--------------- Rebuild Succeeded: 05/31/2020 12:27:11 ---------------

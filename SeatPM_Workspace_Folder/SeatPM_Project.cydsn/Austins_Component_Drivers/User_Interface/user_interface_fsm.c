@@ -61,8 +61,17 @@ void UI_FSM_PrintMessage(
     char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW + 1])
 {
     Screen_ClearDisplay();
+
+    DEBUG_PRINT(&Message[0][0]);
+    DEBUG_PRINT("\r\n");
+
     Screen_PrintString(&Message[0][0]);
+
     Screen_Position(1,0);
+
+    DEBUG_PRINT(&Message[1][0]);
+    DEBUG_PRINT("\r\n\r\n");
+
     Screen_PrintString(&Message[1][0]);
 }
 
@@ -90,7 +99,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         // Print knee angle too large error
         //                           1234567890123456
         sprintf(&me->Message[0][0], "Knee Angle above");
-        sprintf(&me->Message[0][0], "maximum limit!  ");
+        sprintf(&me->Message[1][0], "maximum limit!  ");
         UI_FSM_PrintMessage(me->Message);
     }
     else if (g_KneeAngle < MinAngle)
@@ -98,7 +107,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         // Print knee angle too small error
         //                           1234567890123456
         sprintf(&me->Message[0][0], "Knee Angle below ");
-        sprintf(&me->Message[0][0], "minimum limit!  ");
+        sprintf(&me->Message[1][0], "minimum limit!  ");
         UI_FSM_PrintMessage(me->Message);
     }
     else if (g_KneeAngle == INVALID_ANGLE)
@@ -106,7 +115,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         // Print knee angle invalid error
         //                           1234567890123456
         sprintf(&me->Message[0][0], "Knee Angle is   ");
-        sprintf(&me->Message[0][0], "INVALID_ANGLE ! ");
+        sprintf(&me->Message[1][0], "INVALID_ANGLE ! ");
         UI_FSM_PrintMessage(me->Message);
     }
     else
@@ -114,7 +123,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         // Print knee angle invalid error
         //                           1234567890123456
         sprintf(&me->Message[0][0], "Knee Angle is   ");
-        sprintf(&me->Message[0][0], "unspecified!   ");
+        sprintf(&me->Message[1][0], "unspecified!   ");
         UI_FSM_PrintMessage(me->Message);
     }
     CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
@@ -141,6 +150,7 @@ void UI_FSM_ExecuteCurrentStateFunction(UI_FSM *me)
 {
     Event NoOperationEvent;
     NoOperationEvent.EventSignal = NO_OPERATION;
+    DEBUG_PRINT("Executing State...\r\n");
     FSM_Dispatch(&me->Parent, &NoOperationEvent);
 }
 
@@ -149,7 +159,7 @@ void UI_FSM_ExecuteCurrentStateFunction(UI_FSM *me)
 //=============================================================================
 void UI_FSM_PrintInvalidSignalMessage(UI_FSM *me)
 {
-
+    DEBUG_PRINT("ERROR: Invalid Singal!\r\n");
 }
 
 //=============================================================================
@@ -168,12 +178,14 @@ void UI_FSM_Initial_State(UI_FSM *me, Event const *MyEvent)
     sprintf(&me->Message[0][0], "   Welcome to   ");
     sprintf(&me->Message[1][0], "     SeatPM     ");
     UI_FSM_PrintMessage(me->Message);
+    CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
 
     // UI Startup Code Goes Here
 
     // Transition to Setting Minimum Angle
+    DEBUG_PRINT("Transition to Set Minimum Knee Angle\r\n");
     FSM_Transition(&me->Parent,
-                   &UI_UI_FSM_SetMinimumKneeAngle_StateFSM);
+                   &UI_FSM_SetMinimumKneeAngle_State);
     // Update display in next function without any inputs
     UI_FSM_ExecuteCurrentStateFunction(me);
 } // End of initial state
@@ -184,15 +196,14 @@ void UI_FSM_Initial_State(UI_FSM *me, Event const *MyEvent)
 //=============================================================================
 // Set Minimum Knee Angle State
 //=============================================================================
-void UI_UI_FSM_SetMinimumKneeAngle_StateFSM(UI_FSM *me, Event const *MyEvent)
+void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
 {
-
     switch (MyEvent->EventSignal)
     {
     case CONFIRM_BUTTON_PRESSED:
+        DEBUG_PRINT("Transition to Set Maximum Knee Angle\r\n");
         FSM_Transition(&me->Parent,
                        &UI_FSM_SetMaximumKneeAngle_State);
-        // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
@@ -216,7 +227,8 @@ void UI_UI_FSM_SetMinimumKneeAngle_StateFSM(UI_FSM *me, Event const *MyEvent)
         // TODO
         break;
     } // End of signal processing
-
+    
+    // One-off message
     if (me->IsFirstTimeSettingMinAngle == TRUE)
     {
         // Prompt user to set the minimum angle of the device
@@ -229,6 +241,16 @@ void UI_UI_FSM_SetMinimumKneeAngle_StateFSM(UI_FSM *me, Event const *MyEvent)
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     }
 
+        if(me->Parent.CurrentState == &UI_FSM_SetMinimumKneeAngle_State)
+    {
+        DEBUG_PRINT("\r\nWe are in min angle\r\n");
+    }
+    else
+    {
+        DEBUG_PRINT("\r\nWe are NOT in min angle\r\n");
+    }
+
+    DEBUG_PRINT("Here \r\n");
     // Print current minimum angle
     //                           1234567890123456
     sprintf(&me->Message[0][0], "Min. knee angle ");
@@ -245,6 +267,7 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
     switch (MyEvent->EventSignal)
     {
     case CONFIRM_BUTTON_PRESSED:
+        DEBUG_PRINT("Transition to Goniometer Reading Check\r\n");
         FSM_Transition(&me->Parent,
                        &UI_FSM_GoniometerReadingCheck_State);
         // Update display in next function without any inputs
@@ -253,8 +276,9 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
 
     case BACK_BUTTON_PRESSED:
         // Go back to minimum angle state
+        DEBUG_PRINT("Transition to Set Minimum Knee Angle\r\n");
         FSM_Transition(&me->Parent,
-                       &UI_UI_FSM_SetMinimumKneeAngle_StateFSM);
+                       &UI_FSM_SetMinimumKneeAngle_State);
         // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
         break;
@@ -276,6 +300,7 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
     } // End of signal processing
 
+    // One-off message
     if (me->IsFirstTimeSettingMaxAngle == TRUE)
     {
         // Prompt user to set the max angle of the device
@@ -284,8 +309,17 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         sprintf(&me->Message[1][0], "knee angle...   ");
         UI_FSM_PrintMessage(me->Message);
 
-        me->IsFirstTimeSettingMinAngle = FALSE;
+        me->IsFirstTimeSettingMaxAngle = FALSE;
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
+    }
+
+    if(me->Parent.CurrentState == &UI_FSM_SetMaximumKneeAngle_State)
+    {
+        DEBUG_PRINT("\r\nWe are in max angle\r\n");
+    }
+    else
+    {
+        DEBUG_PRINT("\r\nWe are NOT in max angle\r\n");
     }
 
     // Print current maximum angle
@@ -310,6 +344,7 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
         if (UI_FSM_IsKneeAngleValid(me) == TRUE)
         {
             // If knee angle is valid, tell user to attach ankle strap
+            DEBUG_PRINT("Transition to Ankle Strap R/R\r\n");
             FSM_Transition(&me->Parent, UI_FSM_AnkleStrapRetractRelease_State);
             // Update display in next function without any inputs
             UI_FSM_ExecuteCurrentStateFunction(me);
@@ -319,6 +354,7 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
 
     case BACK_BUTTON_PRESSED:
         // Go back to set maximum angle
+        DEBUG_PRINT("Transition to Set Maximum Knee Angle\r\n");
         FSM_Transition(&me->Parent, UI_FSM_SetMaximumKneeAngle_State);
         // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
@@ -357,7 +393,7 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
     //                           1234567890123456
     sprintf(&me->Message[0][0], "Current %4.1lf deg", g_KneeAngle);
     sprintf(&me->Message[1][0],
-            "Min=%3lf Max=%3lf",
+            "Min=%3.1lf Max=%3.1lf",
             Parameter_GetValue(&g_MinimumAngle),
             Parameter_GetValue(&g_MaximumAngle));
     UI_FSM_PrintMessage(me->Message);
@@ -367,7 +403,7 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
     me->ShallMainLoopUpdateAngleReading = FALSE; // Maybe not the right place
 
     // Make the main loop update the current angle measurement.
-    if (me->Parent.currentState == &UI_FSM_GoniometerReadingCheck_State)
+    if (me->Parent.CurrentState == &UI_FSM_GoniometerReadingCheck_State)
     {
         me->ShallMainLoopUpdateAngleReading = TRUE;
     }
@@ -558,7 +594,7 @@ void UI_FSM_ContinuousPassiveMotion_State(
         break;
     }// End of signal handling
 
-    if (me->Parent.currentState == &UI_FSM_ContinuousPassiveMotion_State)
+    if (me->Parent.CurrentState == &UI_FSM_ContinuousPassiveMotion_State)
     {
         me->ShallMainLoopHandleCPMMessage = TRUE;
     }

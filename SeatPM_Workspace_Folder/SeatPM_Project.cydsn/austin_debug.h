@@ -19,6 +19,7 @@ typedef int bool;
 #define AUSTIN_ACCELEROMETER_DEBUG
 #define AUSTIN_GONIOMETER_DEBUG
 //#define GONIOMETER_TEST
+#define BUTTON_TEST
     
 // ============================================================================
 // DEBUG_PRINT

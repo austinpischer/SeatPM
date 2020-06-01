@@ -33,7 +33,7 @@ struct Event
 //=============================================================================
 struct FiniteStateMachine
 {
-    State currentState;
+    State CurrentState;
 };
 // NOTE: In a finite state machine implementation,
 // All possible signals to the state machine should be
@@ -49,21 +49,21 @@ struct FiniteStateMachine
 // "FSM_Constructor" initializes the first state 
 // by casting passed initialState function pointer to a State 
 #define FSM_Constructor(FSM, initialState) \
-        ((FSM)->currentState = (State)(initialState))
+        ((FSM)->CurrentState = (State)(initialState))
 
 // "FSM_ExecuteInitialState" triggers the transition from the initial state.
 #define FSM_ExecuteInitialState(FSM, initialEvent) \
-        (*(FSM)->currentState)((FSM), (initialEvent))
+        (*(FSM)->CurrentState)((FSM), (initialEvent))
 
 // "FSM_Dispatch" executes the function that the FSM's state points to.
 #define FSM_Dispatch(FSM, dispatchEvent) \
-        (*(FSM)->currentState)((FSM), (dispatchEvent))
+        (*(FSM)->CurrentState)((FSM), (dispatchEvent))
 
 // "FSM_Transtion" changes the state (function pointer) of the FSM
 //      to a new target state (function pointer)
 //      (points state to new function).
 #define FSM_Transition(FSM, targetState) \
-        ((FSM)->currentState = (State)(targetState))
+        ((FSM)->CurrentState = (State)(targetState))
 
 // End of Multiple Inlusion Protection
 #endif

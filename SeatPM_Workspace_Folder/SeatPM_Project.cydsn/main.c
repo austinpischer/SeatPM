@@ -80,21 +80,15 @@ int main(void)
     // UI Startup
     #ifndef GONIOMETER_TEST
     Screen_Start();
-    UI_FSM_Constructor(&g_UserInterface);
-    Enable_UI_Button_Interrupts();
+    Enable_UI_Button_Interrupts(); // Testing UI transitioning unexpectedly, w/o buttons
     #endif
 
-    //-------------------------------------------------------------------------
-    // Global Parameter Constructors
-    //-------------------------------------------------------------------------
+    // UI Software Startup
     #ifndef GONIOMETER_TEST
     InitializeParamters();
+     UI_FSM_Constructor(&g_UserInterface);
     #endif
 
-    //-------------------------------------------------------------------------
-    // User Interface Finite State Machine Startup
-    //-------------------------------------------------------------------------
-    
     //-------------------------------------------------------------------------
     // Non-Global Variables
     //-------------------------------------------------------------------------
@@ -157,7 +151,10 @@ int main(void)
         PrintGoniometerAngle(PrintFiltered, KneeGoniometer.FilteredAngle);
         #endif 
         
-        
+        // MaxValue of MinAngle should be Value of MaxAngle
+        Parameter_SetMaximumValue(&g_MinimumAngle, Parameter_GetValue(&g_MaximumAngle));
+        // MinValue of MaxAngle should be Value of MinAngle
+        Parameter_SetMinimumValue(&g_MaximumAngle, Parameter_GetValue(&g_MinimumAngle));
         CyDelay(10);// used for putty printing properly?
     } // End infinite loop
     
