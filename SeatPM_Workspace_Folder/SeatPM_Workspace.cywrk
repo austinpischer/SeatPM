@@ -8,7 +8,6 @@
 <files />
 <projects>
 <v>.\SeatPM_Project.cydsn\SeatPM_Project.cyprj</v>
-<v>.\UART_Bootloader.cydsn\UART_Bootloader.cyprj</v>
 </projects>
 <workspace_id v="1d2476d5-8597-4394-acd1-a47e92388f0d" />
 <WriteAppVersionLastSavedWith v="4.2.0.641" />

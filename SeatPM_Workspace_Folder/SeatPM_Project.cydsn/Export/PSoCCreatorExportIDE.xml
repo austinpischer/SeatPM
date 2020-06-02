@@ -25,7 +25,7 @@
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
   </Toolchains>
-  <Project Name="SeatPM_Project" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" Version="5.80" Type="Bootloadable">
+  <Project Name="SeatPM_Project" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" Version="5.80" Type="Normal">
     <CMSIS_SVD_File>SeatPM_Project.svd</CMSIS_SVD_File>
     <Datasheet />
     <LinkerFiles>
@@ -45,8 +45,6 @@
         <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitter_cfg.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitter_cfg.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cybootloader.icf</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cybootloader.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cymetadata.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cydevice_trm.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cydevicegnu_trm.inc</File>
@@ -57,8 +55,6 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitteriar.inc</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitter.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cydisabledsheets.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Bootloadable.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Bootloadable.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_I2C.h</File>
@@ -114,6 +110,11 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Screen_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_100Hz.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_100Hz.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_Clock.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_Clock.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_PWM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_PWM.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_PWM_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_SCBCLK.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_SCBCLK.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_sda.c</File>
@@ -169,21 +170,45 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cycodeshareimport.ld</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cycodeshareexport.ld</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cycodeshareimport.scat</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Reset_Clock.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Reset_Clock.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\SW1.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\SW1.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\SW1_aliases.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\SW1_PM.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Reset_Interrupt.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Reset_Interrupt.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Reset_Timer.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Reset_Timer.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Reset_Timer_PM.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED1.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED1.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED1_aliases.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED1_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer_Interrupt.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer_Interrupt.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_INT.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_1kHz.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_1kHz.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputA.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputA.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputA_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputA_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_Input.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_Input.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_Input_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_Input_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_IRQ.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_IRQ.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_intClock.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_intClock.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_Interrupt.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_Interrupt.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_Interrupt.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_Interrupt.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">

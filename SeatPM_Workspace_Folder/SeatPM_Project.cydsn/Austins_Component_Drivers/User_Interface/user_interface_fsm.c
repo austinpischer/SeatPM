@@ -42,7 +42,7 @@ void UI_FSM_Constructor(UI_FSM *me)
 
     Parameter_Constructor(&me->New_CPM_Speed,
                           Parameter_GetMinimumValue(&g_CPM_Speed),
-                          Parameter_GetMinimumValue(&g_CPM_Speed),
+                          Parameter_GetMaximumValue(&g_CPM_Speed),
                           Parameter_GetValue(&g_CPM_Speed));
 
     // One should not expect for the initial state
@@ -241,22 +241,19 @@ void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     }
 
-        if(me->Parent.CurrentState == &UI_FSM_SetMinimumKneeAngle_State)
-    {
-        DEBUG_PRINT("\r\nWe are in min angle\r\n");
-    }
-    else
-    {
-        DEBUG_PRINT("\r\nWe are NOT in min angle\r\n");
-    }
+    // Dont print message if state transitioned in signal processing
+    bool HasStateTransitioned = 
+        !(me->Parent.CurrentState == &UI_FSM_SetMinimumKneeAngle_State);
 
-    DEBUG_PRINT("Here \r\n");
-    // Print current minimum angle
-    //                           1234567890123456
-    sprintf(&me->Message[0][0], "Min. knee angle ");
-    sprintf(&me->Message[1][0], "= %4.1lf degrees",
-            Parameter_GetValue(&g_MinimumAngle));
-    UI_FSM_PrintMessage(me->Message);
+    if(HasStateTransitioned == FALSE)
+    {
+         // Print current minimum angle
+         //                           1234567890123456
+        sprintf(&me->Message[0][0], "Min. knee angle ");
+        sprintf(&me->Message[1][0], "= %4.1lf degrees",
+                Parameter_GetValue(&g_MinimumAngle));
+        UI_FSM_PrintMessage(me->Message);
+    }
 } // End of set minimum knee angle state
 
 //=============================================================================
@@ -313,22 +310,20 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     }
 
-    if(me->Parent.CurrentState == &UI_FSM_SetMaximumKneeAngle_State)
-    {
-        DEBUG_PRINT("\r\nWe are in max angle\r\n");
-    }
-    else
-    {
-        DEBUG_PRINT("\r\nWe are NOT in max angle\r\n");
-    }
+    // Dont print message if state transitioned in signal processing
+    bool HasStateTransitioned = 
+        !(me->Parent.CurrentState == &UI_FSM_SetMaximumKneeAngle_State);
 
-    // Print current maximum angle
-    //                               1234567890123456
-    sprintf(&me->Message[0][0], "Max. knee angle");
-    sprintf(&me->Message[1][0],
-            "= %4.1lf degrees",
-            Parameter_GetValue(&g_MaximumAngle));
-    UI_FSM_PrintMessage(me->Message);
+    if(HasStateTransitioned == FALSE)
+    {
+        // Print current maximum angle
+        //                               1234567890123456
+        sprintf(&me->Message[0][0], "Max. knee angle");
+        sprintf(&me->Message[1][0],
+                "= %4.1lf degrees",
+                Parameter_GetValue(&g_MaximumAngle));
+        UI_FSM_PrintMessage(me->Message);
+    }
 }// End of Set Maximum Knee Angle State
 
 //=============================================================================
@@ -345,6 +340,7 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
         {
             // If knee angle is valid, tell user to attach ankle strap
             DEBUG_PRINT("Transition to Ankle Strap R/R\r\n");
+            me->ShallMainLoopUpdateAngleReading = FALSE; 
             FSM_Transition(&me->Parent, UI_FSM_AnkleStrapRetractRelease_State);
             // Update display in next function without any inputs
             UI_FSM_ExecuteCurrentStateFunction(me);
@@ -355,6 +351,7 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
     case BACK_BUTTON_PRESSED:
         // Go back to set maximum angle
         DEBUG_PRINT("Transition to Set Maximum Knee Angle\r\n");
+        me->ShallMainLoopUpdateAngleReading = FALSE; 
         FSM_Transition(&me->Parent, UI_FSM_SetMaximumKneeAngle_State);
         // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
@@ -389,22 +386,26 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
         me->HasUserSeenAttachGoniometerMessage = TRUE;
     }
 
-    // Print current vs max and min
-    //                           1234567890123456
-    sprintf(&me->Message[0][0], "Current %4.1lf deg", g_KneeAngle);
-    sprintf(&me->Message[1][0],
-            "Min=%3.1lf Max=%3.1lf",
-            Parameter_GetValue(&g_MinimumAngle),
-            Parameter_GetValue(&g_MaximumAngle));
-    UI_FSM_PrintMessage(me->Message);
+    // Dont print message if state transitioned in signal processing
+    bool HasStateTransitioned = 
+        !(me->Parent.CurrentState == &UI_FSM_GoniometerReadingCheck_State);
 
-    // Turn off main loop updating current angle line
-    // Only have effect if this state has already been executed
-    me->ShallMainLoopUpdateAngleReading = FALSE; // Maybe not the right place
-
-    // Make the main loop update the current angle measurement.
-    if (me->Parent.CurrentState == &UI_FSM_GoniometerReadingCheck_State)
+    if(HasStateTransitioned == FALSE)
     {
+        // Print current vs max and min
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Current=%4.1lfdeg", g_KneeAngle);
+        sprintf(&me->Message[1][0],
+                "Min=%3.0lf Max=%3.0lf",
+                Parameter_GetValue(&g_MinimumAngle),
+                Parameter_GetValue(&g_MaximumAngle));
+        UI_FSM_PrintMessage(me->Message);
+
+        //0123456789123456
+        //Cur  Min    Max
+        //xxx.x xxx.x xxx.x
+        // Enable a piece of code in the main loop that
+        // repeatedly updates the "current angle" of this state
         me->ShallMainLoopUpdateAngleReading = TRUE;
     }
 } // End of Goniometer Reading Check State
@@ -437,28 +438,30 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
     case INCREMENT_BUTTON_PRESSED:
         // Only release cable and show percent release while button is pressed
         // and knee angle is valid
-        while (Button_Increment_Read() != FALSE &&
-               UI_FSM_IsKneeAngleValid(me) == TRUE)
+        if(UI_FSM_IsKneeAngleValid(me) == TRUE)
         {
             // TODO: Slow this down?
-            Parameter_SetValue(&g_CableReleasedPercent,
-                           Parameter_GetValue(&g_CableReleasedPercent) + 1);
+            Parameter_IncrementValue(&g_CableReleasedPercent);
+            Motor_PWM_WriteCompare(500);
+            CyDelay(500);
+            Motor_PWM_WriteCompare(0);
             UI_FSM_DisplayCableReleasedPercent(me);
-            CyDelay(100);//TODO
+            CyDelay(1000);//TODO
         }
         break;
 
     case DECREMENT_BUTTON_PRESSED:
         // Only retract cable and show percent release while button is pressed
         // and knee angle is valid
-        while (Button_Decrement_Read() != FALSE &&
-               UI_FSM_IsKneeAngleValid(me) == TRUE)
-        {
             // TODO: Slow this down?
-            Parameter_SetValue(&g_CableReleasedPercent,
-                           Parameter_GetValue(&g_CableReleasedPercent) - 1);
+        if(UI_FSM_IsKneeAngleValid(me) == TRUE)
+        {
+            Parameter_DecrementValue(&g_CableReleasedPercent);
+            Motor_PWM_WriteCompare(500);
+            CyDelay(500);
+            Motor_PWM_WriteCompare(0);
             UI_FSM_DisplayCableReleasedPercent(me);
-            CyDelay(100);//TODO
+            CyDelay(1000);//TODO
         }
         break;
     
@@ -471,6 +474,7 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
         break;
     }
 
+    // One-off message
     if (me->HasUserSeenAttachAnkleStrapMessage == FALSE)
     {
         // Prompt user to attach goniometer
@@ -482,11 +486,20 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
         me->HasUserSeenAttachAnkleStrapMessage = TRUE;
     }
 
-    // Prompt user to retract/release the cable
-    //                           1234567890123456
-    sprintf(&me->Message[0][0], "Release Cable[+]");
-    sprintf(&me->Message[1][0], "Retract Cable[-]");
-    UI_FSM_PrintMessage(me->Message);
+    
+    // Dont print message if state transitioned in signal processing
+    bool HasStateTransitioned = 
+        !(me->Parent.CurrentState == &UI_FSM_AnkleStrapRetractRelease_State);
+
+    if(HasStateTransitioned == FALSE)
+    {
+        // Prompt user to retract/release the cable
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Release Cable[+]");
+        sprintf(&me->Message[1][0], "Retract Cable[-]");
+        UI_FSM_PrintMessage(me->Message);
+    }
+
 }
 
 //=============================================================================
@@ -507,6 +520,7 @@ void UI_FSM_ConfirmCPMStartup_State(
         if(UI_FSM_IsKneeAngleValid(me) == TRUE)
         {   
             Parameter_SetValue(&g_CPM_Speed, 30);
+            CPM_Runtime_Timer_Start();  // Start counting runtime
             FSM_Transition(&me->Parent, UI_FSM_ContinuousPassiveMotion_State);
             // Update display in next function without any inputs
             UI_FSM_ExecuteCurrentStateFunction(me);
@@ -537,13 +551,20 @@ void UI_FSM_ConfirmCPMStartup_State(
         break;
     }
 
+    // Dont print message if state transitioned in signal processing
+    bool HasStateTransitioned = 
+        !(me->Parent.CurrentState == &UI_FSM_ConfirmCPMStartup_State);
+
+    if(HasStateTransitioned == FALSE)
+    {
         // Prompt user to retract/release the cable
-    //                           1234567890123456
-    sprintf(&me->Message[0][0], "Start motion at ");
-    sprintf(&me->Message[1][0], 
-            "%d deg/min?", 
-            CPM_START_SPEED_DEGREES_PER_MINUTE);
-    UI_FSM_PrintMessage(me->Message);
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Start motion at ");
+        sprintf(&me->Message[1][0], 
+                "%d deg/min?", 
+                CPM_START_SPEED_DEGREES_PER_MINUTE);
+        UI_FSM_PrintMessage(me->Message);
+    }
 }
 
 //=============================================================================
@@ -553,10 +574,15 @@ void UI_FSM_ContinuousPassiveMotion_State(
     UI_FSM *me,
     Event const *MyEvent)
 {
+    Motor_PWM_WriteCompare(Parameter_GetValue(&g_CPM_Speed));
+    
     switch (MyEvent->EventSignal)
     {
     case CONFIRM_BUTTON_PRESSED:
         Parameter_SetValue(&g_CPM_Speed, 0);
+        Motor_PWM_WriteCompare(Parameter_GetValue(&g_CPM_Speed));
+        me->ShallMainLoopHandleCPMMessage = FALSE;
+        CPM_Runtime_Timer_Stop(); // Stop counting runtime
         FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
         // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
@@ -564,22 +590,35 @@ void UI_FSM_ContinuousPassiveMotion_State(
 
     case BACK_BUTTON_PRESSED:
         Parameter_SetValue(&g_CPM_Speed, 0);
+        Motor_PWM_WriteCompare(Parameter_GetValue(&g_CPM_Speed));
+        me->ShallMainLoopHandleCPMMessage = FALSE;
+        CPM_Runtime_Timer_Stop(); // Stop counting runtime
         FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
         // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        // Go to change speed state
+        // Set new value to current + 1
+        Parameter_SetValue(&me->New_CPM_Speed, Parameter_GetValue(&g_CPM_Speed));
         Parameter_IncrementValue(&me->New_CPM_Speed);
+
+        me->ShallMainLoopHandleCPMMessage = FALSE;
+
+        // Go to change speed state
         FSM_Transition(&me->Parent, UI_FSM_ConfirmSpeedChange_State);
         // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        // Go to change speed state
+        // Set new value to current - 1
+        Parameter_SetValue(&me->New_CPM_Speed, Parameter_GetValue(&g_CPM_Speed));
         Parameter_DecrementValue(&me->New_CPM_Speed);
+
+        me->ShallMainLoopHandleCPMMessage = FALSE;
+        
+         // Go to change speed state
         FSM_Transition(&me->Parent, UI_FSM_ConfirmSpeedChange_State);
         // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
@@ -594,7 +633,10 @@ void UI_FSM_ContinuousPassiveMotion_State(
         break;
     }// End of signal handling
 
-    if (me->Parent.CurrentState == &UI_FSM_ContinuousPassiveMotion_State)
+    bool HasStateTransitioned = 
+        !(me->Parent.CurrentState == &UI_FSM_ContinuousPassiveMotion_State);
+
+    if (HasStateTransitioned == FALSE)
     {
         me->ShallMainLoopHandleCPMMessage = TRUE;
     }
@@ -644,15 +686,21 @@ void UI_FSM_ConfirmSpeedChange_State(
         break;
     }
 
-            // Prompt user to retract/release the cable
-    //                           1234567890123456
-    sprintf(&me->Message[0][0], 
-            "Crnt= %4.1lf dpm",
-            Parameter_GetValue(&g_CPM_Speed));
-    sprintf(&me->Message[1][0], 
-            "New = %4.1lf dpm", 
-            Parameter_GetValue(&me->New_CPM_Speed));
-    UI_FSM_PrintMessage(me->Message);
+    bool HasStateTransitioned = 
+        !(me->Parent.CurrentState == &UI_FSM_ConfirmSpeedChange_State);
+
+    if(HasStateTransitioned == FALSE)
+    {
+        // Prompt user to change the speed of the device
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], 
+                "Crnt= %4.1lf dpm",
+                Parameter_GetValue(&g_CPM_Speed));
+        sprintf(&me->Message[1][0], 
+                "New = %4.1lf dpm", 
+                Parameter_GetValue(&me->New_CPM_Speed));
+        UI_FSM_PrintMessage(me->Message);
+    }
 }
 
 /* [] END OF FILE */
