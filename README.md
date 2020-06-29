@@ -1,5 +1,7 @@
 # SeatPM
 
+![SeatPM Logo](/Documentation Files/SeatPM-Logo-3.png)
+
 ## How to Collaborate
 This is a public repository that allows potential collaborators to
 contribute to our project using "git" version control.

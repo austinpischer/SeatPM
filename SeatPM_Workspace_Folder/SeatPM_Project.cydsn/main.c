@@ -1,4 +1,12 @@
-// TODO: File header
+/* 
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name: main.h
+Author: Austin Pischer
+*/
 
 //-----------------------------------------------------------------------------
 // Inclusions
