@@ -457,8 +457,8 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
         if(UI_FSM_IsKneeAngleValid(me) == TRUE)
         {
             Parameter_DecrementValue(&g_CableReleasedPercent);
-            Motor_PWM_WriteCompare(500);
-            CyDelay(500);
+            Motor_PWM_WriteCompare(50);
+            CyDelay(50);
             Motor_PWM_WriteCompare(0);
             UI_FSM_DisplayCableReleasedPercent(me);
             CyDelay(1000);//TODO

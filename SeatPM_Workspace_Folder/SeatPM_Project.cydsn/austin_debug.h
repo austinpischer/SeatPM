@@ -20,6 +20,7 @@ typedef int bool;
 #define AUSTIN_GONIOMETER_DEBUG
 //#define GONIOMETER_TEST
 #define FLAG_DISPATCH
+#define POTENTIOMETER_GONIOMETER
     
     
 // ============================================================================

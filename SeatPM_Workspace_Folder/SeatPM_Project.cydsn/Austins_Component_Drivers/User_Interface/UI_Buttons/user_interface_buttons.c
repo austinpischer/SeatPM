@@ -91,7 +91,7 @@ CY_ISR(Button_Decrement_ISR_Handler_Austin)
 CY_ISR(Button_EmergencyStop_Right_Interrupt_Handler)
 {
     Motor_PWM_Stop(); // Stop motor
-    sprintf(&g_UserInterface.Message[0][0], "    EMERGECNY   ");
+    sprintf(&g_UserInterface.Message[0][0], "    EMERGENCY   ");
     sprintf(&g_UserInterface.Message[1][0], "      STOP      ");
     UI_FSM_PrintMessage(g_UserInterface.Message);
     for(;;)
@@ -103,7 +103,7 @@ CY_ISR(Button_EmergencyStop_Right_Interrupt_Handler)
 CY_ISR_PROTO(Button_EmergencyStop_Left_Interrupt_Handler)
 {
     Motor_PWM_Stop();
-    sprintf(&g_UserInterface.Message[0][0], "    EMERGECNY   ");
+    sprintf(&g_UserInterface.Message[0][0], "    EMERGENCY   ");
     sprintf(&g_UserInterface.Message[0][0], "      STOP      ");
     UI_FSM_PrintMessage(g_UserInterface.Message);
     for(;;)
