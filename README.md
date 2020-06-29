@@ -10,11 +10,11 @@ The SeatPM was originally developed as a engineering senior design project
 at Seattle Pacific University. The multidisciplinary team of students that
 developed the SeatPM is:
 
-[Zahra Lawal](https://www.linkedin.com/in/zahra-lawal/) (Mechanical Engineering)
-[Shayne Carpenter](https://www.linkedin.com/in/shayne-carpenter/) (Mechanical Engineering)
-[Fahad Abulhasan](https://www.linkedin.com/in/fahadabulhasan/) (Electrical Engineering)
-[Ali Alansari](https://www.linkedin.com/in/ali-alansari/) (Electrical Engineering)
-[Austin Pischer](https://www.linkedin.com/in/austinpischer/) (Electrical Engineering)
+[Zahra Lawal](https://www.linkedin.com/in/zahra-lawal/) (Mechanical Engineering)  
+[Shayne Carpenter](https://www.linkedin.com/in/shayne-carpenter/) (Mechanical Engineering)  
+[Fahad Abulhasan](https://www.linkedin.com/in/fahadabulhasan/) (Electrical Engineering)  
+[Ali Alansari](https://www.linkedin.com/in/ali-alansari/) (Electrical Engineering)  
+[Austin Pischer](https://www.linkedin.com/in/austinpischer/) (Electrical Engineering)  
 
 
 
