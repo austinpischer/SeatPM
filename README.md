@@ -1,6 +1,6 @@
 # SeatPM
 
-![SeatPM Logo](Documentation Files/SeatPM-Logo-3.png)
+![SeatPM Logo](/Documentation_Files/SeatPM-Logo-3.png)
 
 ## How to Collaborate
 This is a public repository that allows potential collaborators to
