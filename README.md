@@ -1,6 +1,22 @@
-# SeatPM
+<p align="center">
+  <img src=/Documentation_Files/SeatPM-Logo-3.png />
+</p>
 
-![SeatPM Logo](/Documentation_Files/SeatPM-Logo-3.png)
+# SeatPM by Joint Effort
+Here you can find all of the source code and associated documentation for
+the "SeatPM".
+
+The SeatPM was originally developed as a engineering senior design project
+at Seattle Pacific University. The multidisciplinary team of students that
+developed the SeatPM is:
+
+[Zahra Lawal](https://www.linkedin.com/in/zahra-lawal/) (Mechanical Engineering)
+[Shayne Carpenter](https://www.linkedin.com/in/shayne-carpenter/) (Mechanical Engineering)
+[Fahad Abulhasan](https://www.linkedin.com/in/fahadabulhasan/) (Electrical Engineering)
+[Ali Alansari](https://www.linkedin.com/in/ali-alansari/) (Electrical Engineering)
+[Austin Pischer](https://www.linkedin.com/in/austinpischer/) (Electrical Engineering)
+
+
 
 ## How to Collaborate
 This is a public repository that allows potential collaborators to
