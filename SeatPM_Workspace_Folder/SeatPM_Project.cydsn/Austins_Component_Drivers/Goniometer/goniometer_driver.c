@@ -1,15 +1,4 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
-*/
-#include "project.h"
+// TODO: File header
 #include "goniometer_driver.h"
 #include "adxl345_registers.h"
 #include "austin_debug.h"
@@ -20,8 +9,10 @@ void Goniometer_Constructor(Goniometer *me)
 {
     me->CurrentAngle = INVALID_ANGLE;
     me->FilteredAngle = INVALID_ANGLE;
-    ADXL345_Constructor(&(me->Accelerometer_A), DEFAULT_ADDRESS);
+    GONIOMETER_DEBUG("ADXL345 Constructor B\r\n");
     ADXL345_Constructor(&(me->Accelerometer_B), ALTERNATE_ADDRESS); 
+    GONIOMETER_DEBUG("ADXL345 Constructor A\r\n");
+    ADXL345_Constructor(&(me->Accelerometer_A), DEFAULT_ADDRESS);
 }
 
 // Helper Function

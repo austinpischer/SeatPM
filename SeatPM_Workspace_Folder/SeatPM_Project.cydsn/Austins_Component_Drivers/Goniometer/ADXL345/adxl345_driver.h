@@ -1,21 +1,41 @@
-// TODO: File header
+/*==============================================================================
+ * Project: SeatPM
+ * Team: Joint Effort
+ * School: Seattle Pacific University
+ * Class: CatalyzeU Senior Design
+ * 
+ * File Name: adxl345_driver.h
+ * Author: Austin Pischer
+ * 
+ * File Explanation:
+ * The ADXL345 is an accelerometer hardware implementation.
+ * The ADXL345 class is a derived class from the Accelerometer base class.
+ * The data and method members of the ADXL345 class should all be related to
+ * the complexities involved with gathering data from an ADXL345.
+ * This class also implements the virtual UpdateCurrentAcceleration function
+ * from the Accelerometer class.
+ *============================================================================*/
+
+// Start of multiple inclusion protection
 #ifndef ADXL345_DRIVER_H
 #define ADXL345_DRIVER_H
 
-//-----------------------------------------------------------------------------
+//==============================================================================
 // Inclusions
+//==============================================================================
 #include "project.h"
 #include "acceleration_vector.h"
 #include "moving_average_filter.h"
 #include "accelerometer_driver.h"
     
-//=============================================================================
-// Definitions 
+//==============================================================================
+// Definitions
+//==============================================================================
     
 #define ADXL345_BUFFER_SIZE 10
     
 //=============================================================================
-// Data Members -- ADXL345 Class
+// Data Members - ADXL345 Class
 //=============================================================================
 typedef struct ADXL345 ADXL345;
 struct ADXL345
@@ -27,9 +47,8 @@ struct ADXL345
 };
 
 //=============================================================================
-// Method Members -- ADXL345 Class
+// Method Members - ADXL345 Class
 //=============================================================================
-
 /* Object functions */
 void ADXL345_Constructor(ADXL345 *me, uint8 My_I2C_Address);
 
@@ -51,6 +70,5 @@ void ADXL345_WriteConfigRegister(ADXL345 *me,
 void ADXL345_InitializeConfigRegisters(ADXL345 *me);
 void ADXL345_UpdateCurrentAcceleration(ADXL345 *me);
 
-
-#endif 
+#endif // End of multiple inclusion protection.
 /* [] END OF FILE */

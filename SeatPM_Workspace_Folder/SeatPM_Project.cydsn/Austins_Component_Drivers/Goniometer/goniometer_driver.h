@@ -1,20 +1,14 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
-*/
+// TODO: File Header
 #ifndef GONIOMETER_DRIVER_H
 #define GONIOMETER_DRIVER_H
     
 #include "project.h"
 #include "adxl345_driver.h"   
 #include "acceleration_vector.h"
+#include "adxl345_registers.h"
+#include "austin_debug.h"
+#include <math.h>
+#include <stdio.h>
     
 #define INVALID_ANGLE -999
     
