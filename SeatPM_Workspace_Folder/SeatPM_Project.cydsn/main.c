@@ -23,8 +23,14 @@
 //=============================================================================
 // Global Variables
 //=============================================================================
-UI_FSM g_UserInterface;
-Parameter g_MinimumAngle, g_MaximumAngle, g_CurrentAngle, g_CableReleasedPercent, g_CPM_Speed;
+UI_FSM g_UserInterface; // UI must be accessed by button press interrupts
+
+// Parameters are updated by 
+Parameter g_MinimumAngle, 
+          g_MaximumAngle, 
+          g_CurrentAngle, 
+          g_CableReleasedPercent, 
+          g_CPM_Speed;
 
 char g_Debug[64];
 
@@ -37,7 +43,7 @@ bool g_Dispatch_ConfirmButton,
      g_Dispatch_DecrementButton;
 #endif
 
-long long int g_CPM_Runtime_Seconds;
+long long int g_CPM_Runtime_Seconds; // Updated by interrupt
 
 //=============================================================================
 // Function Prototypes
@@ -45,8 +51,10 @@ long long int g_CPM_Runtime_Seconds;
 void InitializeParamters();
 CY_ISR_PROTO(CPM_Runtime_Timer_Interrupt_Handle);
 
+
+
 //=============================================================================
-// Main Function
+// Main Function -- Firmware execution starts here!
 //=============================================================================
 int main(void)
 {
@@ -62,14 +70,14 @@ int main(void)
     UI_FSM_Constructor(&g_UserInterface);
     
     // Motor startup
-    //Motor_PWM_Start();
-    //Motor_PWM_WriteCompare(1000);
+    Motor_PWM_Start();
+    Motor_PWM_WriteCompare(0); // Motor starts with 0 speed
     
     // CPM Runtime startup 
-    Clock_1kHz_Start();
     g_CPM_Runtime_Seconds = 0;
     CPM_Runtime_Timer_Interrupt_ClearPending();
     CPM_Runtime_Timer_Interrupt_StartEx(CPM_Runtime_Timer_Interrupt_Handle);
+    CPM_Runtime_Timer_Start();
     
     //Potentiometer startup
     Potentiometer_ADC_Start();
@@ -101,17 +109,23 @@ int main(void)
     //-------------------------------------------------------------------------
     for(;;)
     {
-        // Get pot reading
-        int16 Counts = Potentiometer_ADC_GetResult16(0);
-        float32 Voltage = Potentiometer_ADC_CountsTo_Volts(0,Counts);
-        double Percent = (double)((Voltage/5));
-        double Degrees = 80+(110*Percent);
+        // Get angle reading
+        #ifdef POTENTIOMETER_GONIOMETER
+            int16 Counts = Potentiometer_ADC_GetResult16(0);
+            float32 Voltage = Potentiometer_ADC_CountsTo_Volts(0,Counts);
+            double Percent = (double)((Voltage/5));
+            double Degrees = 90+(100*Percent);
+        #elif
+         
+        #endif
+        
+        
         Parameter_SetMinimumValue(&g_CurrentAngle, Parameter_GetValue(&g_MinimumAngle));
         Parameter_SetMaximumValue(&g_CurrentAngle, Parameter_GetValue(&g_MaximumAngle));
-        if(Parameter_SetValue(&g_CurrentAngle, Degrees) == FALSE && g_UserInterface.HasUserSeenAttachGoniometerMessage == TRUE)
+        if(Parameter_SetValue(&g_CurrentAngle, Degrees) == FALSE && g_UserInterface.HasUserSeenAttachAnkleStrapMessage == TRUE)
         {
             Motor_PWM_Stop(); // Stop motor
-            sprintf(&g_UserInterface.Message[0][0], "    EMERGECNY   ");
+            sprintf(&g_UserInterface.Message[0][0], "    EMERGENCY   ");
             sprintf(&g_UserInterface.Message[1][0], "      STOP      ");
             UI_FSM_PrintMessage(g_UserInterface.Message);
             for(;;)

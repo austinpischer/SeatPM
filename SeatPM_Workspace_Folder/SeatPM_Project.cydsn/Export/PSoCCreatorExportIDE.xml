@@ -179,8 +179,6 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_INT.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_1kHz.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_1kHz.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB_aliases.h</File>
