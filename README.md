@@ -8,7 +8,8 @@ the "SeatPM".
 
 The SeatPM was originally developed as a engineering senior design project
 at Seattle Pacific University. The multidisciplinary team of students that
-developed the SeatPM is:
+developed the SeatPM is named "Joint Effort" and consists of the following
+members:
 
 [Zahra Lawal](https://www.linkedin.com/in/zahra-lawal/) (Mechanical Engineering)  
 [Shayne Carpenter](https://www.linkedin.com/in/shayne-carpenter/) (Mechanical Engineering)  
@@ -16,7 +17,31 @@ developed the SeatPM is:
 [Ali Alansari](https://www.linkedin.com/in/ali-alansari/) (Electrical Engineering)  
 [Austin Pischer](https://www.linkedin.com/in/austinpischer/) (Electrical Engineering)  
 
+## Project Context
 
+The SeatPM is a lightweight, portable knee rehabilitation device. It is a type
+of Continuous Passive Motion (CPM) device, which are used to rehabilitate
+a person's joint by moving the joint through a limited range of motion,
+over-and-over again, without any effort from the user. CPM devices are useful
+because they stimulate bloodflow to an injured joint and help prevent the
+buildup of stiff scar tissue.
+
+The problem with a traditional Knee CPM Devices is that they are prescribed
+to be used for many hours each day and they must be used while seated on a
+couch, bed, or floor. In addition, they are usually heavy, large, and bulky.
+
+For people in late-stage rehabilitation, such as student athletes
+and office workers, it is difficult to use the CPM device for the prescribed
+number of hours. That is why Joint Effort has set out to create an alternative
+that can be used on-the-go, such as in the office or school library.
+
+The SeatPM empowers its users to speed up rehabilitation by attaching to a table
+so that the user can utilize this CPM device in a seated position. In addition,
+the SeatPM is designed to be more portable than traditional CPM devices.
+
+## Theory Of Operation
+
+Coming Soon(tm)
 
 ## How to Collaborate
 This is a public repository that allows potential collaborators to
@@ -45,16 +70,16 @@ and simplicity of code:
    at the top of the file. These file header comments should use this template:
 ```
 /*==============================================================================
- * Project: SeatPM
- * Team: Joint Effort
- * School: Seattle Pacific University
- * Class: CatalyzeU Senior Design
- * 
- * File Name:
- * Author: 
- * 
- * File Explanation:
- *============================================================================*/
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name:
+Author: 
+
+File Explanation:
+==============================================================================*/
 ```
 2a. All major sections of a file should have a "separator comment" as follows:
 ```
