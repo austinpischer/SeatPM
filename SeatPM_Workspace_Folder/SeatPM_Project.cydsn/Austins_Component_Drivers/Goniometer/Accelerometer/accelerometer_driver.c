@@ -22,7 +22,9 @@
 void Accelerometer_Constructor(Accelerometer *me, 
     Accelerometer_VirtualFunctionPointer Accelerometer_UpdateCurrentAcceleration_Pointer)
 {
+    ACCELEROMETER_DEBUG("Acceleration Vector Constructor\r\n");
     AccelerationVector_Constructor(&(me->CurrentAcceleration));
+    ACCELEROMETER_DEBUG("Moving Average Filter Constructor\r\n");
     MovingAverageFilter_Constructor(&(me->Filter));
     
     // Set the virtual function as the base class function by default

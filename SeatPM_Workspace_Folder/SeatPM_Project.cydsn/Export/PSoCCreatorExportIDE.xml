@@ -6,7 +6,7 @@
     <Toolchain Name="ARM GCC Generic" Selected="True">
       <Tool Name="prebuild" Command="" Options="" />
       <Tool Name="assembler" Command="arm-none-eabi-as.exe" Options="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=${OutputDir}/${CompileFile}.lst -g -W" />
-      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\Austins_Component_Drivers\Goniometer -I.\Austins_Component_Drivers\Goniometer\Acceleration_Vector -I.\Austins_Component_Drivers\Goniometer\ADXL345 -I.\Austins_Component_Drivers\Goniometer\Moving_Average_Filter -I.\Austins_Component_Drivers\User_Interface -I.\Austins_Component_Drivers\User_Interface\Finite_State_Machine -I.\Austins_Component_Drivers\User_Interface\UI_Buttons -I.\Austins_Component_Drivers\Goniometer\Accelerometer -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os" />
+      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\Austins_Component_Drivers\Goniometer -I.\Austins_Component_Drivers\Goniometer\Acceleration_Vector -I.\Austins_Component_Drivers\Goniometer\ADXL345 -I.\Austins_Component_Drivers\Goniometer\Moving_Average_Filter -I.\Austins_Component_Drivers\User_Interface -I.\Austins_Component_Drivers\User_Interface\Finite_State_Machine -I.\Austins_Component_Drivers\User_Interface\UI_Buttons -I.\Austins_Component_Drivers\Goniometer\Accelerometer -I.\Austin_Parameter -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os" />
       <Tool Name="linker" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -l m -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -u _printf_float -Wl,--gc-sections -g -ffunction-sections -Os -ffat-lto-objects" />
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
@@ -25,7 +25,7 @@
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
   </Toolchains>
-  <Project Name="SeatPM_Project" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" Version="5.80" Type="Bootloadable">
+  <Project Name="SeatPM_Project" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" Version="5.80" Type="Normal">
     <CMSIS_SVD_File>SeatPM_Project.svd</CMSIS_SVD_File>
     <Datasheet />
     <LinkerFiles>
@@ -34,19 +34,17 @@
       <LinkerFile Toolchain="ARM IAR Generic">.\Generated_Source\PSoC4\Cm0Iar.icf</LinkerFile>
     </LinkerFiles>
     <Folders>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">main.c</File>
           <File BuildType="BUILD" Toolchain="">cyapicallbacks.h</File>
           <File BuildType="BUILD" Toolchain="">austin_debug.h</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn\Generated_Source\PSoC4">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn\Generated_Source\PSoC4">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitter_cfg.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitter_cfg.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cybootloader.icf</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cybootloader.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cymetadata.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cydevice_trm.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cydevicegnu_trm.inc</File>
@@ -57,8 +55,6 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitteriar.inc</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cyfitter.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cydisabledsheets.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Bootloadable.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Bootloadable.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_I2C.h</File>
@@ -114,30 +110,11 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Screen_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_100Hz.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_100Hz.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Interrupt.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Interrupt.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Clock.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Clock.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sample.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sample.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sample_PM.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputPin.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputPin.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputPin_aliases.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputPin_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_Clock.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_Clock.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_PWM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_PWM.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_PWM_PM.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sensor_A.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sensor_A.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sensor_A_aliases.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sensor_A_PM.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sensor_B.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sensor_B.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sensor_B_aliases.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Quadrature_Sensor_B_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_SCBCLK.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_SCBCLK.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_sda.c</File>
@@ -193,85 +170,130 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cycodeshareimport.ld</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cycodeshareexport.ld</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cycodeshareimport.scat</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer_Interrupt.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\CPM_Runtime_Timer_Interrupt.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_INT.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_1kHz.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_1kHz.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputB_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputA.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputA.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputA_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_OutputA_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_Input.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_Input.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_Input_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_Input_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_IRQ.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_IRQ.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_intClock.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Potentiometer_ADC_intClock.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_Interrupt.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_Interrupt.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_Interrupt.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_Interrupt.h</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\ADXL345\adxl345_driver.c</File>
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\ADXL345\adxl345_driver.h</File>
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\ADXL345\adxl345_registers.h</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\Moving_Average_Filter\moving_average_filter.c</File>
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\Moving_Average_Filter\moving_average_filter.h</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\goniometer_driver.c</File>
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\goniometer_driver.h</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\Acceleration_Vector\acceleration_vector.h</File>
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\Acceleration_Vector\acceleration_vector.c</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\Accelerometer\accelerometer_driver.c</File>
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\Goniometer\Accelerometer\accelerometer_driver.h</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\Finite_State_Machine\finite_state_machine.h</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\UI_Buttons\user_interface_buttons.c</File>
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\UI_Buttons\user_interface_buttons.h</File>
         </Files>
       </Folder>
-      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\user_interface_fsm.h</File>
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\user_interface_fsm.c</File>
         </Files>
       </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+          <File BuildType="BUILD" Toolchain="">Austin_Parameter\austin_parameter.c</File>
+          <File BuildType="BUILD" Toolchain="">Austin_Parameter\austin_parameter.h</File>
+        </Files>
+      </Folder>
       <Folder BuildType="EXCLUDE" Path=".\codegentemp">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\ARM_GCC_441">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\ARM_GCC_473">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\DP8051_Keil_952">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\DP8051">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM0">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM0p">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM3">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM4">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
       <Folder BuildType="EXCLUDE" Path=".\CortexM7">
-        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
+        <Files Root="C:\Users\austi\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn" />
       </Folder>
     </Folders>
   </Project>

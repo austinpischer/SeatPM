@@ -5,6 +5,10 @@
 #include "project.h"
 #include "adxl345_driver.h"   
 #include "acceleration_vector.h"
+#include "adxl345_registers.h"
+#include "austin_debug.h"
+#include <math.h>
+#include <stdio.h>
     
 #define INVALID_ANGLE -999
     

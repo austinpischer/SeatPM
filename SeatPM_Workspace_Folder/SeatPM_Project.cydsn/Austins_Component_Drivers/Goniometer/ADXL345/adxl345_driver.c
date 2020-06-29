@@ -28,7 +28,9 @@
 void ADXL345_Constructor(ADXL345 *me, uint8 My_I2C_Address)
 {
     me->I2C_Address = My_I2C_Address;
+    ACCELEROMETER_DEBUG("Initialize Config Registers\r\n");
     ADXL345_InitializeConfigRegisters(me);
+    ACCELEROMETER_DEBUG("Accelerometer Constructor\r\n");
     Accelerometer_Constructor(&me->Parent, 
     (Accelerometer_VirtualFunctionPointer)(&ADXL345_UpdateCurrentAcceleration));
 }
@@ -38,7 +40,9 @@ void ADXL345_Constructor(ADXL345 *me, uint8 My_I2C_Address)
 //==============================================================================
 void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite)
 {
+    ACCELEROMETER_DEBUG("I2CM Clear Status\r\n");
     I2C_I2CMasterClearStatus(); 
+    ACCELEROMETER_DEBUG("I2CM Write Buffer\r\n");
     I2C_I2CMasterWriteBuf(me->I2C_Address, 
                           me->WriteBuffer,
                           NumberOfBytesToWrite,
@@ -86,6 +90,7 @@ void ADXL345_WriteConfigRegister(ADXL345 *me,
 {
     me->WriteBuffer[0] = ConfigRegisterAddress;
     me->WriteBuffer[1] = ByteToWrite;
+    ACCELEROMETER_DEBUG("Writing config reg...\r\n");
     ADXL345_Write(me, 2); // Write 2 bytes
 }
 
@@ -98,6 +103,7 @@ void ADXL345_InitializeConfigRegisters(ADXL345 *me)
      * and a setting of 1 places the part into measurement mode. The
      * ADXL345 powers up in standby mode with minimum power consumption.
      */
+    ACCELEROMETER_DEBUG("Write Measurement Mode\r\n");
     const uint8 MeasurementMode = 0b00001000;
     ADXL345_WriteConfigRegister(me, POWER_CTL, MeasurementMode);
     /*  
@@ -124,6 +130,7 @@ void ADXL345_InitializeConfigRegisters(ADXL345 *me)
      * We get the least noise on every axis in 16g mode, so lets use that.
      * 
      */
+    ACCELEROMETER_DEBUG("Write Data Range\r\n");
     uint8 DataRange = 0b00000010;
     ADXL345_WriteConfigRegister(me, DATA_FORMAT, DataRange);
 }
