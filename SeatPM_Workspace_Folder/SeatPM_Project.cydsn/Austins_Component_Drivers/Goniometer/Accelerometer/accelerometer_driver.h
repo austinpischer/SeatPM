@@ -1,28 +1,28 @@
 /*==============================================================================
- * Project: SeatPM
- * Team: Joint Effort
- * School: Seattle Pacific University
- * Class: CatalyzeU Senior Design
- * 
- * File Name: accelerometer_driver.h
- * Author: Austin Pischer
- * 
- * File Explanation:
- * This file defines the "Class" (Object-Oriented C) of an accelerometer.
- * See the following link  for more detail:
- * https://dmitryfrank.com/articles/oop_in_c
- * 
- * The accelerometer class should hold all data and perform all functions that
- * are independent of the specific hardware implementation of an accelerometer.
- * 
- * It is important to abstract from the hardware implementation because
- * it will be easier to update the project for a different accelerometer
- * in the future, if necessary.
- * 
- * Therefore, this class is considered the "base" class
- * and hardware implementations are the "derived" classes that must implement
- * the "virtual" UpdateCurrentAcceleration function on their own.
- *============================================================================*/
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name: accelerometer_driver.h
+Author: Austin Pischer
+
+File Explanation:
+This file defines the "Class" (Object-Oriented C) of an accelerometer.
+See the following link  for more detail:
+https://dmitryfrank.com/articles/oop_in_c
+
+The accelerometer class should hold all data and perform all functions that
+are independent of the specific hardware implementation of an accelerometer.
+
+It is important to abstract from the hardware implementation because
+it will be easier to update the project for a different accelerometer
+in the future, if necessary.
+
+Therefore, this class is considered the "base" class
+and hardware implementations are the "derived" classes that must implement
+the "virtual" UpdateCurrentAcceleration function on their own.
+==============================================================================*/
 
 // Start of multiple inclusion protection
 #ifndef ACCELEROMETER_H

@@ -4,7 +4,7 @@ Team: Joint Effort
 School: Seattle Pacific University
 Class: CatalyzeU Senior Design
 
-File Name: main.h
+File Name: main.c
 Author: Austin Pischer
 */
 

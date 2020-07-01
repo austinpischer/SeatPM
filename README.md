@@ -41,7 +41,21 @@ the SeatPM is designed to be more portable than traditional CPM devices.
 
 ## Theory Of Operation
 
-Coming Soon(tm)
+Disclaimer:  
+Due to the COVID-19 Pandemic, Joint Effort had to dramatically alter the scope
+of the SeatPM prototype. This means that many planned subsystems that
+had already been implemented in code had to be replaced with simpler 
+alternatives. Doing so while preserving the originally written code greatly
+increased the complexity of the code.
+
+For a summary of the changes, see the below diagram:
+
+Diagram Coming Soon(TM)
+
+The SeatPM can be broken down into three main subsystems:
+1) The goniometer (a knee angle measurement device made from two accelerometers)
+2) The motor (used to move the knee)
+3) The user interface (used to configure the device parameters)
 
 ## How to Collaborate
 This is a public repository that allows potential collaborators to
