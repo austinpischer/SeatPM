@@ -130,7 +130,9 @@ int main(void)
         
         Parameter_SetMinimumValue(&g_CurrentAngle, Parameter_GetValue(&g_MinimumAngle));
         Parameter_SetMaximumValue(&g_CurrentAngle, Parameter_GetValue(&g_MaximumAngle));
-        if(Parameter_SetValue(&g_CurrentAngle, Degrees) == FALSE && g_UserInterface.HasUserSeenAttachAnkleStrapMessage == TRUE)
+        bool IsCurrentKneeAngleValid = Parameter_SetValue(&g_CurrentAngle, Degrees);
+        if( IsCurrentKneeAngleValid == FALSE && 
+            g_UserInterface.HasUserSeenAttachAnkleStrapMessage == TRUE)
         {
             Motor_PWM_Stop(); // Stop motor
             sprintf(&g_UserInterface.Message[0][0], "    EMERGENCY   ");

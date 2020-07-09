@@ -216,7 +216,10 @@ void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        Parameter_DecrementValue(&g_MinimumAngle);
+        Parameter_DecrementValue(&g_
+            
+            
+            MinimumAngle);
         break;
 
     case NO_OPERATION:
