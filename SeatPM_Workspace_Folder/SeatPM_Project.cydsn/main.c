@@ -6,6 +6,10 @@ Class: CatalyzeU Senior Design
 
 File Name: main.c
 Author: Austin Pischer
+File Description:
+The main() function is where the program always starts executuion.
+In addition, all of the global variables in this program should be
+declared before the main function.
 */
 
 //=============================================================================
@@ -13,11 +17,15 @@ Author: Austin Pischer
 //=============================================================================
 #include "project.h"
 #include "austin_debug.h"
-//#include "goniometer_driver.h"
+#include "feature_branches.h"
 
 #include "user_interface_fsm.h"
 #include "user_interface_buttons.h"
-#include "austin_parameter.h" // For Parameter Class
+#include "austin_parameter.h" // for declaring global parameter instances
+
+#ifdef ACCELEROMETER_GONIOMETER_ENABLED
+    #include "goniometer_driver.h"
+#endif
 
 #include <stdio.h>
 
@@ -33,25 +41,24 @@ Author: Austin Pischer
 //=============================================================================
 UI_FSM g_UserInterface; // UI must be accessed by button press interrupts
 
-// Parameters are updated by 
 Parameter g_MinimumAngle, 
           g_MaximumAngle, 
           g_CurrentAngle, 
           g_CableReleasedPercent, 
           g_CPM_Speed;
 
+long long int g_CPM_Runtime_Seconds; // Updated by timer interrupt for use in user interface
+
 char g_Debug[64];
 
 double g_KneeAngle;
 
-#ifdef FLAG_DISPATCH
+#ifdef FLAG_DISPATCH_ENABLED
 bool g_Dispatch_ConfirmButton, 
      g_Dispatch_BackButton, 
      g_Dispatch_IncrementButton, 
      g_Dispatch_DecrementButton;
 #endif
-
-long long int g_CPM_Runtime_Seconds; // Updated by interrupt
 
 //=============================================================================
 // Function Prototypes
@@ -123,7 +130,8 @@ int main(void)
             float32 Voltage = Potentiometer_ADC_CountsTo_Volts(0,Counts);
             double Percent = (double)((Voltage/5));
             double Degrees = 90+(100*Percent);
-        #elif
+        #else // Accelerometer Goniometer
+            
          
         #endif
         

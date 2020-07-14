@@ -1,4 +1,16 @@
-// TODO: File Header
+/* 
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name: austin_debug.h
+Author: Austin Pischer
+File Description:
+This header file is a collection of macros for enabling and disabling
+certain parts of the code for debugging purposes.
+*/
+
 #ifndef AUSTIN_DEBUG_H
 #define AUSTIN_DEBUG_H
     
@@ -19,8 +31,8 @@ typedef int bool;
 #define AUSTIN_ACCELEROMETER_DEBUG
 #define AUSTIN_GONIOMETER_DEBUG
 //#define GONIOMETER_TEST
-#define FLAG_DISPATCH
-#define POTENTIOMETER_GONIOMETER
+// #define FLAG_DISPATCH // Moved to feature_branches.h
+// #define POTENTIOMETER_GONIOMETER // Moved to feature_branches.h
     
     
 // ============================================================================
