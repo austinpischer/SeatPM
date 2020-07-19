@@ -27,7 +27,7 @@ declared before the main function.
     #include "goniometer_driver.h"
 #endif
 
-#include <stdio.h>
+#include <stdio.h> // for printf
 
 
 //=============================================================================
@@ -47,26 +47,24 @@ Parameter g_MinimumAngle,
           g_CableReleasedPercent, 
           g_CPM_Speed;
 
-long long int g_CPM_Runtime_Seconds; // Updated by timer interrupt for use in user interface
-
-char g_Debug[64];
-
 double g_KneeAngle;
 
 #ifdef FLAG_DISPATCH_ENABLED
+// Flags for dispatching button-press signals to the user interface data struct
 bool g_Dispatch_ConfirmButton, 
      g_Dispatch_BackButton, 
      g_Dispatch_IncrementButton, 
      g_Dispatch_DecrementButton;
 #endif
 
+#ifdef ACCELEROMETER_GONIOMETER_ENABLED
+Goniometer g_KneeGoniometer;
+#endif
+
 //=============================================================================
 // Function Prototypes
 //=============================================================================
 void InitializeParamters();
-CY_ISR_PROTO(CPM_Runtime_Timer_Interrupt_Handle);
-
-
 
 //=============================================================================
 // Main Function -- Firmware execution starts here!
@@ -87,17 +85,16 @@ int main(void)
     // Motor startup
     Motor_PWM_Start();
     Motor_PWM_WriteCompare(0); // Motor starts with 0 speed
-    
-    // CPM Runtime startup 
-    g_CPM_Runtime_Seconds = 0;
-    CPM_Runtime_Timer_Interrupt_ClearPending();
-    CPM_Runtime_Timer_Interrupt_StartEx(CPM_Runtime_Timer_Interrupt_Handle);
-    CPM_Runtime_Timer_Start();
-    
+
+    CPM_Runtime_Startup();
+
+    #ifdef POTENTIOMETER_GONIOMETER_ENABLED
     //Potentiometer startup
     Potentiometer_ADC_Start();
     Potentiometer_ADC_StartConvert();
-    
+    #else // Accelerometer Goniometer Enabled
+    Goniometer_Constructor(&g_KneeGoniometer);
+    #endif
     //-------------------------------------------------------------------------
     // Global Variable Initialization
     //-------------------------------------------------------------------------
@@ -116,8 +113,6 @@ int main(void)
     // Runtime vars
     int RunTime_Hours, RunTime_Minutes, RunTime_Seconds;
     RunTime_Hours = RunTime_Minutes = RunTime_Seconds = 0;
-    long long int Last_CPM_Runtime_InSeconds = 0;
-
     
     //-------------------------------------------------------------------------
     // Infinite Loop
@@ -125,16 +120,15 @@ int main(void)
     for(;;)
     {
         // Get angle reading
-        #ifdef POTENTIOMETER_GONIOMETER
+        #ifdef POTENTIOMETER_GONIOMETER_ENABLED
             int16 Counts = Potentiometer_ADC_GetResult16(0);
             float32 Voltage = Potentiometer_ADC_CountsTo_Volts(0,Counts);
             double Percent = (double)((Voltage/5));
             double Degrees = 90+(100*Percent);
-        #else // Accelerometer Goniometer
-            
+        #else // Accelerometer Goniometer Enabled
+        Goniometer_Sample(&g_KneeGoniometer);
          
         #endif
-        
         
         Parameter_SetMinimumValue(&g_CurrentAngle, Parameter_GetValue(&g_MinimumAngle));
         Parameter_SetMaximumValue(&g_CurrentAngle, Parameter_GetValue(&g_MaximumAngle));
@@ -153,30 +147,42 @@ int main(void)
         }
         g_KneeAngle = Parameter_GetValue(&g_CurrentAngle);
         
-        #ifdef FLAG_DISPATCH
+        
+        //=====================================================================
+        // Tell UI which button was pressed 
+        //=====================================================================
+        #ifdef FLAG_DISPATCH_ENABLED
         if(g_Dispatch_ConfirmButton == TRUE)
         {
             g_Dispatch_ConfirmButton = FALSE;
             UI_Button_Dispatch(CONFIRM_BUTTON_PRESSED);
         }
-        if(g_Dispatch_BackButton == TRUE)
+        else if(g_Dispatch_BackButton == TRUE)
         {
             g_Dispatch_BackButton = FALSE;
             UI_Button_Dispatch(BACK_BUTTON_PRESSED);
         }
-        if(g_Dispatch_IncrementButton == TRUE)
+        else if(g_Dispatch_IncrementButton == TRUE)
         {
             g_Dispatch_IncrementButton = FALSE;
             UI_Button_Dispatch(INCREMENT_BUTTON_PRESSED);
         }
-        if(g_Dispatch_DecrementButton == TRUE)
+        else if(g_Dispatch_DecrementButton == TRUE)
         {
             g_Dispatch_DecrementButton = FALSE; 
             UI_Button_Dispatch(DECREMENT_BUTTON_PRESSED);
         }
+        else
+        {
+            // No (valid) button press signal to dispatch to UI
+        }
         #endif
        
-        // User interface flags
+        //=====================================================================
+        // Update the display if the user interface set flags to do so
+        //=====================================================================
+        
+        /* Update the Angle Reading */
         if(g_UserInterface.ShallMainLoopUpdateAngleReading == TRUE
            && g_KneeAngle != LastKneeAngle)
         {
@@ -189,24 +195,10 @@ int main(void)
             
             LastKneeAngle = g_KneeAngle;
         }
-        // User interface flags
+        
+        /* Update the CPM runtime */
         else if(g_UserInterface.ShallMainLoopHandleCPMMessage == TRUE)
-        {
-            long long int TotalSeconds = g_CPM_Runtime_Seconds;
-            if(TotalSeconds > Last_CPM_Runtime_InSeconds)
-            {
-                Last_CPM_Runtime_InSeconds = g_CPM_Runtime_Seconds;
-                
-                // Get copy of seconds so it doesnt change while calculating runttime
-                
-                // Seconds to hms algorithm
-                RunTime_Hours = (int)(TotalSeconds/(60*60));
-                long long int Remainder = TotalSeconds -(RunTime_Hours*60*60);
-                RunTime_Minutes = (int)(Remainder/60);
-                Remainder = Remainder - (RunTime_Minutes*60);
-                RunTime_Seconds = (int)(Remainder);
-            }
-            
+        {            
             // Print message
             sprintf(&g_UserInterface.Message[0][0],
                     "RT: %2dh %2dm %2ds",
@@ -218,8 +210,16 @@ int main(void)
                     g_KneeAngle);
             UI_FSM_PrintMessage(g_UserInterface.Message);
         }
-
         
+        /* No diplay updates from UI */
+        else
+        {
+            // Do nothing
+        }
+
+        //=====================================================================
+        //Update Min/Max Knee Angle Parameters
+        //=====================================================================
         // MaxValue of MinAngle should be Value of MaxAngle
         Parameter_SetMaximumValue(&g_MinimumAngle, Parameter_GetValue(&g_MaximumAngle));
         // MinValue of MaxAngle should be Value of MinAngle
@@ -233,7 +233,6 @@ int main(void)
 //=============================================================================
 // Function Implementations
 //=============================================================================
-#ifndef GONIOMETER_TEST
 void InitializeParamters()
 {
     
@@ -320,11 +319,5 @@ void InitializeParamters()
     {
         DEBUG_PRINT("Invalid CPM Speed Constructor");
     }
-}
-#endif
-
-CY_ISR(CPM_Runtime_Timer_Interrupt_Handle)
-{
-    g_CPM_Runtime_Seconds++;
 }
 /* [] END OF FILE */
