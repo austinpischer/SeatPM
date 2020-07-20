@@ -31,7 +31,7 @@ typedef int bool;
 #define AUSTIN_ACCELEROMETER_DEBUG
 #define AUSTIN_GONIOMETER_DEBUG
 //#define GONIOMETER_TEST
-// #define FLAG_DISPATCH // Moved to feature_branches.h
+// #define DISPATCH_IN_MAIN // Moved to feature_branches.h
 // #define POTENTIOMETER_GONIOMETER // Moved to feature_branches.h
     
     
@@ -51,7 +51,7 @@ typedef int bool;
     
 #else
     
-    // {} is included to specify empty statement,s 
+    // {} is included to specify empty statement,
     // otherwise compiler throws error
     #define DEBUG_PRINT(string) ({})                            
     

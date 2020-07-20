@@ -26,9 +26,9 @@ of the same """feature""".
 
     
 // TODO description
-#define FLAG_DISPATCH_ENABLED
-#ifndef FLAG_DISPATCH_ENABLED
-    #define ISR_DISPATCH_ENABLED
+#define DISPATCH_IN_MAIN
+#ifndef DISPATCH_IN_MAIN
+    #define DISPATCH_IN_INTERRUPT
 #endif
 
 

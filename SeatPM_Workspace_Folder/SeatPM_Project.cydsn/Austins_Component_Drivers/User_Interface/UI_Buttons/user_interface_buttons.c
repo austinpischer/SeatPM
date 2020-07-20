@@ -3,6 +3,8 @@
 #include "user_interface_buttons.h"
 #include "austin_debug.h"
 #include "user_interface_fsm.h" 
+#include "emergency_stop.h"
+#include "feature_branches.h"
 
 /* Helper function for button interrupt implementations */ 
 void UI_Button_Dispatch(const enum UI_FSM_Signals ButtonSignal)
@@ -44,8 +46,8 @@ CY_ISR(Button_Confirm_ISR_Handler_Austin)
 {
     DEBUG_PRINT("\r\nConfirm Button Pressed\r\n");
     
-    #ifdef FLAG_DISPATCH
-    g_Dispatch_ConfirmButton = TRUE;
+    #ifdef DISPATCH_IN_MAIN
+    g_SignalToDispatch = CONFIRM_BUTTON_PRESSED;
     #else
     UI_Button_Dispatch(CONFIRM_BUTTON_PRESSED);
     #endif 
@@ -57,8 +59,8 @@ CY_ISR(Button_Back_ISR_Handler_Austin)
 {
     DEBUG_PRINT("\r\nBack Button Pressed\r\n");
     
-    #ifdef FLAG_DISPATCH
-    g_Dispatch_BackButton = TRUE;
+    #ifdef DISPATCH_IN_MAIN
+    g_SignalToDispatch = BACK_BUTTON_PRESSED;
     #else
     UI_Button_Dispatch(BACK_BUTTON_PRESSED);
     #endif
@@ -69,8 +71,8 @@ CY_ISR(Button_Increment_ISR_Handler_Austin)
 {
     DEBUG_PRINT("\r\nIncrement Button Pressed\r\n");
     
-    #ifdef FLAG_DISPATCH
-    g_Dispatch_IncrementButton = TRUE;
+    #ifdef DISPATCH_IN_MAIN
+    g_SignalToDispatch = INCREMENT_BUTTON_PRESSED;
     #else
     UI_Button_Dispatch(INCREMENT_BUTTON_PRESSED);
     #endif
@@ -81,8 +83,8 @@ CY_ISR(Button_Decrement_ISR_Handler_Austin)
 {
     DEBUG_PRINT("\r\nDecrement Button Pressed\r\n");
     
-    #ifdef FLAG_DISPATCH
-    g_Dispatch_DecrementButton = TRUE;
+    #ifdef DISPATCH_IN_MAIN
+    g_SignalToDispatch = DECREMENT_BUTTON_PRESSED;
     #else
     UI_Button_Dispatch(DECREMENT_BUTTON_PRESSED);
     #endif
@@ -90,26 +92,12 @@ CY_ISR(Button_Decrement_ISR_Handler_Austin)
 
 CY_ISR(Button_EmergencyStop_Right_Interrupt_Handler)
 {
-    Motor_PWM_Stop(); // Stop motor
-    sprintf(&g_UserInterface.Message[0][0], "    EMERGENCY   ");
-    sprintf(&g_UserInterface.Message[1][0], "      STOP      ");
-    UI_FSM_PrintMessage(g_UserInterface.Message);
-    for(;;)
-    {
-        // Do nothing (aka stop device)
-    };
+    EmergencyStop();
 }
 
 CY_ISR_PROTO(Button_EmergencyStop_Left_Interrupt_Handler)
 {
-    Motor_PWM_Stop();
-    sprintf(&g_UserInterface.Message[0][0], "    EMERGENCY   ");
-    sprintf(&g_UserInterface.Message[0][0], "      STOP      ");
-    UI_FSM_PrintMessage(g_UserInterface.Message);
-    for(;;)
-    {
-        // Do nothing (aka stop device)
-    };
+    EmergencyStop();
 }
 
 /* [] END OF FILE */

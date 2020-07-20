@@ -82,11 +82,11 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
 {
     double MaxAngle = Parameter_GetValue(&g_MaximumAngle);
     double MinAngle = Parameter_GetValue(&g_MinimumAngle);
-
+    double CurrentAngle = Parameter_GetValue(&g_CurrentAngle);
     // Below case is reading within range of user-set parameters (valid)
-    if (g_KneeAngle <= MaxAngle &&
-        g_KneeAngle >= MinAngle &&
-        g_KneeAngle != INVALID_ANGLE)
+    if (CurrentAngle <= MaxAngle &&
+        CurrentAngle >= MinAngle &&
+        CurrentAngle != INVALID_ANGLE)
     {
         // Don't need to print anything if valid
         return (TRUE);
@@ -94,7 +94,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
 
     // All below cases are outside of range of user-set parameters
     // or invalid.
-    else if (g_KneeAngle > MaxAngle)
+    else if (CurrentAngle > MaxAngle)
     {
         // Print knee angle too large error
         //                           1234567890123456
@@ -102,7 +102,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         sprintf(&me->Message[1][0], "maximum limit!  ");
         UI_FSM_PrintMessage(me->Message);
     }
-    else if (g_KneeAngle < MinAngle)
+    else if (CurrentAngle < MinAngle)
     {
         // Print knee angle too small error
         //                           1234567890123456
@@ -110,7 +110,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         sprintf(&me->Message[1][0], "minimum limit!  ");
         UI_FSM_PrintMessage(me->Message);
     }
-    else if (g_KneeAngle == INVALID_ANGLE)
+    else if (CurrentAngle == INVALID_ANGLE)
     {
         // Print knee angle invalid error
         //                           1234567890123456
@@ -397,7 +397,9 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
     {
         // Print current vs max and min
         //                           1234567890123456
-        sprintf(&me->Message[0][0], "Current=%4.1lfdeg", g_KneeAngle);
+        sprintf(&me->Message[0][0], 
+                "Current=%4.1lfdeg", 
+                Parameter(&g_CurrentAngle));
         sprintf(&me->Message[1][0],
                 "Min=%3.0lf Max=%3.0lf",
                 Parameter_GetValue(&g_MinimumAngle),

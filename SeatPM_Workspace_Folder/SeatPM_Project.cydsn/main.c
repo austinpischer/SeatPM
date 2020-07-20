@@ -21,6 +21,9 @@ declared before the main function.
 
 #include "user_interface_fsm.h"
 #include "user_interface_buttons.h"
+#include "cpm_runtime.h"
+#include "emergency_stop.h"
+
 #include "austin_parameter.h" // for declaring global parameter instances
 
 #ifdef ACCELEROMETER_GONIOMETER_ENABLED
@@ -41,15 +44,14 @@ declared before the main function.
 //=============================================================================
 UI_FSM g_UserInterface; // UI must be accessed by button press interrupts
 
+// Parameters
 Parameter g_MinimumAngle, 
           g_MaximumAngle, 
           g_CurrentAngle, 
           g_CableReleasedPercent, 
           g_CPM_Speed;
 
-double g_KneeAngle;
-
-#ifdef FLAG_DISPATCH_ENABLED
+#ifdef DISPATCH_IN_MAIN
 // Flags for dispatching button-press signals to the user interface data struct
 bool g_Dispatch_ConfirmButton, 
      g_Dispatch_BackButton, 
@@ -61,10 +63,13 @@ bool g_Dispatch_ConfirmButton,
 Goniometer g_KneeGoniometer;
 #endif
 
+Runtime g_CPM_Runtime;
+
 //=============================================================================
 // Function Prototypes
 //=============================================================================
 void InitializeParamters();
+double GetKneeAngle(); 
 
 //=============================================================================
 // Main Function -- Firmware execution starts here!
@@ -86,6 +91,7 @@ int main(void)
     Motor_PWM_Start();
     Motor_PWM_WriteCompare(0); // Motor starts with 0 speed
 
+    
     CPM_Runtime_Startup();
 
     #ifdef POTENTIOMETER_GONIOMETER_ENABLED
@@ -98,11 +104,8 @@ int main(void)
     //-------------------------------------------------------------------------
     // Global Variable Initialization
     //-------------------------------------------------------------------------
-    #ifdef FLAG_DISPATCH
-    g_Dispatch_ConfirmButton = FALSE;
-    g_Dispatch_BackButton = FALSE;
-    g_Dispatch_IncrementButton = FALSE;
-    g_Dispatch_DecrementButton = FALSE;
+    #ifdef DISPATCH_IN_MAIN
+    enum UI_FSM_Signals g_SignalToDispatch;
     #endif
   
     
@@ -119,39 +122,31 @@ int main(void)
     //-------------------------------------------------------------------------
     for(;;)
     {
-        // Get angle reading
-        #ifdef POTENTIOMETER_GONIOMETER_ENABLED
-            int16 Counts = Potentiometer_ADC_GetResult16(0);
-            float32 Voltage = Potentiometer_ADC_CountsTo_Volts(0,Counts);
-            double Percent = (double)((Voltage/5));
-            double Degrees = 90+(100*Percent);
-        #else // Accelerometer Goniometer Enabled
-        Goniometer_Sample(&g_KneeGoniometer);
-         
-        #endif
+        /* Update Parameters */
+        // MaxValue of MinAngle should be Value of MaxAngle
+        Parameter_SetMaximumValue(&g_MinimumAngle, Parameter_GetValue(&g_MaximumAngle));
+        // MinValue of MaxAngle should be Value of MinAngle
+        Parameter_SetMinimumValue(&g_MaximumAngle, Parameter_GetValue(&g_MinimumAngle));
         
+        // Update Min and Max Value of the Current Angle
         Parameter_SetMinimumValue(&g_CurrentAngle, Parameter_GetValue(&g_MinimumAngle));
         Parameter_SetMaximumValue(&g_CurrentAngle, Parameter_GetValue(&g_MaximumAngle));
-        bool IsCurrentKneeAngleValid = Parameter_SetValue(&g_CurrentAngle, Degrees);
+         
+        // Sample the goniometer to get the knee angle
+        bool IsCurrentKneeAngleValid = 
+            Parameter_SetValue(&g_CurrentAngle, GetKneeAngle());
+        
+        /* IMMEDIATELY AFTER SAMPLING, Handle Emergency Stop Condition */
         if( IsCurrentKneeAngleValid == FALSE && 
             g_UserInterface.HasUserSeenAttachAnkleStrapMessage == TRUE)
         {
-            Motor_PWM_Stop(); // Stop motor
-            sprintf(&g_UserInterface.Message[0][0], "    EMERGENCY   ");
-            sprintf(&g_UserInterface.Message[1][0], "      STOP      ");
-            UI_FSM_PrintMessage(g_UserInterface.Message);
-            for(;;)
-            {
-                // Do nothing (aka stop device)
-            };
+            EmergencyStop();
         }
-        g_KneeAngle = Parameter_GetValue(&g_CurrentAngle);
-        
         
         //=====================================================================
         // Tell UI which button was pressed 
         //=====================================================================
-        #ifdef FLAG_DISPATCH_ENABLED
+        #ifdef DISPATCH_IN_MAIN
         if(g_Dispatch_ConfirmButton == TRUE)
         {
             g_Dispatch_ConfirmButton = FALSE;
@@ -179,23 +174,24 @@ int main(void)
         #endif
        
         //=====================================================================
-        // Update the display if the user interface set flags to do so
+        // Update the display if the user interface has set flags to do so
         //=====================================================================
-        
+
+        double CurrenKneeAngle = Parameter_GetValue(g_CurrentAngle);
+
         /* Update the Angle Reading */
         if(g_UserInterface.ShallMainLoopUpdateAngleReading == TRUE
-           && g_KneeAngle != LastKneeAngle)
+           && CurrentKneeAngle != LastKneeAngle)
         {
             sprintf(&g_UserInterface.Message[0][0],
                     "Current=%4.1lfdeg",
-                    g_KneeAngle);
+                    CurrentKneeAngle);
             
             Screen_Position(0,0); // Position invisible cursor to overwrite first line 
             Screen_PrintString(&g_UserInterface.Message[0][0]);
             
-            LastKneeAngle = g_KneeAngle;
+            LastKneeAngle = CurrentKneeAngle;
         }
-        
         /* Update the CPM runtime */
         else if(g_UserInterface.ShallMainLoopHandleCPMMessage == TRUE)
         {            
@@ -207,27 +203,17 @@ int main(void)
                     RunTime_Seconds);
             sprintf(&g_UserInterface.Message[1][0],
                     "Angle = %4.1lfdeg",
-                    g_KneeAngle);
+                    CurrentKneeAngle);
             UI_FSM_PrintMessage(g_UserInterface.Message);
         }
-        
         /* No diplay updates from UI */
         else
         {
-            // Do nothing
+            // Do nothing because there are no flags set to update display
         }
-
-        //=====================================================================
-        //Update Min/Max Knee Angle Parameters
-        //=====================================================================
-        // MaxValue of MinAngle should be Value of MaxAngle
-        Parameter_SetMaximumValue(&g_MinimumAngle, Parameter_GetValue(&g_MaximumAngle));
-        // MinValue of MaxAngle should be Value of MinAngle
-        Parameter_SetMinimumValue(&g_MaximumAngle, Parameter_GetValue(&g_MinimumAngle));
         
-        CyDelay(10);// used for putty printing properly?
+        CyDelay(10);// used for putty printing properly? not sure why though.
     } // End infinite loop
-    
 } // End main()
 
 //=============================================================================
@@ -243,8 +229,7 @@ void InitializeParamters()
     double MaxValue = ABSOLUTE_MAXIMUM_KNEE_ANGLE;
     double Value = ABSOLUTE_MINIMUM_KNEE_ANGLE;
 
-    bool IsValidConstructor;
-    IsValidConstructor = 
+    bool IsValidConstructor = 
         Parameter_Constructor(&g_MinimumAngle,
                               MinValue,
                               MaxValue,
@@ -320,4 +305,19 @@ void InitializeParamters()
         DEBUG_PRINT("Invalid CPM Speed Constructor");
     }
 }
+
+double GetKneeAngle()
+{
+    #ifdef POTENTIOMETER_GONIOMETER_ENABLED
+    int16 Counts = Potentiometer_ADC_GetResult16(0);
+    float32 Voltage = Potentiometer_ADC_CountsTo_Volts(0,Counts);
+    double Percent = (double)((Voltage/5));
+    return(90+(100*Percent));
+    #else // Accelerometer Goniometer Enabled
+    Goniometer_Sample(&g_KneeGoniometer);
+    return(g_KneeGoniometer.CurrentAngle);
+    #endif
+}
+
+double 
 /* [] END OF FILE */

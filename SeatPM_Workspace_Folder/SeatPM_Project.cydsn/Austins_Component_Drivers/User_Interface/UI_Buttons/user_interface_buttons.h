@@ -8,8 +8,12 @@
 // Inclusions
 //=============================================================================
 #include "project.h"
+#include "austin_debug.h"
+#include "feature_branches.h"
 #include "user_interface_fsm.h"
+#include "user_interface_buttons.h"
 #include "austin_parameter.h"
+#include "emergency_stop.h"
 
 //=============================================================================
 // External Variables (defined in main.c)
@@ -17,11 +21,8 @@
 extern Parameter g_CPM_Speed;
 extern UI_FSM g_UserInterface;
     
-#ifdef FLAG_DISPATCH
-extern bool g_Dispatch_ConfirmButton;
-extern bool g_Dispatch_BackButton;
-extern bool g_Dispatch_IncrementButton;
-extern bool g_Dispatch_DecrementButton;
+#ifdef DISPATCH_IN_MAIN
+extern enum UI_FSM_Signals g_SignalToDispatch;
 #endif
 
 //=============================================================================

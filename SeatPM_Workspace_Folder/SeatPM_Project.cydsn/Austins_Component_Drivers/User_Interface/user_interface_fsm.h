@@ -47,7 +47,7 @@ extern Parameter g_MinimumAngle;
 extern Parameter g_MaximumAngle;
 extern Parameter g_CPM_Speed;
 extern Parameter g_CableReleasedPercent;
-extern double g_KneeAngle;
+extern Parameter g_CurrentAngle;
 
 //=============================================================================
 // Event Struct -- User Interface Finite State Machine

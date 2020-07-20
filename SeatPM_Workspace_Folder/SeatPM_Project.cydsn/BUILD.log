@@ -1,41 +1,14 @@
---------------- Build Started: 07/18/2020 18:46:29 Project: SeatPM_Project, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Build Started: 07/19/2020 16:24:38 Project: SeatPM_Project, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 The code generation step is up to date.
-arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\Austins_Component_Drivers\Goniometer -I.\Austins_Component_Drivers\Goniometer\Acceleration_Vector -I.\Austins_Component_Drivers\Goniometer\ADXL345 -I.\Austins_Component_Drivers\Goniometer\Moving_Average_Filter -I.\Austins_Component_Drivers\User_Interface -I.\Austins_Component_Drivers\User_Interface\Finite_State_Machine -I.\Austins_Component_Drivers\User_Interface\UI_Buttons -I.\Austins_Component_Drivers\Goniometer\Accelerometer -I.\Austin_Parameter -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/main.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os -c main.c -o .\CortexM0\ARM_GCC_541\Debug\main.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\Austins_Component_Drivers\Goniometer -I.\Austins_Component_Drivers\Goniometer\Acceleration_Vector -I.\Austins_Component_Drivers\Goniometer\ADXL345 -I.\Austins_Component_Drivers\Goniometer\Moving_Average_Filter -I.\Austins_Component_Drivers\User_Interface -I.\Austins_Component_Drivers\User_Interface\Finite_State_Machine -I.\Austins_Component_Drivers\User_Interface\UI_Buttons -I.\Austins_Component_Drivers\Goniometer\Accelerometer -I.\Austin_Parameter -I.\Austins_Component_Drivers\User_Interface\CPM_Runtime -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/main.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os -c main.c -o .\CortexM0\ARM_GCC_541\Debug\main.o
 main.c: In function 'main':
-main.c:89:5: warning: implicit declaration of function 'CPM_Runtime_Startup' [-Wimplicit-function-declaration]
-     CPM_Runtime_Startup();
-     ^
-main.c:96:5: error: too few arguments to function 'Goniometer_Constructor'
-     Goniometer_Constructor()
-     ^
-In file included from .\Austins_Component_Drivers\User_Interface/user_interface_fsm.h:22:0,
-                 from main.c:22:
-.\Austins_Component_Drivers\Goniometer/goniometer_driver.h:23:6: note: declared here
- void Goniometer_Constructor(Goniometer *me);
-      ^
-main.c:112:5: error: expected ';' before 'double'
-     double LastKneeAngle = INVALID_ANGLE;    
-     ^
-main.c:131:9: error: too few arguments to function 'Goniometer_Sample'
-         Goniometer_Sample()
-         ^
-In file included from .\Austins_Component_Drivers\User_Interface/user_interface_fsm.h:22:0,
-                 from main.c:22:
-.\Austins_Component_Drivers\Goniometer/goniometer_driver.h:27:6: note: declared here
- void Goniometer_Sample(Goniometer *me);
-      ^
-main.c:135:9: error: expected ';' before 'Parameter_SetMinimumValue'
-         Parameter_SetMinimumValue(&g_CurrentAngle, Parameter_GetValue(&g_MinimumAngle));
-         ^
-main.c:137:76: error: 'Degrees' undeclared (first use in this function)
+main.c:134:76: error: 'Degrees' undeclared (first use in this function)
          bool IsCurrentKneeAngleValid = Parameter_SetValue(&g_CurrentAngle, Degrees);
                                                                             ^
-main.c:137:76: note: each undeclared identifier is reported only once for each function it appears in
-main.c:189:30: error: 'LastKneeAngle' undeclared (first use in this function)
-            && g_KneeAngle != LastKneeAngle)
-                              ^
-main.c:116:19: warning: unused variable 'Last_CPM_Runtime_InSeconds' [-Wunused-variable]
-     long long int Last_CPM_Runtime_InSeconds = 0;
-                   ^
+main.c:134:76: note: each undeclared identifier is reported only once for each function it appears in
+main.c: At top level:
+main.c:333:1: error: expected identifier or '(' at end of input
+ double 
+ ^
 The command 'arm-none-eabi-gcc.exe' failed with exit code '1'.
---------------- Build Failed: 07/18/2020 18:46:30 ---------------
+--------------- Build Failed: 07/19/2020 16:24:40 ---------------
