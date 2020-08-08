@@ -89,7 +89,10 @@ enum UI_FSM_Signals
     INCREMENT_BUTTON_PRESSED,
     DECREMENT_BUTTON_PRESSED,
     NO_OPERATION,
+    INVALID_SIGNAL
 };
+
+typedef enum UI_FSM_Signals UI_FSM_Signal;
 
 //=============================================================================
 // Method Members -- User Interface Finite State Machine Class

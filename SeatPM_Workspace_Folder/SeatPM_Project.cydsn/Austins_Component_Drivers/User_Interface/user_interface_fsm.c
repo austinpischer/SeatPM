@@ -216,10 +216,7 @@ void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        Parameter_DecrementValue(&g_
-            
-            
-            MinimumAngle);
+        Parameter_DecrementValue(&g_MinimumAngle);
         break;
 
     case NO_OPERATION:
@@ -399,7 +396,7 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
         //                           1234567890123456
         sprintf(&me->Message[0][0], 
                 "Current=%4.1lfdeg", 
-                Parameter(&g_CurrentAngle));
+                Parameter_GetValue(&g_CurrentAngle));
         sprintf(&me->Message[1][0],
                 "Min=%3.0lf Max=%3.0lf",
                 Parameter_GetValue(&g_MinimumAngle),

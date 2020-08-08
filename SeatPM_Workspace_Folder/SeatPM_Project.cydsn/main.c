@@ -1,4 +1,4 @@
-/* 
+/*============================================================================= 
 Project: SeatPM
 Team: Joint Effort
 School: Seattle Pacific University
@@ -10,19 +10,22 @@ File Description:
 The main() function is where the program always starts executuion.
 In addition, all of the global variables in this program should be
 declared before the main function.
-*/
+Also if something is really specific to the SeatPM then it should
+probably belong here. For example, "Knee Angle" as opposed to "Angle"
+=============================================================================*/
 
 //=============================================================================
 // Inclusions
 //=============================================================================
 #include "project.h"
+
 #include "austin_debug.h"
 #include "feature_branches.h"
+#include "emergency_stop.h"
 
 #include "user_interface_fsm.h"
 #include "user_interface_buttons.h"
 #include "cpm_runtime.h"
-#include "emergency_stop.h"
 
 #include "austin_parameter.h" // for declaring global parameter instances
 
@@ -52,11 +55,7 @@ Parameter g_MinimumAngle,
           g_CPM_Speed;
 
 #ifdef DISPATCH_IN_MAIN
-// Flags for dispatching button-press signals to the user interface data struct
-bool g_Dispatch_ConfirmButton, 
-     g_Dispatch_BackButton, 
-     g_Dispatch_IncrementButton, 
-     g_Dispatch_DecrementButton;
+UI_FSM_Signal g_SignalToDispatch;
 #endif
 
 #ifdef ACCELEROMETER_GONIOMETER_ENABLED
@@ -101,11 +100,12 @@ int main(void)
     #else // Accelerometer Goniometer Enabled
     Goniometer_Constructor(&g_KneeGoniometer);
     #endif
+    
     //-------------------------------------------------------------------------
     // Global Variable Initialization
     //-------------------------------------------------------------------------
     #ifdef DISPATCH_IN_MAIN
-    enum UI_FSM_Signals g_SignalToDispatch;
+    g_SignalToDispatch = INVALID_SIGNAL;
     #endif
   
     
@@ -113,73 +113,82 @@ int main(void)
     // Non-Global Variables
     //-------------------------------------------------------------------------
     double LastKneeAngle = INVALID_ANGLE;    
-    // Runtime vars
-    int RunTime_Hours, RunTime_Minutes, RunTime_Seconds;
-    RunTime_Hours = RunTime_Minutes = RunTime_Seconds = 0;
+    double LastTotalSeconds = 0;
     
-    //-------------------------------------------------------------------------
+    //=========================================================================
     // Infinite Loop
-    //-------------------------------------------------------------------------
+    //=========================================================================
     for(;;)
     {
-        /* Update Parameters */
-        // MaxValue of MinAngle should be Value of MaxAngle
-        Parameter_SetMaximumValue(&g_MinimumAngle, Parameter_GetValue(&g_MaximumAngle));
-        // MinValue of MaxAngle should be Value of MinAngle
-        Parameter_SetMinimumValue(&g_MaximumAngle, Parameter_GetValue(&g_MinimumAngle));
-        
-        // Update Min and Max Value of the Current Angle
-        Parameter_SetMinimumValue(&g_CurrentAngle, Parameter_GetValue(&g_MinimumAngle));
-        Parameter_SetMaximumValue(&g_CurrentAngle, Parameter_GetValue(&g_MaximumAngle));
+        //---------------------------------------------------------------------
+        // Update Parameters
+        //---------------------------------------------------------------------
+        // maxval of min angle should be max angle
+        Parameter_SetMaximumValue(&g_MinimumAngle, 
+                                  Parameter_GetValue(&g_MaximumAngle));
+        // minval of max angle should be min angle
+        Parameter_SetMinimumValue(&g_MaximumAngle, 
+                                  Parameter_GetValue(&g_MinimumAngle));
+        // update min and max val of current angle as min and max angle
+        Parameter_SetMinimumValue(&g_CurrentAngle, 
+                                  Parameter_GetValue(&g_MinimumAngle));
+        Parameter_SetMaximumValue(&g_CurrentAngle, 
+                                  Parameter_GetValue(&g_MaximumAngle));
          
+        //---------------------------------------------------------------------
         // Sample the goniometer to get the knee angle
+        //---------------------------------------------------------------------
         bool IsCurrentKneeAngleValid = 
             Parameter_SetValue(&g_CurrentAngle, GetKneeAngle());
         
-        /* IMMEDIATELY AFTER SAMPLING, Handle Emergency Stop Condition */
-        if( IsCurrentKneeAngleValid == FALSE && 
-            g_UserInterface.HasUserSeenAttachAnkleStrapMessage == TRUE)
+        //---------------------------------------------------------------------
+        // Handle emergency stop condition
+        // Should always occur immediately after sampling the goniometer.
+        //---------------------------------------------------------------------
+        if(IsCurrentKneeAngleValid == FALSE && 
+           g_UserInterface.HasUserSeenAttachAnkleStrapMessage == TRUE)
         {
             EmergencyStop();
         }
         
-        //=====================================================================
+        //---------------------------------------------------------------------
         // Tell UI which button was pressed 
-        //=====================================================================
+        //---------------------------------------------------------------------
         #ifdef DISPATCH_IN_MAIN
-        if(g_Dispatch_ConfirmButton == TRUE)
+        switch(g_SignalToDispatch)
         {
-            g_Dispatch_ConfirmButton = FALSE;
-            UI_Button_Dispatch(CONFIRM_BUTTON_PRESSED);
+            case(CONFIRM_BUTTON_PRESSED):
+                UI_Button_Dispatch(CONFIRM_BUTTON_PRESSED);
+                break;
+                
+            case(BACK_BUTTON_PRESSED):
+                UI_Button_Dispatch(BACK_BUTTON_PRESSED);
+                break;
+                
+            case(INCREMENT_BUTTON_PRESSED):
+                UI_Button_Dispatch(INCREMENT_BUTTON_PRESSED);
+                break;
+                
+            case(DECREMENT_BUTTON_PRESSED):
+                UI_Button_Dispatch(DECREMENT_BUTTON_PRESSED);
+                break;
+                
+            default:
+                // todo
+                break;
         }
-        else if(g_Dispatch_BackButton == TRUE)
-        {
-            g_Dispatch_BackButton = FALSE;
-            UI_Button_Dispatch(BACK_BUTTON_PRESSED);
-        }
-        else if(g_Dispatch_IncrementButton == TRUE)
-        {
-            g_Dispatch_IncrementButton = FALSE;
-            UI_Button_Dispatch(INCREMENT_BUTTON_PRESSED);
-        }
-        else if(g_Dispatch_DecrementButton == TRUE)
-        {
-            g_Dispatch_DecrementButton = FALSE; 
-            UI_Button_Dispatch(DECREMENT_BUTTON_PRESSED);
-        }
-        else
-        {
-            // No (valid) button press signal to dispatch to UI
-        }
+        g_SignalToDispatch = INVALID_SIGNAL;
         #endif
        
-        //=====================================================================
+        //---------------------------------------------------------------------
         // Update the display if the user interface has set flags to do so
-        //=====================================================================
+        //---------------------------------------------------------------------
+        
+        // Getting a copy of the current knee angle to improve code readability
+        double CurrentKneeAngle = Parameter_GetValue(&g_CurrentAngle);
 
-        double CurrenKneeAngle = Parameter_GetValue(g_CurrentAngle);
-
-        /* Update the Angle Reading */
+        //....................................................................
+        // Update the Angle Reading
         if(g_UserInterface.ShallMainLoopUpdateAngleReading == TRUE
            && CurrentKneeAngle != LastKneeAngle)
         {
@@ -187,26 +196,31 @@ int main(void)
                     "Current=%4.1lfdeg",
                     CurrentKneeAngle);
             
-            Screen_Position(0,0); // Position invisible cursor to overwrite first line 
+            // Position the invisible cursor to overwrite first line 
+            Screen_Position(0,0);
             Screen_PrintString(&g_UserInterface.Message[0][0]);
             
             LastKneeAngle = CurrentKneeAngle;
         }
-        /* Update the CPM runtime */
-        else if(g_UserInterface.ShallMainLoopHandleCPMMessage == TRUE)
-        {            
+        //....................................................................
+        // Update the CPM runtime
+        else if(g_UserInterface.ShallMainLoopHandleCPMMessage == TRUE
+                && CurrentKneeAngle != LastKneeAngle
+                && g_CPM_Runtime.TotalSeconds != LastTotalSeconds)
+        {      
             // Print message
             sprintf(&g_UserInterface.Message[0][0],
                     "RT: %2dh %2dm %2ds",
-                    RunTime_Hours,
-                    RunTime_Minutes,
-                    RunTime_Seconds);
+                    g_CPM_Runtime.Hours,
+                    g_CPM_Runtime.Minutes,
+                    g_CPM_Runtime.Seconds);
             sprintf(&g_UserInterface.Message[1][0],
                     "Angle = %4.1lfdeg",
                     CurrentKneeAngle);
             UI_FSM_PrintMessage(g_UserInterface.Message);
         }
-        /* No diplay updates from UI */
+        //....................................................................
+        // No diplay updates from UI
         else
         {
             // Do nothing because there are no flags set to update display
@@ -219,6 +233,9 @@ int main(void)
 //=============================================================================
 // Function Implementations
 //=============================================================================
+
+//=============================================================================
+// Initialize parameters specific to SeatPM
 void InitializeParamters()
 {
     
@@ -306,6 +323,8 @@ void InitializeParamters()
     }
 }
 
+//=============================================================================
+// Get the knee angle (taking into account hardware variations)
 double GetKneeAngle()
 {
     #ifdef POTENTIOMETER_GONIOMETER_ENABLED
@@ -318,6 +337,4 @@ double GetKneeAngle()
     return(g_KneeGoniometer.CurrentAngle);
     #endif
 }
-
-double 
 /* [] END OF FILE */

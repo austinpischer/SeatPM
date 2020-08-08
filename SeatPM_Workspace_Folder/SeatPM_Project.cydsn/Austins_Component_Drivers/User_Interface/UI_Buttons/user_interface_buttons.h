@@ -20,10 +20,9 @@
 //=============================================================================
 extern Parameter g_CPM_Speed;
 extern UI_FSM g_UserInterface;
-    
-#ifdef DISPATCH_IN_MAIN
-extern enum UI_FSM_Signals g_SignalToDispatch;
-#endif
+//#ifdef DISPATCH_IN_MAIN
+extern UI_FSM_Signal g_SignalToDispatch;
+//#endif
 
 //=============================================================================
 // Function Prototypes

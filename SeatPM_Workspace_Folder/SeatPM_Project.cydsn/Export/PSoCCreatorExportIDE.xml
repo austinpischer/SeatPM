@@ -6,7 +6,7 @@
     <Toolchain Name="ARM GCC Generic" Selected="True">
       <Tool Name="prebuild" Command="" Options="" />
       <Tool Name="assembler" Command="arm-none-eabi-as.exe" Options="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=${OutputDir}/${CompileFile}.lst -g -W" />
-      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\Austins_Component_Drivers\Goniometer -I.\Austins_Component_Drivers\Goniometer\Acceleration_Vector -I.\Austins_Component_Drivers\Goniometer\ADXL345 -I.\Austins_Component_Drivers\Goniometer\Moving_Average_Filter -I.\Austins_Component_Drivers\User_Interface -I.\Austins_Component_Drivers\User_Interface\Finite_State_Machine -I.\Austins_Component_Drivers\User_Interface\UI_Buttons -I.\Austins_Component_Drivers\Goniometer\Accelerometer -I.\Austin_Parameter -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os" />
+      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -I.\Austins_Component_Drivers -I.\Austins_Component_Drivers\Goniometer -I.\Austins_Component_Drivers\Goniometer\Acceleration_Vector -I.\Austins_Component_Drivers\Goniometer\ADXL345 -I.\Austins_Component_Drivers\Goniometer\Moving_Average_Filter -I.\Austins_Component_Drivers\User_Interface -I.\Austins_Component_Drivers\User_Interface\Finite_State_Machine -I.\Austins_Component_Drivers\User_Interface\UI_Buttons -I.\Austins_Component_Drivers\Goniometer\Accelerometer -I.\Austin_Parameter -I.\Austins_Component_Drivers\User_Interface\CPM_Runtime -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os" />
       <Tool Name="linker" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -l m -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -u _printf_float -Wl,--gc-sections -g -ffunction-sections -Os -ffat-lto-objects" />
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
@@ -37,8 +37,11 @@
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
         <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">main.c</File>
+          <File BuildType="BUILD" Toolchain="">emergency_stop.c</File>
           <File BuildType="BUILD" Toolchain="">cyapicallbacks.h</File>
           <File BuildType="BUILD" Toolchain="">austin_debug.h</File>
+          <File BuildType="BUILD" Toolchain="">feature_branches.h</File>
+          <File BuildType="BUILD" Toolchain="">emergency_stop.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn\Generated_Source\PSoC4">
@@ -255,6 +258,12 @@
         <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\user_interface_fsm.h</File>
           <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\user_interface_fsm.c</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">
+          <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\CPM_Runtime\cpm_runtime.c</File>
+          <File BuildType="BUILD" Toolchain="">Austins_Component_Drivers\User_Interface\CPM_Runtime\cpm_runtime.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\SeatPM_Workspace_Folder\SeatPM_Project.cydsn">

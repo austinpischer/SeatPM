@@ -1,4 +1,13 @@
-// TODO: File header
+/*============================================================================= 
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name: goniometer_driver.h
+Author: Austin Pischer
+File Description:
+=============================================================================*/
 #include "goniometer_driver.h"
 #include "adxl345_registers.h"
 #include "austin_debug.h"

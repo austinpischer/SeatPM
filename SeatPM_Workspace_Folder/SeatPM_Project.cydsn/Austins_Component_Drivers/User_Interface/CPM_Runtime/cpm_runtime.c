@@ -16,7 +16,10 @@ void CPM_Runtime_Startup(Runtime *me)
     CPM_Runtime_Timer_Start();
 }
 
-CPM_Runtime_Update(Runtime *me)
+//=============================================================================
+// Update CPM Runtime
+//============================================================================
+void CPM_Runtime_Update(Runtime *me)
 {
     /* Get a copy of the current TotalSeconds so that it doesn't change
     due to an interrupt while executing this function */
@@ -27,13 +30,12 @@ CPM_Runtime_Update(Runtime *me)
     const int minutes_in_an_hour = 60;
 
     /* Seconds to hms algorithm */
-    me->Hours =
-        (int)((TotalSeconds_Copy / seconds_in_a_minute) / minutes_in_an_hour);
-
+    me->Hours = (int)( 
+        (TotalSeconds_Copy / seconds_in_a_minute) / minutes_in_an_hour);
     /* Calculate remaining seconds not accounted for in truncated "Hours" int */
     Remainder =
         TotalSeconds_Copy - (me->Hours * seconds_in_a_minute * minutes_in_an_hour);
-    RunTime_Minutes = (int)(Remainder / 60);
-    Remainder = Remainder - (RunTime_Minutes * 60);
-    RunTime_Seconds = (int)(Remainder);
+    me->Minutes = (int)(Remainder / 60);
+    Remainder = Remainder - (me->Minutes * 60);
+    me->Seconds = (int)(Remainder);
 }

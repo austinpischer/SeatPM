@@ -1,6 +1,16 @@
-/*
-TODO
-*/
+/*==============================================================================
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name: emergency_stop.c
+Author: Austin Pischer
+
+File Explanation: This file holds the function implementation for an
+emergency stop. This encapsulates / hides the inner-workings of the
+emergency stop function such that it can easily change in the future.
+==============================================================================*/
 #include "emergency_stop.h"
 
 void EmergencyStop()

@@ -1,7 +1,9 @@
 
 #ifndef CPM_RUNTIME_H
 #define CPM_RUNTIME_H
-
+    
+#include "project.h"
+    
 typedef struct Runtime Runtime;
 struct Runtime
 {
@@ -20,4 +22,5 @@ CY_ISR_PROTO(CPM_Runtime_Timer_Interrupt_Handle);
 
 // Function Prototypes
 void CPM_Runtime_Startup();
+void CPM_Runtime_Update(Runtime *me);
 #endif
