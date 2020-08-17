@@ -1,4 +1,18 @@
-// Todo: File header
+/*==============================================================================
+ * Project: SeatPM
+ * Team: Joint Effort
+ * School: Seattle Pacific University
+ * Class: CatalyzeU Senior Design
+ * 
+ * File Name: user_interface_buttons.h
+ * Author: Austin Pischer
+ * 
+ * File Explanation:
+ * This file protoypes all of the funtions that make the SeatPM's user
+ * interface's buttons come to life. It also includes all the external global
+ * variables from main.c and all the inclusions needed for the function
+ * definitions in the associated file user_interface_buttons.c.
+ *============================================================================*/
 
 // Start of Multiple Inclusion Protection
 #ifndef USER_INTERFACE_BUTTONS_H
@@ -18,7 +32,6 @@
 //=============================================================================
 // External Variables (defined in main.c)
 //=============================================================================
-extern Parameter g_CPM_Speed;
 extern UI_FSM g_UserInterface;
 //#ifdef DISPATCH_IN_MAIN
 extern UI_FSM_Signal g_SignalToDispatch;

@@ -1,8 +1,30 @@
-// TODO: File header
+/*==============================================================================
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
 
-// https://barrgroup.com/embedded-systems/how-to/state-machines-event-driven-systems
+File Name: finite_state_machine.h
+Author: Austin Pischer
+File Description:
+This file contains all the code for the finite state machine base class.
+There is no finite_state_machine.c file because all of the "functions" for
+the FSM base class are macros.
 
-// Multiple Inlusion Protection
+This file is mostly adopted from the following link:
+https://barrgroup.com/embedded-systems/how-to/state-machines-event-driven-systems
+
+A state is a function that handles the event passed to it by FSM_Dispatch()
+A finite state machine "object" only holds the current state.
+The current state should transition to another state by calling FSM_Transition()
+
+For the purposes of the SeatPM, the finite state machine is only used as the
+user interface derived class.
+
+A derived event class can hold more than a signal.
+==============================================================================*/
+
+// Start Multiple Inclusion Protection
 #ifndef AUSTIN_FINITE_STATE_MACHINE_H
 #define AUSTIN_FINITE_STATE_MACHINE_H
 
@@ -65,6 +87,6 @@ struct FiniteStateMachine
 #define FSM_Transition(FSM, targetState) \
         ((FSM)->CurrentState = (State)(targetState))
 
-// End of Multiple Inlusion Protection
+// End of Multiple Inclusion Protection
 #endif
 /* [] END OF FILE */

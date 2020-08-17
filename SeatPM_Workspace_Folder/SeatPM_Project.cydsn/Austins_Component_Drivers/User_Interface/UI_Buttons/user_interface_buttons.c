@@ -1,5 +1,16 @@
-// TODO; File header
+/*==============================================================================
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
 
+File Name: user_interface_buttons.c
+Author: Austin Pischer
+File Description:
+This file implements the functions prototyped in user_interface_buttons.h.
+These function implementations are (or are related to) Cypress Interrupt
+Service routines (CY_ISR).
+==============================================================================*/
 #include "user_interface_buttons.h"
 #include "austin_debug.h"
 #include "user_interface_fsm.h" 

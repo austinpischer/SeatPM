@@ -8,7 +8,10 @@
  * Author: Austin Pischer
  * 
  * File Explanation:
-// TODO
+ // TODO
+ * This file contains the data members and function prototypes related to a
+ * derived class of the finite state machine base class.
+ * 
  *============================================================================*/
 
 // Start of multiple inclusion protection
@@ -24,6 +27,8 @@
 #include "stdio.h"                // For sprintf
 #include "austin_debug.h"         // For bool type
 #include "austin_parameter.h"     // For paramter class
+#include "motor.h"                // For manipulating speed and cable retract
+#include "cpm_runtime.h"          // For displaying runtime of CPM useage
 
 //=============================================================================
 // Definitions
@@ -45,9 +50,9 @@ typedef struct UI_FSM_Event UI_FSM_Event;
 //=============================================================================
 extern Parameter g_MinimumAngle;
 extern Parameter g_MaximumAngle;
-extern Parameter g_CPM_Speed;
-extern Parameter g_CableReleasedPercent;
 extern Parameter g_CurrentAngle;
+
+extern Motor g_CPM_Motor;
 
 //=============================================================================
 // Event Struct -- User Interface Finite State Machine

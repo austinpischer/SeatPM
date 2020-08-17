@@ -95,7 +95,8 @@ Author:
 File Explanation:
 ==============================================================================*/
 ```
-2a. All major sections of a file should have a "separator comment" as follows:
+2a. All major sections of a file should (feel free to change "=" for more or 
+    less emphasis) have a "separator comment" as follows:
 ```
 //==============================================================================
 // Section Name

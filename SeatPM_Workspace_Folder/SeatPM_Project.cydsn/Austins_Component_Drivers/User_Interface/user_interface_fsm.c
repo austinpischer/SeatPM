@@ -8,7 +8,11 @@
  * Author: Austin Pischer
  * 
  * File Explanation:
-// TODO
+ * Thisfile contains all the function implementations for those defined in
+ * user_interface_fsm.c.
+ * 
+ * The majority of the functions in this file are states, which consist of
+ * switch statements that handle dispatched signals.
  *============================================================================*/
 
 //=============================================================================
@@ -39,12 +43,7 @@ void UI_FSM_Constructor(UI_FSM *me)
     me->ShallMainLoopUpdateAngleReading = FALSE;
     me->HasUserSeenAttachAnkleStrapMessage = FALSE;
     me->ShallMainLoopHandleCPMMessage = FALSE;
-
-    Parameter_Constructor(&me->New_CPM_Speed,
-                          Parameter_GetMinimumValue(&g_CPM_Speed),
-                          Parameter_GetMaximumValue(&g_CPM_Speed),
-                          Parameter_GetValue(&g_CPM_Speed));
-
+    
     // One should not expect for the initial state
     // to do anything with this signal
     Event InitialEvent;
@@ -139,7 +138,7 @@ void UI_FSM_DisplayCableReleasedPercent(UI_FSM *me)
     sprintf(&me->Message[0][0], "Cable Released %%"); // Double % shows "%"
     sprintf(&me->Message[1][0],
             "%lf %%",
-            Parameter_GetValue(&g_CableReleasedPercent));
+            Parameter_GetValue(&(g_CPM_Motor.PercentCableReleased)));
     UI_FSM_PrintMessage(me->Message);
 }
 
@@ -224,7 +223,8 @@ void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     default:
-        // TODO
+        DEBUG_PRINT("Error: Invalid signal has been received by the UI \
+                     at the Set Minimum Knee Angle State\r\n");
         break;
     } // End of signal processing
     
@@ -293,7 +293,8 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     default:
-        // TODO
+                DEBUG_PRINT("Error: Invalid signal has been received by the UI \
+                            at the Set Maximum Knee Angle State\r\n");
         break;
     } // End of signal processing
 
@@ -370,7 +371,8 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     default:
-        // TODO
+        DEBUG_PRINT("Error: Invalid signal has been received by the UI \
+                    at the Check Goniometer Reading Check State\r\n");
         break;
     } // End of signal processing
 
@@ -442,11 +444,8 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
         // and knee angle is valid
         if(UI_FSM_IsKneeAngleValid(me) == TRUE)
         {
-            // TODO: Slow this down?
-            Parameter_IncrementValue(&g_CableReleasedPercent);
-            Motor_PWM_WriteCompare(500);
-            CyDelay(500);
-            Motor_PWM_WriteCompare(0);
+            Motor_SetPercentCableReleased(&g_CPM_Motor, 
+                Motor_GetPercentCableReleased(&g_CPM_Motor)+1);
             UI_FSM_DisplayCableReleasedPercent(me);
             CyDelay(1000);//TODO
         }
@@ -455,13 +454,10 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
     case DECREMENT_BUTTON_PRESSED:
         // Only retract cable and show percent release while button is pressed
         // and knee angle is valid
-            // TODO: Slow this down?
         if(UI_FSM_IsKneeAngleValid(me) == TRUE)
         {
-            Parameter_DecrementValue(&g_CableReleasedPercent);
-            Motor_PWM_WriteCompare(50);
-            CyDelay(50);
-            Motor_PWM_WriteCompare(0);
+            Motor_SetPercentCableReleased(&g_CPM_Motor, 
+                Motor_GetPercentCableReleased(&g_CPM_Motor)-1);
             UI_FSM_DisplayCableReleasedPercent(me);
             CyDelay(1000);//TODO
         }
@@ -472,7 +468,8 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
         break;
 
     default:
-        // TODO
+        DEBUG_PRINT("Error: Invalid signal has been received by the UI \
+                    at the Ankle Strap Retract/Release State\r\n");
         break;
     }
 
@@ -521,8 +518,8 @@ void UI_FSM_ConfirmCPMStartup_State(
         // Go to CPM State
         if(UI_FSM_IsKneeAngleValid(me) == TRUE)
         {   
-            Parameter_SetValue(&g_CPM_Speed, 30);
-            CPM_Runtime_Timer_Start();  // Start counting runtime
+            Motor_SetSpeed(&g_CPM_Motor, 30);
+            CPM_Runtime_StartCounting(&g_CPM_Runtime);
             FSM_Transition(&me->Parent, UI_FSM_ContinuousPassiveMotion_State);
             // Update display in next function without any inputs
             UI_FSM_ExecuteCurrentStateFunction(me);
@@ -549,7 +546,8 @@ void UI_FSM_ConfirmCPMStartup_State(
         break;
 
     default:
-        // TODO
+        DEBUG_PRINT("Error: Invalid signal has been received by the UI \
+                    at the Confirm CPM Startup State\r\n");
         break;
     }
 
@@ -575,38 +573,35 @@ void UI_FSM_ConfirmCPMStartup_State(
 void UI_FSM_ContinuousPassiveMotion_State(
     UI_FSM *me,
     Event const *MyEvent)
-{
-    Motor_PWM_WriteCompare(Parameter_GetValue(&g_CPM_Speed));
-    
+{    
     switch (MyEvent->EventSignal)
     {
     case CONFIRM_BUTTON_PRESSED:
-        Parameter_SetValue(&g_CPM_Speed, 0);
-        Motor_PWM_WriteCompare(Parameter_GetValue(&g_CPM_Speed));
+        /* "Soft stop": Stop motor and go back to confirmation state */
+        Motor_Stop(&g_CPM_Motor);
+        CPM_Runtime_StopCounting(&g_CPM_Runtime);
         me->ShallMainLoopHandleCPMMessage = FALSE;
-        CPM_Runtime_Timer_Stop(); // Stop counting runtime
         FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
         // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case BACK_BUTTON_PRESSED:
-        Parameter_SetValue(&g_CPM_Speed, 0);
-        Motor_PWM_WriteCompare(Parameter_GetValue(&g_CPM_Speed));
+        /* "Soft stop": Stop motor and go back to confirmation state */
+        Motor_Stop(&g_CPM_Motor);
+        CPM_Runtime_StopCounting(&g_CPM_Runtime);
         me->ShallMainLoopHandleCPMMessage = FALSE;
-        CPM_Runtime_Timer_Stop(); // Stop counting runtime
         FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
         // Update display in next function without any inputs
         UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case INCREMENT_BUTTON_PRESSED:
+        // Make sure we increment from current speed
+        Parameter_SetValue(&me->New_CPM_Speed, Motor_GetSpeed(&g_CPM_Motor));
         // Set new value to current + 1
-        Parameter_SetValue(&me->New_CPM_Speed, Parameter_GetValue(&g_CPM_Speed));
         Parameter_IncrementValue(&me->New_CPM_Speed);
-
         me->ShallMainLoopHandleCPMMessage = FALSE;
-
         // Go to change speed state
         FSM_Transition(&me->Parent, UI_FSM_ConfirmSpeedChange_State);
         // Update display in next function without any inputs
@@ -614,12 +609,11 @@ void UI_FSM_ContinuousPassiveMotion_State(
         break;
 
     case DECREMENT_BUTTON_PRESSED:
+        // Make sure we decrement from current speed
+        Parameter_SetValue(&me->New_CPM_Speed, Motor_GetSpeed(&g_CPM_Motor));
         // Set new value to current - 1
-        Parameter_SetValue(&me->New_CPM_Speed, Parameter_GetValue(&g_CPM_Speed));
         Parameter_DecrementValue(&me->New_CPM_Speed);
-
         me->ShallMainLoopHandleCPMMessage = FALSE;
-        
          // Go to change speed state
         FSM_Transition(&me->Parent, UI_FSM_ConfirmSpeedChange_State);
         // Update display in next function without any inputs
@@ -631,7 +625,8 @@ void UI_FSM_ContinuousPassiveMotion_State(
         break;
 
     default:
-        // TODO
+        DEBUG_PRINT("Error: Invalid signal has been received by the UI \
+                        at the Continuous Passive Motion State\r\n");
         break;
     }// End of signal handling
 
@@ -655,7 +650,7 @@ void UI_FSM_ConfirmSpeedChange_State(
     {
     case CONFIRM_BUTTON_PRESSED:
         // Set current to new
-        Parameter_SetValue(&g_CPM_Speed, Parameter_GetValue(&me->New_CPM_Speed));
+        Motor_SetSpeed(&g_CPM_Motor, Parameter_GetValue(&me->New_CPM_Speed));
         // Go to CPM state
         FSM_Transition(&me->Parent, UI_FSM_ContinuousPassiveMotion_State);
         // Update display in next function without any inputs
@@ -664,7 +659,7 @@ void UI_FSM_ConfirmSpeedChange_State(
 
     case BACK_BUTTON_PRESSED:
         // Set new to current
-        Parameter_SetValue(&me->New_CPM_Speed, Parameter_GetValue(&g_CPM_Speed));
+        Parameter_SetValue(&me->New_CPM_Speed, Motor_GetSpeed(&g_CPM_Motor));
         // Go to CPM state
         FSM_Transition(&me->Parent, UI_FSM_ContinuousPassiveMotion_State);
         // Update display in next function without any inputs
@@ -684,7 +679,8 @@ void UI_FSM_ConfirmSpeedChange_State(
         break;
 
     default:
-        // TODO
+        DEBUG_PRINT("Error: Invalid signal has been received by the UI \
+                    at the Confirm Speed Change State\r\n");
         break;
     }
 
@@ -696,8 +692,8 @@ void UI_FSM_ConfirmSpeedChange_State(
         // Prompt user to change the speed of the device
         //                           1234567890123456
         sprintf(&me->Message[0][0], 
-                "Crnt= %4.1lf dpm",
-                Parameter_GetValue(&g_CPM_Speed));
+                "Crnt= %4.1d dpm",
+                Motor_GetSpeed(&g_CPM_Motor));
         sprintf(&me->Message[1][0], 
                 "New = %4.1lf dpm", 
                 Parameter_GetValue(&me->New_CPM_Speed));

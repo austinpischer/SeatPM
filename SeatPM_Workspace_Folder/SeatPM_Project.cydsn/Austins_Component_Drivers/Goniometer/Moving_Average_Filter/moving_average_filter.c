@@ -1,5 +1,19 @@
-// TODO: File header
-
+/*==============================================================================
+ * Project: SeatPM
+ * Team: Joint Effort
+ * School: Seattle Pacific University
+ * Class: CatalyzeU Senior Design
+ * 
+ * File Name: moving_average_filter.c
+ * Author: Austin Pischer
+ * 
+ * File Explanation:
+ * This file contains all the function implementations for those defined in
+ * moving_average_filter.h.
+ * 
+ * The moving average filter is made to average the last <#> of acceleration
+ * vectors.
+ *============================================================================*/
 //=============================================================================
 // Associated Header File
 //=============================================================================

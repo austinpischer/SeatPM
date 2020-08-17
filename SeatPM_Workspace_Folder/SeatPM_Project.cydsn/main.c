@@ -22,6 +22,7 @@ probably belong here. For example, "Knee Angle" as opposed to "Angle"
 #include "austin_debug.h"
 #include "feature_branches.h"
 #include "emergency_stop.h"
+#include "motor.h"
 
 #include "user_interface_fsm.h"
 #include "user_interface_buttons.h"
@@ -50,9 +51,7 @@ UI_FSM g_UserInterface; // UI must be accessed by button press interrupts
 // Parameters
 Parameter g_MinimumAngle, 
           g_MaximumAngle, 
-          g_CurrentAngle, 
-          g_CableReleasedPercent, 
-          g_CPM_Speed;
+          g_CurrentAngle;
 
 #ifdef DISPATCH_IN_MAIN
 UI_FSM_Signal g_SignalToDispatch;
@@ -63,6 +62,8 @@ Goniometer g_KneeGoniometer;
 #endif
 
 Runtime g_CPM_Runtime;
+
+Motor g_CPM_Motor;
 
 //=============================================================================
 // Function Prototypes
@@ -84,14 +85,8 @@ int main(void)
     Screen_Start();
     Enable_UI_Button_Interrupts(); // Testing UI transitioning unexpectedly, w/o buttons
     InitializeParamters();
-    UI_FSM_Constructor(&g_UserInterface);
-    
-    // Motor startup
-    Motor_PWM_Start();
-    Motor_PWM_WriteCompare(0); // Motor starts with 0 speed
-
-    
-    CPM_Runtime_Startup();
+    UI_FSM_Constructor(&g_UserInterface);    
+    CPM_Runtime_Startup(&g_CPM_Runtime);
 
     #ifdef POTENTIOMETER_GONIOMETER_ENABLED
     //Potentiometer startup
@@ -100,6 +95,8 @@ int main(void)
     #else // Accelerometer Goniometer Enabled
     Goniometer_Constructor(&g_KneeGoniometer);
     #endif
+    
+    Motor_Startup(&g_CPM_Motor);
     
     //-------------------------------------------------------------------------
     // Global Variable Initialization
@@ -174,7 +171,7 @@ int main(void)
                 break;
                 
             default:
-                // todo
+                DEBUG_PRINT("Invalid signal being dispatched to UI!\r\n");
                 break;
         }
         g_SignalToDispatch = INVALID_SIGNAL;
@@ -254,11 +251,10 @@ void InitializeParamters()
 
     if(IsValidConstructor == FALSE)
     {
-        // TODO: Should probably put more detailed error in the parameter code
         DEBUG_PRINT("Invalid Minimum Angle Constructor");
         // Knee angle settings are critical to user safety.
         // Shut off the device to prevent injuring the user.
-        // TODO: Turn off device here.
+        EmergencyStop();
     }
     // Otherwise, constructor called with valid min, max and value
     
@@ -276,11 +272,10 @@ void InitializeParamters()
     
     if(IsValidConstructor == FALSE)
     {
-        // TODO: Should probably put more detailed error in the parameter code
         DEBUG_PRINT("Invalid Maximum Angle Constructor");
         // Knee angle settings are critical to user safety.
         // Shut off the device to prevent injuring the user.
-        // TODO: Turn off device here.
+        EmergencyStop();
     }
     // Otherwise, constructor called with valid min, max and value
 
@@ -295,31 +290,6 @@ void InitializeParamters()
     if(IsValidConstructor == FALSE)
     {
         DEBUG_PRINT("Invalid Current Angle Constructor");
-    }
-    
-    // Cable released percent
-    MinValue = 0; 
-    MaxValue = 100;
-    Value = 0;
-    IsValidConstructor =
-        Parameter_Constructor(&g_CableReleasedPercent,
-                              MinValue,
-                              MaxValue,
-                              Value);
-
-    //Speed
-    MinValue = 0;
-    MaxValue = 100;
-    Value = 0;
-    IsValidConstructor = 
-        Parameter_Constructor(&g_CPM_Speed,
-                              MinValue,
-                              MaxValue,
-                              Value);
-
-    if(IsValidConstructor == FALSE)
-    {
-        DEBUG_PRINT("Invalid CPM Speed Constructor");
     }
 }
 
