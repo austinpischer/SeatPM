@@ -11,6 +11,7 @@ This header file is a collection of macros for enabling and disabling
 certain parts of the code for debugging purposes.
 */
 
+// Start of multiple inclusion protection
 #ifndef AUSTIN_DEBUG_H
 #define AUSTIN_DEBUG_H
     
@@ -26,13 +27,7 @@ typedef int bool;
  * Uncomment "#define AUSTIN_DEBUG" to enable debugging output"
  *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 #define AUSTIN_DEBUG // Associated with DEBUG_PRINT
-#define AUSTIN_CSV
-#define AUSTIN_SCREEN_DEBUG
 #define AUSTIN_ACCELEROMETER_DEBUG
-#define AUSTIN_GONIOMETER_DEBUG
-//#define GONIOMETER_TEST
-// #define DISPATCH_IN_MAIN // Moved to feature_branches.h
-// #define POTENTIOMETER_GONIOMETER // Moved to feature_branches.h
     
     
 // ============================================================================
@@ -58,25 +53,8 @@ typedef int bool;
 #endif // END of preprocessor if/else statement.
 
 // ============================================================================
-// CSV_PRINT
+// DEBUG_PRINT
 // ============================================================================
-#ifdef AUSTIN_CSV
-#define CSV_PRINT(string) (PuTTY_UartPutString(string))
-#else
-    #define CSV_PRINT(string) ({})
-#endif
-
-
-#ifdef AUSTIN_SCREEN_DEBUG
-   #define SCREEN_DEBUG(string) {\
-                                 Screen_ClearDisplay();\
-                                 Screen_PrintString(string); \
-                                }
-#else
-    #define SCREEN_DEBUG(string) ({})
-#endif
-
-
 #ifdef AUSTIN_ACCELEROMETER_DEBUG
     #define ACCELEROMETER_DEBUG(string) {\
                                          PuTTY_UartPutString(string);\
@@ -86,15 +64,6 @@ typedef int bool;
     #define ACCELEROMETER_DEBUG(string) ({})
 #endif
 
-#ifdef AUSTIN_GONIOMETER_DEBUG
-    #define GONIOMETER_DEBUG(string) {\
-                                      PuTTY_UartPutString(string);\
-                                      CyDelay(100); \
-                                     } 
-#else
-    #define GONIOMETER_DEBUG(string) ({})
-#endif
-    
 
-#endif
+#endif // End of multiple inclusion protection
 /* [] END OF FILE */
