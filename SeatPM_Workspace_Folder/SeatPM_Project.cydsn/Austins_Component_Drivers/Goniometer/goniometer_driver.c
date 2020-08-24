@@ -4,16 +4,21 @@ Team: Joint Effort
 School: Seattle Pacific University
 Class: CatalyzeU Senior Design
 
-File Name: goniometer_driver.h
+File Name: goniometer_driver.c
 Author: Austin Pischer
 File Description:
+This file contains all of the function implementations for the method
+members prototyped in the associated file header "goniometer_driver.h"
 =============================================================================*/
-#include "goniometer_driver.h"
-#include "adxl345_registers.h"
-#include "austin_debug.h"
-#include <math.h>
-#include <stdio.h>
 
+//=============================================================================
+// Inclusions
+//=============================================================================
+#include "goniometer_driver.h"
+
+//=============================================================================
+/// Constructor
+//=============================================================================
 void Goniometer_Constructor(Goniometer *me)
 {
     me->CurrentAngle = INVALID_ANGLE;
@@ -24,7 +29,10 @@ void Goniometer_Constructor(Goniometer *me)
     ADXL345_Constructor(&(me->Accelerometer_A), DEFAULT_ADDRESS);
 }
 
-// Helper Function
+
+//=============================================================================
+// Calculate Angle (Helper Function)
+//=============================================================================
 double CalculateAngle(AccelerationVector a, AccelerationVector b)
 {    
     // printing doubles https://community.cypress.com/docs/DOC-9389
@@ -41,18 +49,28 @@ double CalculateAngle(AccelerationVector a, AccelerationVector b)
     return( 57.2958*acos(DotProduct/(MagnitudeA*MagnitudeB)) ); // Angle between two vectors, with radians->degrees approximation
 }
 
+//=============================================================================
+// Calculate Filtered Angle
+//=============================================================================
 void Goniometer_CalculateFilteredAngle(Goniometer *me)
 {
     me->FilteredAngle = 
         CalculateAngle(me->Accelerometer_A.Parent.FilteredAcceleration, me->Accelerometer_B.Parent.FilteredAcceleration);
 }
 
+//=============================================================================
+// Calculate Curerent Angle
+//=============================================================================
 void Goniometer_CalculateCurrentAngle(Goniometer *me)
 {
     me->CurrentAngle = 
         CalculateAngle(me->Accelerometer_A.Parent.CurrentAcceleration, me->Accelerometer_B.Parent.CurrentAcceleration);
 }
 
+
+//=============================================================================
+// Sample
+//=============================================================================
 void Goniometer_Sample(Goniometer *me)
 {
     Accelerometer_UpdateFilteredAcceleration(&(me->Accelerometer_A.Parent));
@@ -60,4 +78,5 @@ void Goniometer_Sample(Goniometer *me)
     Goniometer_CalculateFilteredAngle(me);
     Goniometer_CalculateCurrentAngle(me);
 }
+
 /* [] END OF FILE */

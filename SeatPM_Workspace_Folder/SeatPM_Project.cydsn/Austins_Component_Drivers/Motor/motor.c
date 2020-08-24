@@ -25,7 +25,8 @@ void Motor_Startup(Motor *me)
         Parameter_Constructor(&(me->CurrentSpeed),
                               MinValue,
                               MaxValue,
-                              Value);
+                              Value,
+                              INVALID_SPEED);
 
     if(IsValidConstructor == FALSE)
     {
@@ -40,7 +41,8 @@ void Motor_Startup(Motor *me)
         Parameter_Constructor(&(me->PercentCableReleased),
                               MinValue,
                               MaxValue,
-                              Value);
+                              Value,
+                              INVALID_SPEED);
     
     Motor_Clock_Start();
     

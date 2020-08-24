@@ -48,10 +48,6 @@ typedef struct UI_FSM_Event UI_FSM_Event;
 //=============================================================================
 // External Global Variables from main.c
 //=============================================================================
-extern Parameter g_MinimumAngle;
-extern Parameter g_MaximumAngle;
-extern Parameter g_CurrentAngle;
-
 extern Motor g_CPM_Motor;
 
 //=============================================================================
@@ -74,6 +70,7 @@ struct UI_FSM
     // NOTE: +1 for c-string null terminator
     char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW + 1];
 
+    // Conditionals
     bool IsFirstTimeSettingMinAngle;
     bool IsFirstTimeSettingMaxAngle;
     bool HasUserSeenAttachGoniometerMessage;
@@ -82,6 +79,7 @@ struct UI_FSM
     bool ShallMainLoopHandleCPMMessage;
 
     Parameter New_CPM_Speed;
+    Parameter KneeAngle;
 };
 
 //=============================================================================

@@ -48,6 +48,9 @@ void UI_FSM_Constructor(UI_FSM *me)
     // to do anything with this signal
     Event InitialEvent;
     InitialEvent.EventSignal = CONFIRM_BUTTON_PRESSED;
+    
+    Parameter_Constructor(&me->New_CPM_Speed,0,100,0,-1);
+    Parameter_Constructor(&me->KneeAngle,90,180,90,INVALID_ANGLE);
 
     DEBUG_PRINT("Executing Initial State\r\n");
     FSM_ExecuteInitialState(&me->Parent, &InitialEvent);
@@ -79,21 +82,16 @@ void UI_FSM_PrintMessage(
 //=============================================================================
 bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
 {
-    double MaxAngle = Parameter_GetValue(&g_MaximumAngle);
-    double MinAngle = Parameter_GetValue(&g_MinimumAngle);
-    double CurrentAngle = Parameter_GetValue(&g_CurrentAngle);
-    // Below case is reading within range of user-set parameters (valid)
-    if (CurrentAngle <= MaxAngle &&
-        CurrentAngle >= MinAngle &&
-        CurrentAngle != INVALID_ANGLE)
+    Parameter_ValueValidationResult Result 
+       = Parameter_ValidateValue(&me->KneeAngle);
+    
+    // Handle non-errors
+    if(Result == VALUE_VALID)
     {
-        // Don't need to print anything if valid
-        return (TRUE);
+        return(TRUE);
     }
-
-    // All below cases are outside of range of user-set parameters
-    // or invalid.
-    else if (CurrentAngle > MaxAngle)
+    // Handle errors
+    else if (Result == VALUE_GREATER_THAN_MAXIMUM)
     {
         // Print knee angle too large error
         //                           1234567890123456
@@ -101,7 +99,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         sprintf(&me->Message[1][0], "maximum limit!  ");
         UI_FSM_PrintMessage(me->Message);
     }
-    else if (CurrentAngle < MinAngle)
+    else if (Result == VALUE_LESS_THAN_MINIMUM)
     {
         // Print knee angle too small error
         //                           1234567890123456
@@ -109,7 +107,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         sprintf(&me->Message[1][0], "minimum limit!  ");
         UI_FSM_PrintMessage(me->Message);
     }
-    else if (CurrentAngle == INVALID_ANGLE)
+    else if (Result == VALUE_EQUAL_TO_INVALID)
     {
         // Print knee angle invalid error
         //                           1234567890123456
@@ -211,11 +209,13 @@ void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        Parameter_IncrementValue(&g_MinimumAngle);
+        Parameter_SetMinimumValue(&me->KneeAngle, 
+            Parameter_GetMinimumValue(&me->KneeAngle)+1);
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        Parameter_DecrementValue(&g_MinimumAngle);
+       Parameter_SetMinimumValue(&me->KneeAngle, 
+        Parameter_GetMinimumValue(&me->KneeAngle)-1);
         break;
 
     case NO_OPERATION:
@@ -251,7 +251,7 @@ void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
          //                           1234567890123456
         sprintf(&me->Message[0][0], "Min. knee angle ");
         sprintf(&me->Message[1][0], "= %4.1lf degrees",
-                Parameter_GetValue(&g_MinimumAngle));
+                Parameter_GetMinimumValue(&me->KneeAngle));
         UI_FSM_PrintMessage(me->Message);
     }
 } // End of set minimum knee angle state
@@ -281,11 +281,11 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        Parameter_IncrementValue(&g_MaximumAngle);
+        Parameter_SetMaximumValue(&me->KneeAngle, Parameter_GetMaximumValue(&me->KneeAngle)+1);
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        Parameter_DecrementValue(&g_MaximumAngle);
+        Parameter_SetMaximumValue(&me->KneeAngle, Parameter_GetMaximumValue(&me->KneeAngle)-1);
         break;
 
     case NO_OPERATION:
@@ -322,7 +322,7 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         sprintf(&me->Message[0][0], "Max. knee angle");
         sprintf(&me->Message[1][0],
                 "= %4.1lf degrees",
-                Parameter_GetValue(&g_MaximumAngle));
+                Parameter_GetMaximumValue(&me->KneeAngle));
         UI_FSM_PrintMessage(me->Message);
     }
 }// End of Set Maximum Knee Angle State
@@ -398,11 +398,11 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
         //                           1234567890123456
         sprintf(&me->Message[0][0], 
                 "Current=%4.1lfdeg", 
-                Parameter_GetValue(&g_CurrentAngle));
+                Parameter_GetValue(&me->KneeAngle));
         sprintf(&me->Message[1][0],
                 "Min=%3.0lf Max=%3.0lf",
-                Parameter_GetValue(&g_MinimumAngle),
-                Parameter_GetValue(&g_MaximumAngle));
+                Parameter_GetMinimumValue(&me->KneeAngle),
+                Parameter_GetMaximumValue(&me->KneeAngle));
         UI_FSM_PrintMessage(me->Message);
 
         //0123456789123456

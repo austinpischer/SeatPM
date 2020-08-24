@@ -45,6 +45,20 @@ struct Parameter
     double Value;
     double MinimumValue;
     double MaximumValue;
+    double InvalidValue;
+};
+
+//=============================================================================
+// Error Values
+//=============================================================================
+typedef enum Parameter_ValueValidationResult Parameter_ValueValidationResult;
+enum Parameter_ValueValidationResult
+{
+    VALUE_VALID,
+    VALUE_GREATER_THAN_MAXIMUM,
+    VALUE_LESS_THAN_MINIMUM,
+    VALUE_EQUAL_TO_INVALID,
+    UNKNOWN_ERROR  
 };
 
 //=============================================================================
@@ -53,7 +67,8 @@ struct Parameter
 bool Parameter_Constructor(Parameter *me,
                            double NewMinimumValue,
                            double NewMaximumValue,
-                           double NewValue);
+                           double NewValue,
+                           double NewInvalidValue);
 bool Parameter_SetValue(Parameter *me, double NewValue);
 double Parameter_GetValue(Parameter *me);
 bool Parameter_SetMinimumValue(Parameter *me, double NewMinimumValue);
@@ -62,6 +77,7 @@ bool Parameter_SetMaximumValue(Parameter *me, double NewMaximumValue);
 double Parameter_GetMaximumValue(Parameter *me);
 bool Parameter_IncrementValue(Parameter *me);
 bool Parameter_DecrementValue(Parameter *me);
+Parameter_ValueValidationResult Parameter_ValidateValue(Parameter *me);
 
 
 #endif // End of multiple inclusion protection

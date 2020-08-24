@@ -6,7 +6,13 @@ Class: CatalyzeU Senior Design
 
 File Name: goniometer_driver.h
 Author: Austin Pischer
-File Description: // TODO
+File Description:
+A goniometer is an angle measurement device.
+The SeatPM goniometer is made of two accelerometers.
+This goniometer "class" also keeps track of its current angle its
+moving-average angle (for example, the average of the last 5 current angles).
+Please note that the current angle stored by the goniometer instance
+is intended to be "raw data" that is then validated by the "knee angle" class.
 =============================================================================*/
 
 // Start of multiple inclusion protection
@@ -38,6 +44,7 @@ struct Goniometer
     ADXL345 Accelerometer_A, Accelerometer_B;
     double CurrentAngle;
     double FilteredAngle;
+    
 };
 
 //=============================================================================

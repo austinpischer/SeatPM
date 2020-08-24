@@ -38,7 +38,6 @@ probably belong here. For example, "Knee Angle" as opposed to "Angle"
 #include "cpm_runtime.h"
 #include "austin_parameter.h" // for declaring global parameter instances
 
-
 //=============================================================================
 // Definitions
 //=============================================================================
@@ -49,20 +48,14 @@ probably belong here. For example, "Knee Angle" as opposed to "Angle"
 //=============================================================================
 UI_FSM g_UserInterface; // UI must be accessed by button press interrupts
 
-// Parameters
-// TODO: put these elsewhere?
-Parameter g_MinimumAngle, 
-          g_MaximumAngle, 
-          g_CurrentAngle;
-
 #ifdef DISPATCH_IN_MAIN
 UI_FSM_Signal g_SignalToDispatch; // Interrupts update this signal for main()
 #endif
 
+
+
 #ifdef ACCELEROMETER_GONIOMETER_ENABLED
 Goniometer g_KneeGoniometer; // Goniometer can be sampled via interrupt
-#else
-
 #endif
 
 Runtime g_CPM_Runtime; // Interrupt updates seconds cout
@@ -71,7 +64,6 @@ Motor g_CPM_Motor;
 //=============================================================================
 // Function Prototypes
 //=============================================================================
-void InitializeParamters();
 double GetKneeAngle(); 
 
 //=============================================================================
@@ -87,7 +79,6 @@ int main(void)
     // UI Startup
     Screen_Start();
     Enable_UI_Button_Interrupts(); // Testing UI transitioning unexpectedly, w/o buttons
-    InitializeParamters();
     UI_FSM_Constructor(&g_UserInterface);    
     CPM_Runtime_Startup(&g_CPM_Runtime);
 
@@ -119,27 +110,12 @@ int main(void)
     // Infinite Loop
     //=========================================================================
     for(;;)
-    {
-        //---------------------------------------------------------------------
-        // Update Parameters
-        //---------------------------------------------------------------------
-        // maxval of min angle should be max angle
-        Parameter_SetMaximumValue(&g_MinimumAngle, 
-                                  Parameter_GetValue(&g_MaximumAngle));
-        // minval of max angle should be min angle
-        Parameter_SetMinimumValue(&g_MaximumAngle, 
-                                  Parameter_GetValue(&g_MinimumAngle));
-        // update min and max val of current angle as min and max angle
-        Parameter_SetMinimumValue(&g_CurrentAngle, 
-                                  Parameter_GetValue(&g_MinimumAngle));
-        Parameter_SetMaximumValue(&g_CurrentAngle, 
-                                  Parameter_GetValue(&g_MaximumAngle));
-         
+    {       
         //---------------------------------------------------------------------
         // Sample the goniometer to get the knee angle
         //---------------------------------------------------------------------
         bool IsCurrentKneeAngleValid = 
-            Parameter_SetValue(&g_CurrentAngle, GetKneeAngle());
+            Parameter_SetValue(&g_UserInterface.KneeAngle, GetKneeAngle());
         
         //---------------------------------------------------------------------
         // Handle emergency stop condition
@@ -185,7 +161,7 @@ int main(void)
         //---------------------------------------------------------------------
         
         // Getting a copy of the current knee angle to improve code readability
-        double CurrentKneeAngle = Parameter_GetValue(&g_CurrentAngle);
+        double CurrentKneeAngle = Parameter_GetValue(&g_UserInterface.KneeAngle);
 
         //....................................................................
         // Update the Angle Reading
@@ -230,76 +206,6 @@ int main(void)
     } // End infinite loop
 } // End main()
 
-//=============================================================================
-// Function Implementations
-//=============================================================================
-
-//=============================================================================
-// Initialize parameters specific to SeatPM
-void InitializeParamters()
-{
-    const double AbsoluteMaximumKneeAngle = 90;
-    const double AbsoluteMinimumKneeAngle = 180;
-
-    // Handle button dispatches
-        // The minimum angle can be between the absolute minmum and the maximum angle
-    // Since maximum angle value isn't set yet, just use maximum possible angle
-    double MinValue = AbsoluteMinimumKneeAngle;
-    double MaxValue = AbsoluteMaximumKneeAngle;
-    double Value = AbsoluteMinimumKneeAngle;
-
-    bool IsValidConstructor = 
-        Parameter_Constructor(&g_MinimumAngle,
-                              MinValue,
-                              MaxValue,
-                              Value);
-
-    if(IsValidConstructor == FALSE)
-    {
-        DEBUG_PRINT("Invalid Minimum Angle Constructor");
-        // Knee angle settings are critical to user safety.
-        // Shut off the device to prevent injuring the user.
-        EmergencyStop();
-    }
-    // Otherwise, constructor called with valid min, max and value
-    
-    // The maximum angle can be between the absolute maximum and the minimum
-    MinValue = Parameter_GetValue(&g_MinimumAngle);
-    MaxValue = AbsoluteMaximumKneeAngle;
-    Value = AbsoluteMaximumKneeAngle;
-
-    IsValidConstructor =
-     Parameter_Constructor(&g_MaximumAngle,
-                            MinValue,
-                            MaxValue,
-                            Value);
-
-    
-    if(IsValidConstructor == FALSE)
-    {
-        DEBUG_PRINT("Invalid Maximum Angle Constructor");
-        // Knee angle settings are critical to user safety.
-        // Shut off the device to prevent injuring the user.
-        EmergencyStop();
-    }
-    // Otherwise, constructor called with valid min, max and value
-
-    MinValue = Parameter_GetValue(&g_MinimumAngle);
-    MaxValue = Parameter_GetValue(&g_MaximumAngle);
-    Value = MinValue; // dummy value
-    IsValidConstructor =
-        Parameter_Constructor(&g_CurrentAngle,
-                              MinValue,
-                              MaxValue,
-                              Value);
-    if(IsValidConstructor == FALSE)
-    {
-        DEBUG_PRINT("Invalid Current Angle Constructor");
-    }
-}
-
-//=============================================================================
-// Get the knee angle (taking into account hardware variations)
 double GetKneeAngle()
 {
     #ifdef POTENTIOMETER_GONIOMETER_ENABLED
@@ -312,4 +218,5 @@ double GetKneeAngle()
     return(g_KneeGoniometer.CurrentAngle);
     #endif
 }
+
 /* [] END OF FILE */

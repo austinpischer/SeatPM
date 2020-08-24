@@ -26,56 +26,47 @@
 bool Parameter_Constructor(Parameter *me,
                            double NewMinimumValue,
                            double NewMaximumValue,
-                           double NewValue)
+                           double NewValue,
+                           double NewInvalidValue)
 {
+     
     char DebugString[64];
-      
-    // Assert that min <= max
-    bool IsMin_LessThanOrEqualTo_Max = (NewMinimumValue <= NewMaximumValue);
-    // Assert that min <= val
-    bool IsMin_LessThanOrEqualTo_Value = (NewMinimumValue <= NewValue);
-    // Assert that val <= max
-    bool IsValue_lessThanOrEqualTo_Max = (NewValue <= NewMaximumValue);
-
-    bool IsConstructorValid = 
-        (IsMin_LessThanOrEqualTo_Max &&
-        IsMin_LessThanOrEqualTo_Value &&
-        IsValue_lessThanOrEqualTo_Max); 
-
-    // Assign passed values to parameter
-    if (IsConstructorValid == TRUE)
+    
+    me->MinimumValue = NewMinimumValue;
+    me->MaximumValue = NewMaximumValue;
+    me->Value = NewValue;
+    me->InvalidValue = NewInvalidValue;
+    
+    Parameter_ValueValidationResult Result = Parameter_ValidateValue(me);
+    
+    // Handle valid constructor (value==invlaid okay b/c this is constructor)
+    if((me->MinimumValue <= me->MinimumValue) && 
+       (Result == VALUE_VALID || Result == VALUE_EQUAL_TO_INVALID))
     {
-        me->MinimumValue = NewMinimumValue;
-        me->MaximumValue = NewMaximumValue;
-        me->Value = NewValue;
-        return TRUE; 
+        return(TRUE);
     }
-    // Print Error Messages
-    else
+    else // Print Error Messages
     {
-        if(IsMin_LessThanOrEqualTo_Max == FALSE)
+        if((me->MinimumValue <= me->MinimumValue) == FALSE)
         {
-            DEBUG_PRINT("ERROR: Minmum is greater than Maximum!\r\n");
-            sprintf(DebugString, 
-                    "%lf > %lf\r\n", 
-                    NewMinimumValue, 
-                    NewMaximumValue);
+            DEBUG_PRINT("ERROR: Minimum is greater than Maximum!\r\n");
+            sprintf(DebugString, "%lf > %lf\r\n", me->MinimumValue, me->MaximumValue);
             DEBUG_PRINT(DebugString);
         }
-        if(IsMin_LessThanOrEqualTo_Value == FALSE) 
+        if(Result == VALUE_GREATER_THAN_MAXIMUM) 
         {
-            DEBUG_PRINT("ERROR: Minimum is greater than value!\r\n");
-            sprintf(DebugString, "%lf > %lf\r\n", NewMinimumValue, NewValue);
+            DEBUG_PRINT("ERROR: Value is greater than maximum!\r\n");
+            sprintf(DebugString, "%lf > %lf\r\n", me->Value, me->MaximumValue);
             DEBUG_PRINT(DebugString);
         }
-        if(IsValue_lessThanOrEqualTo_Max == FALSE) 
+        if(Result == VALUE_LESS_THAN_MINIMUM) 
         {
             DEBUG_PRINT("ERROR: Maximum is less than value!\r\n");
-            sprintf(DebugString, "%lf < %lf\r\n", NewMaximumValue, NewValue);
+            sprintf(DebugString, "%lf > %lf\r\n", me->Value, me->MinimumValue);
             DEBUG_PRINT(DebugString);
         }
-    } // End printing error messages
-    return(IsConstructorValid);
+    } // End printing error message
+    return(FALSE);
 }
 
 //=============================================================================
@@ -171,4 +162,28 @@ bool Parameter_IncrementValue(Parameter *me)
 bool Parameter_DecrementValue(Parameter *me)
 {
     return(Parameter_SetValue(me, Parameter_GetValue(me)-1));
+}
+
+//=============================================================================
+// Validate Value
+//=============================================================================
+Parameter_ValueValidationResult Parameter_ValidateValue(Parameter *me)
+{
+    if(me->Value > me->MaximumValue)
+    {
+        return(VALUE_GREATER_THAN_MAXIMUM);
+    }
+    else if(me->Value < me->MaximumValue)
+    {
+        return(VALUE_LESS_THAN_MINIMUM);
+    }
+    else if(me->Value == me->InvalidValue)
+    {
+        return(VALUE_EQUAL_TO_INVALID);
+    }
+    else
+    {
+        return(VALUE_VALID);
+    }
+    
 }
