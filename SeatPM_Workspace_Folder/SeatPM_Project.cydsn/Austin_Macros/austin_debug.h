@@ -26,8 +26,8 @@ typedef int bool;
  * Comment out "#define AUSTIN_DEBUG" to disable debugging output"
  * Uncomment "#define AUSTIN_DEBUG" to enable debugging output"
  *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-#define AUSTIN_DEBUG // Associated with DEBUG_PRINT
-#define AUSTIN_ACCELEROMETER_DEBUG
+#define AUSTIN_DEBUG // Associated with DEBUG_PRINT()
+#define AUSTIN_ACCELEROMETER_DEBUG // Associated with ACCELEROMETER_DEBUG()
     
     
 // ============================================================================

@@ -50,7 +50,12 @@ void UI_FSM_Constructor(UI_FSM *me)
     InitialEvent.EventSignal = CONFIRM_BUTTON_PRESSED;
     
     Parameter_Constructor(&me->New_CPM_Speed,0,100,0,-1);
-    Parameter_Constructor(&me->KneeAngle,90,180,90,INVALID_ANGLE);
+    
+    Parameter_Constructor(&me->KneeAngle,
+                          ABSOLUTE_MINIMUM_KNEE_ANGLE,
+                          ABSOLUTE_MAXIMUM_KNEE_ANGLE, 
+                          INVALID_ANGLE,
+                          INVALID_ANGLE);
 
     DEBUG_PRINT("Executing Initial State\r\n");
     FSM_ExecuteInitialState(&me->Parent, &InitialEvent);
@@ -209,13 +214,31 @@ void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        Parameter_SetMinimumValue(&me->KneeAngle, 
-            Parameter_GetMinimumValue(&me->KneeAngle)+1);
+        // Do not increment minval above maxval
+        if(Parameter_GetMinimumValue(&me->KneeAngle)+1 
+            > Parameter_GetMaximumValue(&me->KneeAngle))
+        {
+            // Do not increment
+        }
+        else
+        {
+            Parameter_SetMinimumValue(&me->KneeAngle, 
+                Parameter_GetMinimumValue(&me->KneeAngle)+1);
+        }
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-       Parameter_SetMinimumValue(&me->KneeAngle, 
-        Parameter_GetMinimumValue(&me->KneeAngle)-1);
+        // Do not  decrement minval below abs min
+        if(Parameter_GetMinimumValue(&me->KneeAngle)-1 
+            < ABSOLUTE_MINIMUM_KNEE_ANGLE)
+        {
+            // Do not decrement
+        }
+        else
+        {
+            Parameter_SetMinimumValue(&me->KneeAngle, 
+                    Parameter_GetMinimumValue(&me->KneeAngle)-1);   
+        }
         break;
 
     case NO_OPERATION:
@@ -281,11 +304,26 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        Parameter_SetMaximumValue(&me->KneeAngle, Parameter_GetMaximumValue(&me->KneeAngle)+1);
+        if(Parameter_GetMaximumValue(&me->KneeAngle)+1 > ABSOLUTE_MAXIMUM_KNEE_ANGLE)
+        {
+            // Do not increment
+        }
+        else
+        {
+            Parameter_SetMaximumValue(&me->KneeAngle, 
+                Parameter_GetMaximumValue(&me->KneeAngle)+1);
+        }
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        Parameter_SetMaximumValue(&me->KneeAngle, Parameter_GetMaximumValue(&me->KneeAngle)-1);
+        if(Parameter_GetMaximumValue(&me->KneeAngle)-1 < Parameter_GetMinimumValue(&me->KneeAngle))
+        {
+            // Do not decrement
+        }
+        else
+        {
+            Parameter_SetMaximumValue(&me->KneeAngle, Parameter_GetMaximumValue(&me->KneeAngle)-1);
+        }
         break;
 
     case NO_OPERATION:

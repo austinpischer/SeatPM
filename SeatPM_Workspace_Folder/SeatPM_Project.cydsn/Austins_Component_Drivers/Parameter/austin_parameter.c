@@ -173,7 +173,7 @@ Parameter_ValueValidationResult Parameter_ValidateValue(Parameter *me)
     {
         return(VALUE_GREATER_THAN_MAXIMUM);
     }
-    else if(me->Value < me->MaximumValue)
+    else if(me->Value < me->MinimumValue)
     {
         return(VALUE_LESS_THAN_MINIMUM);
     }

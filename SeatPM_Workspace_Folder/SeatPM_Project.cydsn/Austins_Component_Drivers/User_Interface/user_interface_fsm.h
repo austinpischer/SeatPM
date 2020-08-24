@@ -35,8 +35,10 @@
 //=============================================================================
 #define MESSAGE_ROWS 2
 #define MESSAGE_CHARACTERS_PER_ROW 16
-#define MESSAGE_ON_SCREEN_TIME_MS 2000
+#define MESSAGE_ON_SCREEN_TIME_MS 500
 #define CPM_START_SPEED_DEGREES_PER_MINUTE 30
+#define ABSOLUTE_MAXIMUM_KNEE_ANGLE 180
+#define ABSOLUTE_MINIMUM_KNEE_ANGLE 90
 
 //=============================================================================
 // Type definitions

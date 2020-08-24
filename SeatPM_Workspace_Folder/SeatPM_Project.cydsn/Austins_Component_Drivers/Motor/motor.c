@@ -91,12 +91,7 @@ int Motor_GetSpeed(Motor *me)
 //=============================================================================
 bool Motor_SetSpeed(Motor *me, int NewSpeed)
 {
-    // Don't do anything if speed isn't going to change
-    if(Motor_GetSpeed(me) == NewSpeed)
-    {
-       return(FALSE);
-    }
-    
+    // Don't do anything if speed isn't going to change    
     // Set speed variable to new
     bool IsNewSpeedValid = Parameter_SetValue(&me->CurrentSpeed, NewSpeed);
     
