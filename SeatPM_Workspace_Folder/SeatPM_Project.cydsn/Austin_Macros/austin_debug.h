@@ -42,7 +42,7 @@ typedef int bool;
 #ifdef AUSTIN_DEBUG // START of preprocessor if/else statement.
     
     // Note: Macro function replaces left statement with right before compiling
-    #define DEBUG_PRINT(string) (PuTTY_UartPutString(string))  
+    #define DEBUG_PRINT(string) (PuTTY_PutString(string))  
     
 #else
     
@@ -57,7 +57,7 @@ typedef int bool;
 // ============================================================================
 #ifdef AUSTIN_ACCELEROMETER_DEBUG
     #define ACCELEROMETER_DEBUG(string) {\
-                                         PuTTY_UartPutString(string);\
+                                         PuTTY_PutString(string);\
                                          CyDelay(100); \
                                         } 
 #else

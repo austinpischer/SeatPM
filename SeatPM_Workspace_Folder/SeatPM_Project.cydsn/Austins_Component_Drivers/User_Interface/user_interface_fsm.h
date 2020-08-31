@@ -82,6 +82,8 @@ struct UI_FSM
 
     Parameter New_CPM_Speed;
     Parameter KneeAngle;
+    
+    double KneeAngle_Raw;
 };
 
 //=============================================================================
@@ -110,7 +112,7 @@ void UI_FSM_Constructor(UI_FSM *me);
 // Clears the UI Screen and then prints
 void UI_FSM_PrintMessage(
     char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW + 1]);
-bool UI_FSM_IsKneeAngleValid(UI_FSM *me);
+bool UI_FSM_IsKneeAngle_Raw_Valid(UI_FSM *me);
 void UI_FSM_DisplayCableReleasedPercent(UI_FSM *me);
 void UI_FSM_ExecuteCurrentStateFunction(UI_FSM *me);
 void UI_FSM_PrintInvalidSignalMessage(UI_FSM *me);

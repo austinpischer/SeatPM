@@ -32,7 +32,6 @@ void CPM_Runtime_Startup(Runtime *me)
     // Start PSoC Timer component that triggers each second.
     CPM_Runtime_Timer_Interrupt_ClearPending();
     CPM_Runtime_Timer_Interrupt_StartEx(CPM_Runtime_Timer_Interrupt_Handle);
-    CPM_Runtime_StartCounting(me);
 }
 
 //=============================================================================

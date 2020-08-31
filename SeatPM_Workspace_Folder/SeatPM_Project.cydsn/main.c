@@ -104,8 +104,16 @@ int main(void)
         //---------------------------------------------------------------------
         // Sample the goniometer to get the knee angle
         //---------------------------------------------------------------------
+        
+        // Note: Get value before checking validity, because
+        //       "CurrentKneeAngle" is used in code below before
+        //       validity matters (user has not seen "attach ankle..." message 
+        
+         // Sample, and get copy for readability
+        double CurrentKneeAngle = g_UserInterface.KneeAngle_Raw = GetKneeAngle();
+        
         bool IsCurrentKneeAngleValid = 
-            Parameter_SetValue(&g_UserInterface.KneeAngle, GetKneeAngle());
+            Parameter_SetValue(&g_UserInterface.KneeAngle, CurrentKneeAngle);
         
         //---------------------------------------------------------------------
         // Handle emergency stop condition
@@ -114,6 +122,19 @@ int main(void)
         if(IsCurrentKneeAngleValid == FALSE && 
            g_UserInterface.HasUserSeenAttachAnkleStrapMessage == TRUE)
         {
+            // Print to debug what went wrong
+            char8 debug[64];
+            sprintf(debug, 
+                    "current = %lf,\r\n"
+                    "val = %lf,\r\n"
+                    "min = %lf,\r\n"
+                    "max = %lf\r\n\r\n",
+                    CurrentKneeAngle,
+                    Parameter_GetValue(&g_UserInterface.KneeAngle),
+                    Parameter_GetMinimumValue(&g_UserInterface.KneeAngle),
+                    Parameter_GetMaximumValue(&g_UserInterface.KneeAngle));
+            DEBUG_PRINT(debug);
+            
             EmergencyStop();
         }
         
@@ -140,7 +161,6 @@ int main(void)
                 break;
                 
             default:
-                DEBUG_PRINT("Invalid signal being dispatched to UI!\r\n");
                 break;
         }
         g_SignalToDispatch = INVALID_SIGNAL;
@@ -149,9 +169,6 @@ int main(void)
         //---------------------------------------------------------------------
         // Update the display if the user interface has set flags to do so
         //---------------------------------------------------------------------
-        
-        // Getting a copy of the current knee angle to improve code readability
-        double CurrentKneeAngle = Parameter_GetValue(&g_UserInterface.KneeAngle);
 
         //....................................................................
         // Update the Angle Reading
@@ -173,7 +190,9 @@ int main(void)
         else if(g_UserInterface.ShallMainLoopHandleCPMMessage == TRUE
                 && CurrentKneeAngle != LastKneeAngle
                 && g_CPM_Runtime.TotalSeconds != LastTotalSeconds)
-        {      
+        {
+            // Update the runtime
+            CPM_Runtime_Update(&g_CPM_Runtime);
             // Print message
             sprintf(&g_UserInterface.Message[0][0],
                     "RT: %2dh %2dm %2ds",
@@ -191,7 +210,6 @@ int main(void)
         {
             // Do nothing because there are no flags set to update display
         }
-        
         CyDelay(10);// used for putty printing properly? not sure why though.
     } // End infinite loop
 } // End main()
@@ -205,7 +223,7 @@ double GetKneeAngle()
     Potentiometer_ADC_IsEndConversion(Potentiometer_ADC_WAIT_FOR_RESULT);
     double Input = (double)Potentiometer_ADC_GetResult16(0);
    
-    // Define Normalization Cons    tants
+    // Define Normalization Constants
     const double MaxInput = 2047; // 11 bits + signed bit 
     const double MinInput = 0; 
     const double MaxOutput = 180; // max angle

@@ -56,6 +56,9 @@ void UI_FSM_Constructor(UI_FSM *me)
                           ABSOLUTE_MAXIMUM_KNEE_ANGLE, 
                           INVALID_ANGLE,
                           INVALID_ANGLE);
+    
+        
+    me->KneeAngle_Raw = INVALID_ANGLE;
 
     DEBUG_PRINT("Executing Initial State\r\n");
     FSM_ExecuteInitialState(&me->Parent, &InitialEvent);
@@ -83,20 +86,14 @@ void UI_FSM_PrintMessage(
 }
 
 //=============================================================================
-// Validate Current Goniometer Measurement
+// Validate Raw Goniometer Measurement
 //=============================================================================
-bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
+bool UI_FSM_IsKneeAngle_Raw_Valid(UI_FSM *me)
 {
-    Parameter_ValueValidationResult Result 
-       = Parameter_ValidateValue(&me->KneeAngle);
-    
-    // Handle non-errors
-    if(Result == VALUE_VALID)
-    {
-        return(TRUE);
-    }
+    DEBUG_PRINT("Raw Knee Angle Validation Check:\r\n");
+
     // Handle errors
-    else if (Result == VALUE_GREATER_THAN_MAXIMUM)
+    if (me->KneeAngle_Raw > me->KneeAngle.MaximumValue)
     {
         // Print knee angle too large error
         //                           1234567890123456
@@ -104,7 +101,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         sprintf(&me->Message[1][0], "maximum limit!  ");
         UI_FSM_PrintMessage(me->Message);
     }
-    else if (Result == VALUE_LESS_THAN_MINIMUM)
+    else if (me->KneeAngle_Raw < me->KneeAngle.MinimumValue)
     {
         // Print knee angle too small error
         //                           1234567890123456
@@ -112,7 +109,7 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         sprintf(&me->Message[1][0], "minimum limit!  ");
         UI_FSM_PrintMessage(me->Message);
     }
-    else if (Result == VALUE_EQUAL_TO_INVALID)
+    else if (me->KneeAngle_Raw == me->KneeAngle.InvalidValue)
     {
         // Print knee angle invalid error
         //                           1234567890123456
@@ -120,13 +117,10 @@ bool UI_FSM_IsKneeAngleValid(UI_FSM *me)
         sprintf(&me->Message[1][0], "INVALID_ANGLE ! ");
         UI_FSM_PrintMessage(me->Message);
     }
+    // Handle non-errors
     else
     {
-        // Print knee angle invalid error
-        //                           1234567890123456
-        sprintf(&me->Message[0][0], "Knee Angle is   ");
-        sprintf(&me->Message[1][0], "unspecified!   ");
-        UI_FSM_PrintMessage(me->Message);
+        return(TRUE);
     }
     CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     return (FALSE);
@@ -214,31 +208,19 @@ void UI_FSM_SetMinimumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        // Do not increment minval above maxval
-        if(Parameter_GetMinimumValue(&me->KneeAngle)+1 
-            > Parameter_GetMaximumValue(&me->KneeAngle))
+        // Only increment minval up to maxval
+        if((Parameter_GetMinimumValue(&me->KneeAngle)+1) <= Parameter_GetMaximumValue(&me->KneeAngle))
         {
-            // Do not increment
-        }
-        else
-        {
-            Parameter_SetMinimumValue(&me->KneeAngle, 
-                Parameter_GetMinimumValue(&me->KneeAngle)+1);
-        }
+            Parameter_IncrementMinimumValue(&me->KneeAngle);
+        }// Otherwise do nothing
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        // Do not  decrement minval below abs min
-        if(Parameter_GetMinimumValue(&me->KneeAngle)-1 
-            < ABSOLUTE_MINIMUM_KNEE_ANGLE)
+        // Decrement minval only down to absolute min
+        if((Parameter_GetMinimumValue(&me->KneeAngle)-1) >= ABSOLUTE_MINIMUM_KNEE_ANGLE)
         {
-            // Do not decrement
-        }
-        else
-        {
-            Parameter_SetMinimumValue(&me->KneeAngle, 
-                    Parameter_GetMinimumValue(&me->KneeAngle)-1);   
-        }
+            Parameter_DecrementMinimumValue(&me->KneeAngle);
+        }// Otherwise do nothing
         break;
 
     case NO_OPERATION:
@@ -304,25 +286,18 @@ void UI_FSM_SetMaximumKneeAngle_State(UI_FSM *me, Event const *MyEvent)
         break;
 
     case INCREMENT_BUTTON_PRESSED:
-        if(Parameter_GetMaximumValue(&me->KneeAngle)+1 > ABSOLUTE_MAXIMUM_KNEE_ANGLE)
+        // only increment up to absolute max
+        if((Parameter_GetMaximumValue(&me->KneeAngle)+1) <= ABSOLUTE_MAXIMUM_KNEE_ANGLE)
         {
-            // Do not increment
-        }
-        else
-        {
-            Parameter_SetMaximumValue(&me->KneeAngle, 
-                Parameter_GetMaximumValue(&me->KneeAngle)+1);
+            Parameter_IncrementMaximumValue(&me->KneeAngle);
         }
         break;
 
     case DECREMENT_BUTTON_PRESSED:
-        if(Parameter_GetMaximumValue(&me->KneeAngle)-1 < Parameter_GetMinimumValue(&me->KneeAngle))
+        // only decrement down to minimum
+        if((Parameter_GetMaximumValue(&me->KneeAngle)-1) >= Parameter_GetMinimumValue(&me->KneeAngle))
         {
-            // Do not decrement
-        }
-        else
-        {
-            Parameter_SetMaximumValue(&me->KneeAngle, Parameter_GetMaximumValue(&me->KneeAngle)-1);
+            Parameter_DecrementMaximumValue(&me->KneeAngle);
         }
         break;
 
@@ -375,8 +350,8 @@ void UI_FSM_GoniometerReadingCheck_State(UI_FSM *me, Event const *MyEvent)
     {
     case CONFIRM_BUTTON_PRESSED:
         // Print invalid message if invalid
-        if (UI_FSM_IsKneeAngleValid(me) == TRUE)
-        {
+        if (UI_FSM_IsKneeAngle_Raw_Valid(me) == TRUE)
+        {   
             // If knee angle is valid, tell user to attach ankle strap
             DEBUG_PRINT("Transition to Ankle Strap R/R\r\n");
             me->ShallMainLoopUpdateAngleReading = FALSE; 
@@ -461,13 +436,10 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
     switch (MyEvent->EventSignal)
     {
     case CONFIRM_BUTTON_PRESSED:
-        if (UI_FSM_IsKneeAngleValid(me) == TRUE)
-        {
-            // If knee angle is valid, go to CPM startup state
-            FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
-            // Update display in next function without any inputs
-            UI_FSM_ExecuteCurrentStateFunction(me);
-        }
+        //Go to CPM startup state
+        FSM_Transition(&me->Parent, UI_FSM_ConfirmCPMStartup_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         // Else, knee angle is invalid, so do nothing.
         break;
 
@@ -480,25 +452,15 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
     case INCREMENT_BUTTON_PRESSED:
         // Only release cable and show percent release while button is pressed
         // and knee angle is valid
-        if(UI_FSM_IsKneeAngleValid(me) == TRUE)
-        {
-            Motor_SetPercentCableReleased(&g_CPM_Motor, 
+        Motor_SetPercentCableReleased(&g_CPM_Motor, 
                 Motor_GetPercentCableReleased(&g_CPM_Motor)+1);
-            UI_FSM_DisplayCableReleasedPercent(me);
-            CyDelay(1000);//TODO
-        }
         break;
 
     case DECREMENT_BUTTON_PRESSED:
         // Only retract cable and show percent release while button is pressed
         // and knee angle is valid
-        if(UI_FSM_IsKneeAngleValid(me) == TRUE)
-        {
-            Motor_SetPercentCableReleased(&g_CPM_Motor, 
-                Motor_GetPercentCableReleased(&g_CPM_Motor)-1);
-            UI_FSM_DisplayCableReleasedPercent(me);
-            CyDelay(1000);//TODO
-        }
+        Motor_SetPercentCableReleased(&g_CPM_Motor, 
+            Motor_GetPercentCableReleased(&g_CPM_Motor)-1);
         break;
     
     case NO_OPERATION:
@@ -521,6 +483,12 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
         UI_FSM_PrintMessage(me->Message);
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
         me->HasUserSeenAttachAnkleStrapMessage = TRUE;
+        // Prompt user to retract/release the cable
+        //                           1234567890123456
+        sprintf(&me->Message[0][0], "Release Cable[+]");
+        sprintf(&me->Message[1][0], "Retract Cable[-]");
+        UI_FSM_PrintMessage(me->Message);
+        CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     }
 
     
@@ -530,11 +498,7 @@ void UI_FSM_AnkleStrapRetractRelease_State(UI_FSM *me,
 
     if(HasStateTransitioned == FALSE)
     {
-        // Prompt user to retract/release the cable
-        //                           1234567890123456
-        sprintf(&me->Message[0][0], "Release Cable[+]");
-        sprintf(&me->Message[1][0], "Retract Cable[-]");
-        UI_FSM_PrintMessage(me->Message);
+        UI_FSM_DisplayCableReleasedPercent(me);
     }
 
 }
@@ -554,14 +518,11 @@ void UI_FSM_ConfirmCPMStartup_State(
     {
     case CONFIRM_BUTTON_PRESSED:
         // Go to CPM State
-        if(UI_FSM_IsKneeAngleValid(me) == TRUE)
-        {   
-            Motor_SetSpeed(&g_CPM_Motor, 30);
-            CPM_Runtime_StartCounting(&g_CPM_Runtime);
-            FSM_Transition(&me->Parent, UI_FSM_ContinuousPassiveMotion_State);
-            // Update display in next function without any inputs
-            UI_FSM_ExecuteCurrentStateFunction(me);
-        }
+        Motor_SetSpeed(&g_CPM_Motor, 30);
+        CPM_Runtime_StartCounting(&g_CPM_Runtime);
+        FSM_Transition(&me->Parent, UI_FSM_ContinuousPassiveMotion_State);
+        // Update display in next function without any inputs
+        UI_FSM_ExecuteCurrentStateFunction(me);
         break;
 
     case BACK_BUTTON_PRESSED:

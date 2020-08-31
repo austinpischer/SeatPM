@@ -69,6 +69,8 @@ bool Parameter_Constructor(Parameter *me,
                            double NewMaximumValue,
                            double NewValue,
                            double NewInvalidValue);
+
+
 bool Parameter_SetValue(Parameter *me, double NewValue);
 double Parameter_GetValue(Parameter *me);
 bool Parameter_SetMinimumValue(Parameter *me, double NewMinimumValue);
@@ -77,6 +79,10 @@ bool Parameter_SetMaximumValue(Parameter *me, double NewMaximumValue);
 double Parameter_GetMaximumValue(Parameter *me);
 bool Parameter_IncrementValue(Parameter *me);
 bool Parameter_DecrementValue(Parameter *me);
+bool Parameter_IncrementMinimumValue(Parameter *me);
+bool Parameter_DecrementMinimumValue(Parameter *me);
+bool Parameter_IncrementMaximumValue(Parameter *me);
+bool Parameter_DecrementMaximumValue(Parameter *me);
 Parameter_ValueValidationResult Parameter_ValidateValue(Parameter *me);
 
 

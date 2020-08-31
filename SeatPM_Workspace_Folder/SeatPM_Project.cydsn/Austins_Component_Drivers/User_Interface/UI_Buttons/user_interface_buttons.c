@@ -103,11 +103,13 @@ CY_ISR(Button_Decrement_ISR_Handler_Austin)
 
 CY_ISR(Button_EmergencyStop_Right_Interrupt_Handler)
 {
+    DEBUG_PRINT("Right emergency stop button pressed\r\n");
     EmergencyStop();
 }
 
 CY_ISR_PROTO(Button_EmergencyStop_Left_Interrupt_Handler)
 {
+    DEBUG_PRINT("Left emergency stop button pressed\r\n");
     EmergencyStop();
 }
 
