@@ -1,16 +1,16 @@
 /*==============================================================================
- * Project: SeatPM
- * Team: Joint Effort
- * School: Seattle Pacific University
- * Class: CatalyzeU Senior Design
- * 
- * File Name: austin_parameter.c
- * Author: Austin Pischer
- * 
- * File Explanation:
- * Implements the functions declared in parameter.h as part of
- * the Parameter class.
- *============================================================================*/
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name: austin_parameter.c
+Author: Austin Pischer
+
+File Explanation:
+Implements the functions declared in parameter.h as part of
+the Parameter class.
+==============================================================================*/
 
 //=============================================================================
 // Inclusions

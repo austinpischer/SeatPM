@@ -1,25 +1,25 @@
 /*==============================================================================
- * Project: SeatPM
- * Team: Joint Effort
- * School: Seattle Pacific University
- * Class: CatalyzeU Senior Design
- * 
- * File Name: parameter.h
- * Author: Austin Pischer
- * 
- * File Explanation:
- * A parameter is a bounded variable associated with the user's settings.
- * The parameters of the SeatPM are:
- * 1. The minimum knee angle
- * 2. The maximum knee angle
- * 3. The speed of the device?
- * 4. The amount of cable released from the device?
- * "Bounded" means that there is a minimum and maximum value
- * That the parameter cannot exceed in either direction.
- * The min/max value cannot be manipulated by the user
- * and are part of the behavior of the SeatPM device. 
- * Only the value can be manipulated by the user.
- *===========================================================================*/
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name: parameter.h
+Author: Austin Pischer
+
+File Explanation:
+A parameter is a bounded variable associated with the user's settings.
+The parameters of the SeatPM are:
+1. The minimum knee angle
+2. The maximum knee angle
+3. The speed of the device?
+4. The amount of cable released from the device?
+"Bounded" means that there is a minimum and maximum value
+That the parameter cannot exceed in either direction.
+The min/max value cannot be manipulated by the user
+and are part of the behavior of the SeatPM device. 
+Only the value can be manipulated by the user.
+==============================================================================*/
 
 // Start of multiple inclusion protection
 #ifndef AUSTIN_PARAMTER_H

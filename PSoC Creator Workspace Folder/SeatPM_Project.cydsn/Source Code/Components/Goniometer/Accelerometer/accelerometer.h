@@ -8,16 +8,10 @@ File Name: accelerometer.h
 Author: Austin Pischer
 
 File Explanation:
-This file defines the "Class" (Object-Oriented C) of an accelerometer.
-See the following link  for more detail:
-https://dmitryfrank.com/articles/oop_in_c
+This file defines the the "accelerometer" class (object-oriented c)
 
 The accelerometer class should hold all data and perform all functions that
 are independent of the specific hardware implementation of an accelerometer.
-
-It is important to abstract from the hardware implementation because
-it will be easier to update the project for a different accelerometer
-in the future, if necessary.
 
 Therefore, this class is considered the "base" class
 and hardware implementations are the "derived" classes that must implement
@@ -39,38 +33,70 @@ the "virtual" UpdateCurrentAcceleration function on their own.
 //==============================================================================
 // Type Definitions
 //==============================================================================
-// We define the Accelerometer type
-// so that we can omit the "struct" keyword from following lines of code.
-// This enforces the idea of a "class" over a separate data member struct
-// with associated methods.
-typedef struct Accelerometer Accelerometer;
+/* Create a function pointer type for readability
+that returns nothing and requires accelerometer pointer parameter */
 typedef void (*Accelerometer_VirtualFunctionPointer)(Accelerometer *me);
 
 //==============================================================================
-// Data Members - Accelerometer Class 
+// Data Members - Accelerometer Class
 //==============================================================================
+/* "typedef struct Accelerometer Accelerometer;" makes it so we can use the
+type keyword "Accelerometer <instancename>" 
+instead of "struct Accelerometer <instancename> */
+typedef struct Accelerometer Accelerometer;
 struct Accelerometer
 {
-    Accelerometer_VirtualFunctionPointer Accelerometer_UpdateCurrentAcceleration;  
-        /* NOTE: Normally, we would want only one virtual method table
-                 for both the base class and for each derived class.
-                 However, the simplicity of one function pointer for each
-                 instance of the class outweighs the memory cost
-                 since we only have 2 instances of the dervied class (ADXL345)
-                 In the form of the 2 acceleormeters for the goniometer.
-        */
+    /* Normally base classes have a "virtual table" for the derived class
+    to assign function implementations to.
+    Since we only have one virtual function in this base class, we will skip
+    making a vtable for the sake of simplicity.*/
+    Accelerometer_VirtualFunctionPointer Accelerometer_UpdateCurrentAcceleration;
     AccelerationVector CurrentAcceleration;
-    AccelerationVector FilteredAcceleration;
+    // Filter related data members:
     MovingAverageFilter Filter;
+    AccelerationVector FilteredAcceleration;
 };
 
 //==============================================================================
-// Method Declarations - Accelerometer Class 
+// Method Declarations - Accelerometer Class
 //==============================================================================
-void Accelerometer_Constructor(Accelerometer *me, 
-    Accelerometer_VirtualFunctionPointer Accelerometer_UpdateCurrentAcceleration_Pointer);
+
+/* Function Name: Accelerometer_Constructor
+Requirements: - Reference to Accelerometer instance
+              - Function pointer to function implementation for the
+                "Update Current Acceleration" virtual function
+Returns: Passed Accelerometer Instance has data members initialized and virtual
+functions pointed to derived class implementation.
+*/
+void Accelerometer_Constructor(Accelerometer *me,
+                               Accelerometer_VirtualFunctionPointer Accelerometer_UpdateCurrentAcceleration_Pointer);
+
+/* Function Name: Virtual_Accelerometer_UpdateCurrentAcceleration
+Requirements: Reference to Accelerometer instance
+Returns: Nothing
+Note: This is the base class implementation of the virtual function
+*/
 void Virtual_Accelerometer_UpdateCurrentAcceleration(Accelerometer *me);
+
+/* Function Name: Accelerometer_UpdateFilteredAcceleration
+Requirements: Reference to Accelerometer instance
+Returns: Updates the filtered acceleration member after sampling the current
+acceleration and inserting the current acceleration into the filtering algorithm
+*/
 void Accelerometer_UpdateFilteredAcceleration(Accelerometer *me);
 
+/* Function Name: GetCurrentAcceleration
+Requirements: Reference to Accelerometer instance
+Returns: Returns the instance of the current acceleration WITHOUT
+updating it.
+*/
+AccelerationVector Accelerometer_GetCurrentAcceleration(Accelerometer *me);
+
+/* Function Name: GetFilteredAcceleration
+Requirements: Reference to Accelerometer instance
+Returns: Returns the instance of the filtered acceleration WITHOUT
+updating it.
+*/
+AccelerationVector Accelerometer_GetFilteredAcceleration(Accelerometer *me);
 #endif // End of multiple inclusion protection.
-/* [] END OF FILE */
+       /* [] END OF FILE */

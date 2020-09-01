@@ -109,20 +109,25 @@ File Explanation:
    unless doing so hinders readability/coherence of the code.
 
 4. Each file should have a "end of file comment" at the (you guessed it)
-   end of the file as follows:
-
+   end of the file (PSoC Creator creates this by default) as follows:
+```
 /* [] END OF FILE */
-
+```
 5a. All header files should have multiple inclusion protection (m.i.p.).
-5b. The start of the m.i.p. should be beneath the "file header comment".
-5c. The start of the m.i.p. should utilize the header file's name in
-    UPPER_CASE_SNAKE_CASE as follows:
-```   
+5b. The start of the multiple inclusion protection should be beneath the
+    "file header comment".
+5c. The start of the multiple inclusion protection should utilize the header 
+    file's name in UPPER_CASE_SNAKE_CASE as follows:
+```  
+...file header comment...
+==============================================================================*/
+
 // Start of multiple inclusion protection
 #ifndef FILE_NAME_H
 #define FILE_NAME_H
 ```
-5d.The end of the m.i.p. should be before the "end of file" comment as follows:
+5d. The end of the multiple inclusion protection should be before the 
+    "end of file" comment as follows:
 ```
 #endif // End of multiple inclusion protection.
 /* [] END OF FILE */
@@ -150,7 +155,8 @@ File Explanation:
 
 9. Filenames should be in "snake_case"
 
-10. Variables and whatnot should be in "PascalCase"
+10. Variables and whatnot should be in "PascalCase" with underscores between
+    acronyms and other words. 
 
 11. This project tries to adhere to object-oriented C (OOC) principles.
     These are self-imposed rules that are not actually part of the C language.
@@ -160,6 +166,16 @@ File Explanation:
     See the following link for some information about OOC: 
     https://dmitryfrank.com/articles/oop_in_c
 
+12. Functions should have a "contract" comment block above its declaration in
+    a header file. The contract should detail what the function requires
+    (parameters, global variables, prior conditions) and what
+    the function returns. It should look something like this:
+```
+/* Function Name:
+Requirements:
+Returns:
+*/
+```
     
    
 

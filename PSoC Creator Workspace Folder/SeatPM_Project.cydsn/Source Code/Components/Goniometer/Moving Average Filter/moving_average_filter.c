@@ -91,7 +91,7 @@ AccelerationVector MovingAverageFilter_GetAverage(MovingAverageFilter *me)
         }
     }
     
-        // Calculate new average
+    // Calculate new average
     if(SampleSize_X > 0)
     {
         Average.x = Sum_X / SampleSize_X;
