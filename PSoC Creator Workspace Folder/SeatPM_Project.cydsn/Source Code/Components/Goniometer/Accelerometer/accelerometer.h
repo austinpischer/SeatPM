@@ -33,6 +33,11 @@ the "virtual" UpdateCurrentAcceleration function on their own.
 //==============================================================================
 // Type Definitions
 //==============================================================================
+/* "typedef struct Accelerometer Accelerometer;" makes it so we can use the
+type keyword "Accelerometer <instancename>" 
+instead of "struct Accelerometer <instancename> */
+typedef struct Accelerometer Accelerometer;    
+    
 /* Create a function pointer type for readability
 that returns nothing and requires accelerometer pointer parameter */
 typedef void (*Accelerometer_VirtualFunctionPointer)(Accelerometer *me);
@@ -40,21 +45,17 @@ typedef void (*Accelerometer_VirtualFunctionPointer)(Accelerometer *me);
 //==============================================================================
 // Data Members - Accelerometer Class
 //==============================================================================
-/* "typedef struct Accelerometer Accelerometer;" makes it so we can use the
-type keyword "Accelerometer <instancename>" 
-instead of "struct Accelerometer <instancename> */
-typedef struct Accelerometer Accelerometer;
 struct Accelerometer
 {
-    /* Normally base classes have a "virtual table" for the derived class
+  /* Normally base classes have a "virtual table" for the derived class
     to assign function implementations to.
     Since we only have one virtual function in this base class, we will skip
     making a vtable for the sake of simplicity.*/
-    Accelerometer_VirtualFunctionPointer Accelerometer_UpdateCurrentAcceleration;
-    AccelerationVector CurrentAcceleration;
-    // Filter related data members:
-    MovingAverageFilter Filter;
-    AccelerationVector FilteredAcceleration;
+  Accelerometer_VirtualFunctionPointer Accelerometer_UpdateCurrentAcceleration;
+  AccelerationVector CurrentAcceleration;
+  // Filter related data members:
+  MovingAverageFilter Filter;
+  AccelerationVector FilteredAcceleration;
 };
 
 //==============================================================================
@@ -65,7 +66,7 @@ struct Accelerometer
 Requirements: - Reference to Accelerometer instance
               - Function pointer to function implementation for the
                 "Update Current Acceleration" virtual function
-Returns: Passed Accelerometer Instance has data members initialized and virtual
+Results: Passed Accelerometer Instance has data members initialized and virtual
 functions pointed to derived class implementation.
 */
 void Accelerometer_Constructor(Accelerometer *me,
@@ -73,28 +74,28 @@ void Accelerometer_Constructor(Accelerometer *me,
 
 /* Function Name: Virtual_Accelerometer_UpdateCurrentAcceleration
 Requirements: Reference to Accelerometer instance
-Returns: Nothing
+Results: Nothing
 Note: This is the base class implementation of the virtual function
 */
 void Virtual_Accelerometer_UpdateCurrentAcceleration(Accelerometer *me);
 
 /* Function Name: Accelerometer_UpdateFilteredAcceleration
 Requirements: Reference to Accelerometer instance
-Returns: Updates the filtered acceleration member after sampling the current
+Results: Updates the filtered acceleration member after sampling the current
 acceleration and inserting the current acceleration into the filtering algorithm
 */
 void Accelerometer_UpdateFilteredAcceleration(Accelerometer *me);
 
 /* Function Name: GetCurrentAcceleration
 Requirements: Reference to Accelerometer instance
-Returns: Returns the instance of the current acceleration WITHOUT
+Results: Returns the instance of the current acceleration WITHOUT
 updating it.
 */
 AccelerationVector Accelerometer_GetCurrentAcceleration(Accelerometer *me);
 
 /* Function Name: GetFilteredAcceleration
 Requirements: Reference to Accelerometer instance
-Returns: Returns the instance of the filtered acceleration WITHOUT
+Results: Returns the instance of the filtered acceleration WITHOUT
 updating it.
 */
 AccelerationVector Accelerometer_GetFilteredAcceleration(Accelerometer *me);

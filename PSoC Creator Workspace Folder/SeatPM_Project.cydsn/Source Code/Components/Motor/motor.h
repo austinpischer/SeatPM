@@ -23,22 +23,22 @@ associated motor.c function implementation file.
 //=============================================================================
 #include "project.h"
 #include "parameter.h"
-    
+
 //=============================================================================
 // Definitions
-//=============================================================================  
+//=============================================================================
 #define INVALID_SPEED -1
-    
+
 //=============================================================================
 // Define directions
-//=============================================================================    
+//=============================================================================
 typedef enum Direction Direction;
 enum Direction
 {
-    // TODO: Subject to change based on physical design on the motor.
-    // These should always be boolean (0 or 1)
-    RETRACTING = 0,
-    RELEASING = 1
+  // TODO: Subject to change based on physical design on the motor.
+  // These should always be boolean (0 or 1)
+  RETRACTING = 0,
+  RELEASING = 1
 };
 
 //=============================================================================
@@ -47,56 +47,81 @@ enum Direction
 typedef struct Motor Motor;
 struct Motor
 {
-    Parameter CurrentSpeed;
-    Direction CurrentDirection;
-    Parameter PercentCableReleased;
+  Parameter CurrentSpeed;
+  Direction CurrentDirection;
+  Parameter PercentCableReleased;
 };
 
 //=============================================================================
 // Method Members
 //=============================================================================
 
-/* Function: Motor Startup
-Description: Should be run before the infinite loop in main.
+/* Function Name: Motor_Constructor
+Requirements: - Address of Motor instance
+              - Timer/Counter/Pulse-Width-Modulation (TCPWM) component in
+                the PSoC Creator Project's TopDesign.cysch
+                configured in PWM mode with period of 100 and compare of 0,
+                named "Motor_PWM"
+              - Control register component in the PSoC Creator Project's
+                TopDesign.cysch, configured with only 1 output,
+                named "Motor_Direction"
+Results: Motor instance data members and associated TopDesign components are
+initialized and started-up, respectively.
 */
-void Motor_Startup(Motor *me);
+void Motor_Constructor(Motor *me);
 
-/* Function: Motor Stop
-Description: Sets the speed of the motor to zero.
+/* Function Name: Motor_Stop
+Requirements: Address of Motor instance
+Results: Motor is stopped
 */
 void Motor_Stop(Motor *me);
 
-
-/* Function: Motor Get Direction
-Description: Returns direction of motor passed in.
+/* Function Name: Motor_GetDirection
+Requirements: Address of Motor instance
+Results: Returns direction of motor (enumerated to RETRACTING or RELEASING)
 */
 Direction Motor_GetDirection(Motor *me);
 
-/* Function: Motor Set Direction
-Description: Sets direction of rotation of motor to release or retract cable.
+/* Function Name: Motor_SetDirection
+Requirements: - Address of Motor instance
+              - New direction of motor (enumerated to RETRACTING or RELEASING)
+Results: Motor direction is set in a direction that either retracts the user's
+         ankle toward the motor or releases the user's ankle away from the motor.
 */
 void Motor_SetDirection(Motor *me, Direction NewDirection);
 
-/* Function: Motor Get Spedd
-Description: Returns speed of motor within bounds of parameter set in startup.
+/* Function Name: Motor_GetSpeed
+Requirements: Address of Motor instance
+Results: Returns the value of the Motor speed as stored in the Motor instance
 */
 int Motor_GetSpeed(Motor *me);
 
-/* Function: Motor Set Speed
-Description: Returns true if passed speed is set, false if invalid or unchanged.
+/* Function Name: Motor_SetSpeed
+Requirements: - Address of Motor instance
+              - New speed value (currently valid range is 0-100 percent)
+Results: Returns true if the speed was set to the passed New Speed, otherwise
+         returns false.
+         If true is returned, then to motor's speed has been sped up or slowed
+         down to the new speed percent value.
 */
 bool Motor_SetSpeed(Motor *me, int NewSpeed);
 
-/* Function: Motor Get Cable Released Percent
-Description: Returns the amount of cable that has been released (0-100%)
-// todo - more granularity with double values
+/* Function Name: Motor_GetPercentCableReleased
+Requirements: Address of Motor instance
+Results: Returns value of the "percent of cable released" as stored in the
+         Motor instance.
 */
 int Motor_GetPercentCableReleased(Motor *me);
 
-
-/* Function: Motor Set Cable Released Percent
-Description: Returns true if percent changes, otherwise unchanged or invalid.
-// todo - more granularity with double values
+/* Function Name: Motor_SetPercentCableReleased
+Requirements: - Address of Motor instance
+              - New percent value of cable to be released (can be more or less
+                than current percent released, bounded by 0 or 100)
+Results: Returns true if cable percent has been changed to the new value,
+         otherwise returns false.
+         If true is returned, then the motor will move in the retracting
+         or releasing direction in order to make the cable percent released
+         match that of the passed in new value.
 */
 bool Motor_SetPercentCableReleased(Motor *me, int NewPercentCableReleased);
 

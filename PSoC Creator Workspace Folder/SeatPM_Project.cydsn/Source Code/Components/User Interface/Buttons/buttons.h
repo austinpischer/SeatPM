@@ -25,23 +25,23 @@
 #include "debug.h"
 #include "feature_branches.h"
 #include "user_interface.h"
-#include "user_interface_buttons.h"
+#include "buttons.h"
 #include "parameter.h"
 #include "emergency_stop.h"
 
 //=============================================================================
 // External Variables (defined in main.c)
 //=============================================================================
-extern UI_FSM g_UserInterface;
+extern UserInterface g_UserInterface;
 //#ifdef DISPATCH_IN_MAIN
-extern UI_FSM_Signal g_SignalToDispatch;
+extern UserInterface_Signal g_SignalToDispatch;
 //#endif
 
 //=============================================================================
 // Function Prototypes
 //=============================================================================
-void UI_Button_Dispatch(const enum UI_FSM_Signals ButtonSignal);
-void Enable_UI_Button_Interrupts();
+void UI_Button_Dispatch(const enum UserInterface_Signal ButtonSignal);
+void UI_Buttons_EnableInterrupts();
 
 //=============================================================================
 // Interrupt Function Prototypes

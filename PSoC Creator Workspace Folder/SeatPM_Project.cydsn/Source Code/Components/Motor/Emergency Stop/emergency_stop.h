@@ -16,23 +16,23 @@ file "emergency_stop.c"
 // Start Multiple inclusion protection
 #ifndef EMERGENCY_STOP_H
 #define EMERGENCY_STOP_H
-    
+
 //=============================================================================
 // Inclusions
 //=============================================================================
-#include <stdio.h> // for printf
+#include <stdio.h>          // for printf
 #include "user_interface.h" // for user interface "class"
-    
+
 //=============================================================================
 // External Global Variables
 //=============================================================================
-extern UI_FSM g_UserInterface;
-    
+extern UserInterface g_UserInterface;
+
 //=============================================================================
-// Function Prototypes 
+// Function Prototypes
 //=============================================================================
 void EmergencyStop();
-    
+
 // End Multiple inclusion protection
 #endif
 /* [] END OF FILE */

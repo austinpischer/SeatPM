@@ -6,7 +6,7 @@
     <Toolchain Name="ARM GCC Generic" Selected="True">
       <Tool Name="prebuild" Command="" Options="" />
       <Tool Name="assembler" Command="arm-none-eabi-as.exe" Options="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=${OutputDir}/${CompileFile}.lst -g -W" />
-      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb &quot;-I.\Source Code&quot; &quot;-I.\Source Code\Components&quot; &quot;-I.\Source Code\Components\Goniometer&quot; &quot;-I.\Source Code\Components\Goniometer\Acceleration Vector&quot; &quot;-I.\Source Code\Components\Goniometer\Accelerometer&quot; &quot;-I.\Source Code\Components\Goniometer\ADXL345&quot; &quot;-I.\Source Code\Components\Goniometer\Moving Average Filter&quot; &quot;-I.\Source Code\Components\Motor&quot; &quot;-I.\Source Code\Components\Motor\Emergency Stop&quot; &quot;-I.\Source Code\Components\User Interface&quot; &quot;-I.\Source Code\Components\User Interface\CPM Runtime&quot; &quot;-I.\Source Code\Components\User Interface\Finite State Machine&quot; &quot;-I.\Source Code\Components\User Interface\User Interface Buttons&quot; &quot;-I.\Source Code\Data Models&quot; &quot;-I.\Source Code\Data Models\Parameter&quot; &quot;-I.\Source Code\Macros&quot; -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os" />
+      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb &quot;-I.\Source Code&quot; &quot;-I.\Source Code\Components&quot; &quot;-I.\Source Code\Components\Goniometer&quot; &quot;-I.\Source Code\Components\Goniometer\Acceleration Vector&quot; &quot;-I.\Source Code\Components\Goniometer\Accelerometer&quot; &quot;-I.\Source Code\Components\Goniometer\ADXL345&quot; &quot;-I.\Source Code\Components\Goniometer\Moving Average Filter&quot; &quot;-I.\Source Code\Components\Motor&quot; &quot;-I.\Source Code\Components\Motor\Emergency Stop&quot; &quot;-I.\Source Code\Components\User Interface&quot; &quot;-I.\Source Code\Components\User Interface\Runtime&quot; &quot;-I.\Source Code\Components\User Interface\Runtime\CPM Runtime&quot; &quot;-I.\Source Code\Components\User Interface\Finite State Machine&quot; &quot;-I.\Source Code\Components\User Interface\Buttons&quot; &quot;-I.\Source Code\Data Models&quot; &quot;-I.\Source Code\Data Models\Parameter&quot; &quot;-I.\Source Code\Macros&quot; &quot;-I.\Source Code\Components\User Interface\Screen&quot; &quot;-I.\Source Code\Components\User Interface\User Interface States&quot; -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os" />
       <Tool Name="linker" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -l m -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -u _printf_float -Wl,--gc-sections -g -ffunction-sections -Os -ffat-lto-objects" />
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
@@ -97,9 +97,6 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Confirm.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Confirm_aliases.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_Confirm_PM.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Screen.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Screen.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Screen_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_100Hz.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Clock_100Hz.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Motor_Clock.c</File>
@@ -119,10 +116,6 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_scl_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_SCB_IRQ.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\I2C_SCB_IRQ.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Screen_LCDPort.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Screen_LCDPort.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Screen_LCDPort_aliases.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Screen_LCDPort_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cy_em_eeprom.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cy_em_eeprom.h</File>
           <File BuildType="BUILD" Toolchain="ARM GCC Generic">Generated_Source\PSoC4\cm0gcc.ld</File>
@@ -194,6 +187,13 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_Interrupt.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_Interrupt.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen_LCDPort.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen_LCDPort.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen_LCDPort_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen_LCDPort_PM.c</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
@@ -241,8 +241,14 @@
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
         <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
-          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\CPM Runtime\runtime.c</File>
-          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\CPM Runtime\runtime.h</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Runtime\CPM Runtime\cpm_runtime.c</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Runtime\CPM Runtime\cpm_runtime.h</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Runtime\runtime.c</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Runtime\runtime.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
@@ -252,14 +258,26 @@
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
         <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
-          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\User Interface Buttons\user_interface_buttons.c</File>
-          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\User Interface Buttons\user_interface_buttons.h</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Buttons\buttons.c</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Buttons\buttons.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
         <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\user_interface.c</File>
           <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\user_interface.h</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Screen\screen.h</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Screen\screen.c</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\User Interface States\user_interface_states.c</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\User Interface States\user_interface_states.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">

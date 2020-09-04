@@ -47,13 +47,35 @@ struct Goniometer
     
 };
 
-//=============================================================================
+//==============================================================================
 // Method Members
-//=============================================================================
+//==============================================================================
+/* Function Name: Goniometer_Constructor
+Requirements: Address of Goniometer instance
+Results: Goniometer instance's data members are initialized
+*/
 void Goniometer_Constructor(Goniometer *me);
-double CalculateAngle(AccelerationVector a, AccelerationVector b);
-void Goniometer_CalculateFilteredAngle(Goniometer *me);
-void Goniometer_CalculateCurrentAngle(Goniometer *me);
+
+/* Function Name: Goniometer_Sample
+Requirements: Address of Goniometer instance
+Results: Current and Filtered Angle in Goniometer instance are updated after
+the goniometer is sampled
+*/
 void Goniometer_Sample(Goniometer *me);
+
+/* Function Name: Goniometer_GetCurrentAngle
+Requirements: Address of Goniometer instance
+Results: Returns value of the Current Angle as stored in goniometer instance.
+To update the Current Angle and Filtered angle, use Goniometer_Sample()
+*/
+double Goniometer_GetCurrentAngle(Goniometer *me);
+
+/* Function Name: Goniometer_GetFilteredAngle
+Requirements: Address of Goniometer instance
+Results: Returns value of the Filtered Angle as stored in goniometer instance.
+To update the Current Angle and Filtered angle, use Goniometer_Sample()
+*/
+double Goniometer_GetFilteredAngle(Goniometer *me);
+
 #endif
 /* [] END OF FILE */

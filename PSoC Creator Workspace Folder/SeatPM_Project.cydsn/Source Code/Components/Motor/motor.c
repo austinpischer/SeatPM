@@ -15,26 +15,26 @@ in the associated file "motor.h" Please see that file for high level information
 //=============================================================================
 //  Motor Startup
 //=============================================================================
-void Motor_Startup(Motor *me)
+void Motor_Constructor(Motor *me)
 {
     // Initialize speed parameter
     double MinValue = 0;
     double MaxValue = 100;
     double Value = 0;
-    bool IsValidConstructor = 
+    bool IsValidConstructor =
         Parameter_Constructor(&(me->CurrentSpeed),
                               MinValue,
                               MaxValue,
                               Value,
                               INVALID_SPEED);
 
-    if(IsValidConstructor == FALSE)
+    if (IsValidConstructor == FALSE)
     {
         DEBUG_PRINT("Invalid CPM Speed Constructor");
     }
-    
+
     // Cable released percent
-    MinValue = 0; 
+    MinValue = 0;
     MaxValue = 100;
     Value = 0;
     IsValidConstructor =
@@ -43,12 +43,12 @@ void Motor_Startup(Motor *me)
                               MaxValue,
                               Value,
                               INVALID_SPEED);
-    
+
     Motor_Clock_Start();
-    
+
     // Motor startup
     Motor_PWM_Start(); // This needs to be first but I'm not sure why
-    
+
     // Set motor to be stopped at startup
     Motor_Stop(me);
 }
@@ -58,7 +58,7 @@ void Motor_Startup(Motor *me)
 //=============================================================================
 Direction Motor_GetDirection(Motor *me)
 {
-    return(me->CurrentDirection);
+    return (me->CurrentDirection);
 }
 
 //=============================================================================
@@ -67,15 +67,16 @@ Direction Motor_GetDirection(Motor *me)
 void Motor_SetDirection(Motor *me, Direction NewDirection)
 {
     // First thing is to return early if direction is not going to change.
-    if(Motor_GetDirection(me) == NewDirection)
+    if (Motor_GetDirection(me) == NewDirection)
     {
         return;
     }
-    
+
     // Set direction variable to new
     me->CurrentDirection = NewDirection;
     // Make hardware follow data
-    Motor_Direction_Write(Motor_GetDirection(me));;
+    Motor_Direction_Write(Motor_GetDirection(me));
+    ;
 }
 
 //=============================================================================
@@ -83,7 +84,7 @@ void Motor_SetDirection(Motor *me, Direction NewDirection)
 //=============================================================================
 int Motor_GetSpeed(Motor *me)
 {
-    return(Parameter_GetValue(&(me->CurrentSpeed)));
+    return (Parameter_GetValue(&(me->CurrentSpeed)));
 }
 
 //=============================================================================
@@ -91,11 +92,11 @@ int Motor_GetSpeed(Motor *me)
 //=============================================================================
 bool Motor_SetSpeed(Motor *me, int NewSpeed)
 {
-    // Don't do anything if speed isn't going to change    
+    // Don't do anything if speed isn't going to change
     // Set speed variable to new
     bool IsNewSpeedValid = Parameter_SetValue(&me->CurrentSpeed, NewSpeed);
-    
-    if(IsNewSpeedValid == TRUE)
+
+    if (IsNewSpeedValid == TRUE)
     {
         // Make hardware follow data
         Motor_PWM_WriteCompare(Motor_GetSpeed(me));
@@ -104,7 +105,7 @@ bool Motor_SetSpeed(Motor *me, int NewSpeed)
     {
         DEBUG_PRINT("Invalid motor speed setting!");
     }
-    return(IsNewSpeedValid);
+    return (IsNewSpeedValid);
 }
 
 //=============================================================================
@@ -120,7 +121,7 @@ void Motor_Stop(Motor *me)
 //=============================================================================
 int Motor_GetPercentCableReleased(Motor *me)
 {
-    return(Parameter_GetValue(&(me->PercentCableReleased)));
+    return (Parameter_GetValue(&(me->PercentCableReleased)));
 }
 
 //=============================================================================
@@ -128,39 +129,38 @@ int Motor_GetPercentCableReleased(Motor *me)
 //=============================================================================
 bool Motor_SetPercentCableReleased(Motor *me, int NewPercentCableReleased)
 {
-    if(Motor_GetPercentCableReleased(me) == NewPercentCableReleased)
+    if (Motor_GetPercentCableReleased(me) == NewPercentCableReleased)
     {
-        return(FALSE);
+        return (FALSE);
     }
-    
+
     int CopyPercentCableReleased = Motor_GetPercentCableReleased(me);
-    
+    int PercentToChange;
+
     bool IsNewPercentCableReleasedValid =
         Parameter_SetValue(&(me->PercentCableReleased), NewPercentCableReleased);
-    if(IsNewPercentCableReleasedValid == TRUE)
+    if (IsNewPercentCableReleasedValid == TRUE)
     {
-        if(CopyPercentCableReleased > NewPercentCableReleased)
+        if (CopyPercentCableReleased > NewPercentCableReleased)
         {
             Motor_SetDirection(me, RELEASING);
+            PercentToChange = NewPercentCableReleased - Motor_GetPercentCableReleased(me);
         }
         else
         {
             Motor_SetDirection(me, RETRACTING);
+            PercentToChange = Motor_GetPercentCableReleased(me) - NewPercentCableReleased;
         }
         // Release to the new percentage
-        Motor_SetSpeed(me, Parameter_GetMaximumValue(&(me->CurrentSpeed))); 
-        // TODO: probably shouldn't set speed at maximum but this is just demo
-        
-        //Quadrature encoder code would go here
-       
-        CyDelay(250);
+        Motor_SetSpeed(me, Parameter_GetMaximumValue(&(me->CurrentSpeed)));
+        CyDelay(250 * PercentToChange);
         Motor_Stop(me);
     }
     else
     {
         DEBUG_PRINT("Invalid value to set percent of cable released!");
     }
-    return(IsNewPercentCableReleasedValid);
+    return (IsNewPercentCableReleasedValid);
 }
 
 /* [] END OF FILE */

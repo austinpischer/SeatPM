@@ -11,21 +11,24 @@ This file implements the functions prototyped in user_interface_buttons.h.
 These function implementations are (or are related to) Cypress Interrupt
 Service routines (CY_ISR).
 ==============================================================================*/
-#include "user_interface_buttons.h"
+#include "buttons.h"
 #include "debug.h"
 #include "user_interface.h" 
 #include "emergency_stop.h"
 #include "feature_branches.h"
 
 /* Helper function for button interrupt implementations */ 
-void UI_Button_Dispatch(const enum UI_FSM_Signals ButtonSignal)
+void UI_Button_Dispatch(UserInterface_Signal ButtonSignal)
 {
-    UI_FSM_Event NewEvent;
-    NewEvent.Parent.EventSignal = ButtonSignal;
-    FSM_Dispatch(&g_UserInterface.Parent, &NewEvent.Parent);
+    if(ButtonSignal != INVALID_SIGNAL)
+    {
+        UserInterface_Event NewEvent;
+        NewEvent.Parent.EventSignal = ButtonSignal;
+        FSM_Dispatch(&g_UserInterface.Parent, &NewEvent.Parent);
+    }
 }
 
-void Enable_UI_Button_Interrupts()
+void UI_Buttons_EnableInterrupts()
 {
     DEBUG_PRINT("Confirm Button ISR Started\r\n");
     Button_Confirm_ISR_ClearPending();

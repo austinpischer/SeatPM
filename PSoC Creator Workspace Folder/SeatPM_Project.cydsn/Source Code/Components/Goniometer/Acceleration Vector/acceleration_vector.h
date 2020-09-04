@@ -49,7 +49,7 @@ struct AccelerationVector
 
 /* Function Name: Accelleration Vector Constructor
 Requirements: Reference to AccelerationVector instance
-Returns: The passed in AccelerationVector instance has initialized data members
+Results: The passed in AccelerationVector instance has initialized data members
 */
 void AccelerationVector_Constructor(AccelerationVector *me);
 

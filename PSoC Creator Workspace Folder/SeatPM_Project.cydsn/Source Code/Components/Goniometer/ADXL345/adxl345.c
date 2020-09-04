@@ -1,15 +1,15 @@
 /*==============================================================================
- * Project: SeatPM
- * Team: Joint Effort
- * School: Seattle Pacific University
- * Class: CatalyzeU Senior Design
- * 
- * File Name: adxl345_driver.c
- * Author: Austin Pischer
- * 
- * File Explanation:
- * This file implements the functions declared in "adxl345.h"
- *============================================================================*/
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name: adxl345_driver.c
+Author: Austin Pischer
+
+File Explanation:
+This file implements the functions declared in "adxl345.h"
+==============================================================================*/
 
 //==============================================================================
 // Associated Header File Inclusion
@@ -22,6 +22,18 @@
 #include "adxl345_registers.h"
 #include "debug.h"
 
+//==============================================================================
+// Private Function Declarations
+//==============================================================================
+int16 ADXL345_ConvertDataToComponent(uint8 ComponentDataRegister1, 
+                                     uint8 ComponentDataRegister0);
+void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite);
+void ADXL345_Read(ADXL345 *me, uint8 NumberOfBytesToRead);
+void ADXL345_ReadDataRegisters(ADXL345 *me);
+void ADXL345_WriteConfigRegister(ADXL345 *me,
+                                 const uint8 ConfigRegisterAddress,
+                                 uint8 ByteToWrite);
+void ADXL345_InitializeConfigRegisters(ADXL345 *me);
 //==============================================================================
 // Constructor
 //==============================================================================

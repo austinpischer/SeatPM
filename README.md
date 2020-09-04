@@ -173,7 +173,7 @@ File Explanation:
 ```
 /* Function Name:
 Requirements:
-Returns:
+Results:
 */
 ```
     

@@ -1,20 +1,20 @@
 /*==============================================================================
- * Project: SeatPM
- * Team: Joint Effort
- * School: Seattle Pacific University
- * Class: CatalyzeU Senior Design
- * 
- * File Name: adxl345.h
- * Author: Austin Pischer
- * 
- * File Explanation:
- * The ADXL345 is an accelerometer hardware implementation.
- * The ADXL345 class is a derived class from the Accelerometer base class.
- * The data and method members of the ADXL345 class should all be related to
- * the complexities involved with gathering data from an ADXL345.
- * This class also implements the virtual UpdateCurrentAcceleration function
- * from the Accelerometer class.
- *============================================================================*/
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+
+File Name: adxl345.h
+Author: Austin Pischer
+
+File Explanation:
+The ADXL345 is an accelerometer hardware implementation.
+The ADXL345 class is a derived class from the Accelerometer base class.
+The data and method members of the ADXL345 class should all be related to
+the complexities involved with gathering data from an ADXL345.
+This class also implements the virtual UpdateCurrentAcceleration function
+from the Accelerometer class.
+==============================================================================*/
 
 // Start of multiple inclusion protection
 #ifndef ADXL345_DRIVER_H
@@ -31,7 +31,6 @@
 //==============================================================================
 // Definitions
 //==============================================================================
-    
 #define ADXL345_BUFFER_SIZE 10
     
 //=============================================================================
@@ -49,25 +48,22 @@ struct ADXL345
 //=============================================================================
 // Method Members - ADXL345 Class
 //=============================================================================
-/* Object functions */
+
+/* Function Name: ADXL345_Constructor
+Requirements: - Reference to ADXL345 Instance,
+              - 8 bit I2C Address as defined in adxl345_registers.h
+              - SCB component in the PSoC Creator Project's TopDesign.cysch
+                configured as I2C in "Master" mode named "I2C"
+Results: ADXL345 instance has data members initialized and TopDesign components
+         are started up.
+*/
 void ADXL345_Constructor(ADXL345 *me, uint8 My_I2C_Address);
 
-/* Helper functions private to class */
-int16 ADXL345_ConvertDataToComponent(uint8 ComponentDataRegister1, 
-                                     uint8 ComponentDataRegister0);
-
-/* Low Level */
-void ADXL345_Write(ADXL345 *me, uint8 NumberOfBytesToWrite);
-void ADXL345_Read(ADXL345 *me, uint8 NumberOfBytesToRead);
-
-/* Mid Level (served by low level) */
-void ADXL345_ReadDataRegisters(ADXL345 *me);
-void ADXL345_WriteConfigRegister(ADXL345 *me,
-                                 const uint8 ConfigRegisterAddress,
-                                 uint8 ByteToWrite);
-
-/* High Level (served by mid level) */
-void ADXL345_InitializeConfigRegisters(ADXL345 *me);
+/* Function Name: ADXL345_UpdateCurrentAcceleration
+Requirements: Reference to ADXL345 Instance
+Results: CurrentAcceleration vector (in the instance's parent) is updated after
+sampling the ADXL345 hardware (according to the ADXL345 instance's I2C_Address).
+*/
 void ADXL345_UpdateCurrentAcceleration(ADXL345 *me);
 
 #endif // End of multiple inclusion protection.
