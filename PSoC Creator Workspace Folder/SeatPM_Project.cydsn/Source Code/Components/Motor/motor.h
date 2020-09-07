@@ -12,6 +12,8 @@ The motor is what attaches to a spool of cable, which pulls the user's ankle
 to create radial motion from the knee.
 Any functions related to the motor should be implemented in this file and the
 associated motor.c function implementation file.
+This is the "data model" class for the motor, which is separate from the
+"hardware" functions outlined in the motor_hardware.h file.
 =============================================================================*/
 
 // Multiple Inclusion Protection
@@ -23,6 +25,7 @@ associated motor.c function implementation file.
 //=============================================================================
 #include "project.h"
 #include "parameter.h"
+#include "motor_hardware.h"
 
 //=============================================================================
 // Definitions

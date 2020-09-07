@@ -17,8 +17,12 @@ Service routines (CY_ISR).
 #include "emergency_stop.h"
 #include "feature_branches.h"
 
+
+//=============================================================================
+// UI Button Dispatch
+//=============================================================================
 /* Helper function for button interrupt implementations */ 
-void UI_Button_Dispatch(UserInterface_Signal ButtonSignal)
+void Buttons_Dispatch(UserInterface_Signal ButtonSignal)
 {
     if(ButtonSignal != INVALID_SIGNAL)
     {
@@ -28,7 +32,10 @@ void UI_Button_Dispatch(UserInterface_Signal ButtonSignal)
     }
 }
 
-void UI_Buttons_EnableInterrupts()
+//=============================================================================
+// UI Button Enable Interrupts
+//=============================================================================
+void Buttons_Setup()
 {
     DEBUG_PRINT("Confirm Button ISR Started\r\n");
     Button_Confirm_ISR_ClearPending();
@@ -55,7 +62,10 @@ void UI_Buttons_EnableInterrupts()
     Button_EmergencyStop_Right_Interrupt_StartEx(Button_EmergencyStop_Right_Interrupt_Handler);
 }
 
-/* Confirm Button Interrupt Implementation*/
+
+//=============================================================================
+// Confirm Button Interrupt Implementation
+//=============================================================================
 CY_ISR(Button_Confirm_ISR_Handler_Austin)
 {
     DEBUG_PRINT("\r\nConfirm Button Pressed\r\n");
@@ -63,12 +73,14 @@ CY_ISR(Button_Confirm_ISR_Handler_Austin)
     #ifdef DISPATCH_IN_MAIN
     g_SignalToDispatch = CONFIRM_BUTTON_PRESSED;
     #else
-    UI_Button_Dispatch(CONFIRM_BUTTON_PRESSED);
+    Buttons_Dispatch(CONFIRM_BUTTON_PRESSED);
     #endif 
     
 }
 
-/* Back Button Interrupt Implementation*/
+//=============================================================================
+// Back Button Interrupt Implementation
+//=============================================================================
 CY_ISR(Button_Back_ISR_Handler_Austin)
 {
     DEBUG_PRINT("\r\nBack Button Pressed\r\n");
@@ -76,11 +88,13 @@ CY_ISR(Button_Back_ISR_Handler_Austin)
     #ifdef DISPATCH_IN_MAIN
     g_SignalToDispatch = BACK_BUTTON_PRESSED;
     #else
-    UI_Button_Dispatch(BACK_BUTTON_PRESSED);
+    Buttons_Dispatch(BACK_BUTTON_PRESSED);
     #endif
 }
 
-/* Increment Button Interrupt Implementation*/
+//=============================================================================
+// Increment Button Interrupt Implementation
+//=============================================================================
 CY_ISR(Button_Increment_ISR_Handler_Austin)
 {
     DEBUG_PRINT("\r\nIncrement Button Pressed\r\n");
@@ -88,11 +102,13 @@ CY_ISR(Button_Increment_ISR_Handler_Austin)
     #ifdef DISPATCH_IN_MAIN
     g_SignalToDispatch = INCREMENT_BUTTON_PRESSED;
     #else
-    UI_Button_Dispatch(INCREMENT_BUTTON_PRESSED);
+    Buttons_Dispatch(INCREMENT_BUTTON_PRESSED);
     #endif
 }
 
-/* Decrement Button Interrupt Implementation*/
+//=============================================================================
+// Decrement Button Interrupt Implementation
+//=============================================================================
 CY_ISR(Button_Decrement_ISR_Handler_Austin)
 {
     DEBUG_PRINT("\r\nDecrement Button Pressed\r\n");
@@ -100,20 +116,27 @@ CY_ISR(Button_Decrement_ISR_Handler_Austin)
     #ifdef DISPATCH_IN_MAIN
     g_SignalToDispatch = DECREMENT_BUTTON_PRESSED;
     #else
-    UI_Button_Dispatch(DECREMENT_BUTTON_PRESSED);
+    Buttons_Dispatch(DECREMENT_BUTTON_PRESSED);
     #endif
 }
 
+
+//=============================================================================
+// Right Emergency Stop Button Interrupt Implementation
+//=============================================================================
 CY_ISR(Button_EmergencyStop_Right_Interrupt_Handler)
 {
     DEBUG_PRINT("Right emergency stop button pressed\r\n");
-    EmergencyStop();
+    UserInterface_EmergencyStop(&g_UserInterface);
 }
 
+//=============================================================================
+// Left Emergency Stop Button Interrupt Implementation
+//=============================================================================
 CY_ISR_PROTO(Button_EmergencyStop_Left_Interrupt_Handler)
 {
     DEBUG_PRINT("Left emergency stop button pressed\r\n");
-    EmergencyStop();
+    UserInterface_EmergencyStop(&g_UserInterface);
 }
 
 /* [] END OF FILE */

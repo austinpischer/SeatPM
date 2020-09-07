@@ -298,14 +298,14 @@ void UserInterface_AnkleStrapRetractRelease_State(UserInterface *me,
             // Only release cable and show percent release while button is
             // pressed and knee angle is valid
             Motor_SetPercentCableReleased(
-                &g_CPM_Motor, Motor_GetPercentCableReleased(&g_CPM_Motor) + 1);
+                &me->CPM_Motor, Motor_GetPercentCableReleased(&me->CPM_Motor) + 1);
             break;
 
         case DECREMENT_BUTTON_PRESSED:
             // Only retract cable and show percent release while button is
             // pressed and knee angle is valid
             Motor_SetPercentCableReleased(
-                &g_CPM_Motor, Motor_GetPercentCableReleased(&g_CPM_Motor) - 1);
+                &me->CPM_Motor, Motor_GetPercentCableReleased(&me->CPM_Motor) - 1);
             break;
 
         case NO_OPERATION:
@@ -358,7 +358,7 @@ void UserInterface_ConfirmCPMStartup_State(UserInterface *me,
     {
         case CONFIRM_BUTTON_PRESSED:
             // Go to CPM State
-            Motor_SetSpeed(&g_CPM_Motor, 30);
+            Motor_SetSpeed(&me->CPM_Motor, 30);
             CPM_Runtime_StartCounting();
             FSM_Transition(&me->Parent,
                            UserInterface_ContinuousPassiveMotion_State);
@@ -418,7 +418,7 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
     {
         case CONFIRM_BUTTON_PRESSED:
             /* "Soft stop": Stop motor and go back to confirmation state */
-            Motor_Stop(&g_CPM_Motor);
+            Motor_Stop(&me->CPM_Motor);
             CPM_Runtime_StopCounting();
             me->ShallMainLoopHandleCPMMessage = FALSE;
             FSM_Transition(&me->Parent, UserInterface_ConfirmCPMStartup_State);
@@ -428,7 +428,7 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
 
         case BACK_BUTTON_PRESSED:
             /* "Soft stop": Stop motor and go back to confirmation state */
-            Motor_Stop(&g_CPM_Motor);
+            Motor_Stop(&me->CPM_Motor);
             CPM_Runtime_StopCounting();
             me->ShallMainLoopHandleCPMMessage = FALSE;
             FSM_Transition(&me->Parent, UserInterface_ConfirmCPMStartup_State);
@@ -439,7 +439,7 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
         case INCREMENT_BUTTON_PRESSED:
             // Make sure we increment from current speed
             Parameter_SetValue(&me->New_CPM_Speed,
-                               Motor_GetSpeed(&g_CPM_Motor));
+                               Motor_GetSpeed(&me->CPM_Motor));
             // Set new value to current + 1
             Parameter_IncrementValue(&me->New_CPM_Speed);
             me->ShallMainLoopHandleCPMMessage = FALSE;
@@ -452,7 +452,7 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
         case DECREMENT_BUTTON_PRESSED:
             // Make sure we decrement from current speed
             Parameter_SetValue(&me->New_CPM_Speed,
-                               Motor_GetSpeed(&g_CPM_Motor));
+                               Motor_GetSpeed(&me->CPM_Motor));
             // Set new value to current - 1
             Parameter_DecrementValue(&me->New_CPM_Speed);
             me->ShallMainLoopHandleCPMMessage = FALSE;
@@ -492,7 +492,7 @@ void UserInterface_ConfirmSpeedChange_State(UserInterface *me,
     {
         case CONFIRM_BUTTON_PRESSED:
             // Set current to new
-            Motor_SetSpeed(&g_CPM_Motor,
+            Motor_SetSpeed(&me->CPM_Motor,
                            Parameter_GetValue(&me->New_CPM_Speed));
             // Go to CPM state
             FSM_Transition(&me->Parent,
@@ -504,7 +504,7 @@ void UserInterface_ConfirmSpeedChange_State(UserInterface *me,
         case BACK_BUTTON_PRESSED:
             // Set new to current
             Parameter_SetValue(&me->New_CPM_Speed,
-                               Motor_GetSpeed(&g_CPM_Motor));
+                               Motor_GetSpeed(&me->CPM_Motor));
             // Go to CPM state
             FSM_Transition(&me->Parent,
                            UserInterface_ContinuousPassiveMotion_State);
@@ -539,9 +539,10 @@ void UserInterface_ConfirmSpeedChange_State(UserInterface *me,
         // Prompt user to change the speed of the device
         //                           1234567890123456
         sprintf(&me->Message[0][0], "Crnt= %4.1d dpm",
-                Motor_GetSpeed(&g_CPM_Motor));
+                Motor_GetSpeed(&me->CPM_Motor));
         sprintf(&me->Message[1][0], "New = %4.1lf dpm",
                 Parameter_GetValue(&me->New_CPM_Speed));
         Screen_PrintMessage(me->Message);
     }
 }
+/* [] END OF FILE */

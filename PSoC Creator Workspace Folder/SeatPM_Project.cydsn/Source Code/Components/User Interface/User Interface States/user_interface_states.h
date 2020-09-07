@@ -1,3 +1,6 @@
+#ifndef USER_INTERFACE_STATES_H
+#define USER_INTERFACE_STATES_H
+    
 #include "user_interface.h"
 //-----------------------------------------------------------------------------
 // Generic States
@@ -22,3 +25,5 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
                                                  Event const *event);
 void UserInterface_ConfirmSpeedChange_State(UserInterface *me,
                                             Event const *event);
+#endif
+/* [] END OF FILE */

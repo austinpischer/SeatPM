@@ -8,7 +8,8 @@
 #define MESSAGE_ON_SCREEN_TIME_MS 500
 
 /* Function definitions */
-void Screen_Setup(); void Screen_PrintMessage(
+void Screen_Setup(); 
+void Screen_PrintMessage(
     char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW + 1]);
 
 #endif

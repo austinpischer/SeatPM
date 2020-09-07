@@ -22,16 +22,15 @@
 // Inclusions
 //=============================================================================
 #include <stdio.h>  // For sprintf
-
-#include "cpm_runtime.h"           // For start/stop counting functions
-#include "debug.h"                 // For bool type and debug functions
-#include "finite_state_machine.h"  // For base class
-#include "goniometer.h"            // For invalid angle definition
-#include "motor.h"                 // For manipulating speed and cable retract
-#include "parameter.h"             // For paramter class
-#include "project.h"               // For PSoC components
-#include "runtime.h"               // For displaying runtime of CPM useage
-#include "screen.h"                // For screen functions
+#include "cpm_runtime.h" // For start/stop counting functions
+#include "debug.h" // For bool type and debug functions
+#include "finite_state_machine.h" // For base class
+#include "goniometer.h" // For invalid angle definition
+#include "motor.h"  // For manipulating speed and cable retract
+#include "parameter.h" // For paramter class
+#include "project.h" // For PSoC components
+#include "runtime.h" // For displaying runtime of CPM useage
+#include "screen.h" // For screen functions
 
 //=============================================================================
 // Definitions
@@ -41,20 +40,9 @@
 #define ABSOLUTE_MINIMUM_KNEE_ANGLE 90
 
 //=============================================================================
-// Type definitions
-//=============================================================================
-// Define "struct <tag>" as type "<tag>"
-typedef struct UserInterface UserInterface;
-typedef struct UserInterface_Event UserInterface_Event;
-
-//=============================================================================
-// External Global Variables from main.c
-//=============================================================================
-extern Motor g_CPM_Motor;
-
-//=============================================================================
 // Event Struct -- User Interface Finite State Machine
 //=============================================================================
+typedef struct UserInterface_Event UserInterface_Event;
 struct UserInterface_Event
 {
     Event Parent;  // Achieving inheritance by requiring base class
@@ -63,6 +51,7 @@ struct UserInterface_Event
 //=============================================================================
 // Data Members -- UserInterface Class (Derived from FiniteStateMachine)
 //=============================================================================
+typedef struct UserInterface UserInterface;
 struct UserInterface
 {
     // Achieving inheritance by requiring base class.
@@ -84,6 +73,9 @@ struct UserInterface
     Parameter New_CPM_Speed;
     Parameter KneeAngle;
     double KneeAngle_Raw;
+    
+    Motor CPM_Motor;
+    Runtime CPM_Runtime;
 };
 
 //=============================================================================
@@ -119,6 +111,10 @@ bool UserInterface_ShallUpdateCPMRuntimeMessage(UserInterface *me,
                                                 double LastKneeAngle,
                                                 double LastTotalSeconds);
 void UserInterface_UpdateCPMRuntimeMessage(UserInterface *me,
-                                           double CurrenKneeAngle);
+                                           double KneeAngle);
+void UserInterface_EmergencyStop(UserInterface *me);
+void UserInterface_HandleEmergencyStopCondition(UserInterface *me,
+                                                bool IsKneeAngleValid,
+                                                double KneeAngle);
 #endif  // End of multiple inclusion protection
-        /* [] END OF FILE */
+/* [] END OF FILE */

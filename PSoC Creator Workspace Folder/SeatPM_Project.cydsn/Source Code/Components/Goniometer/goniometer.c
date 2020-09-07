@@ -12,7 +12,7 @@ members prototyped in the associated file header "goniometer.h"
 =============================================================================*/
 
 //==============================================================================
-// Inclusions
+// Associated Header File
 //==============================================================================
 #include "goniometer.h"
 
@@ -23,8 +23,17 @@ double CalculateAngle(AccelerationVector a, AccelerationVector b);
 void Goniometer_CalculateFilteredAngle(Goniometer *me);
 void Goniometer_CalculateCurrentAngle(Goniometer *me);
 
+
 //==============================================================================
-/// Constructor
+// Goniometer Setup(hardware)
+//==============================================================================
+void Goniometer_Setup()
+{
+    I2C_Start();
+}
+
+//==============================================================================
+// Constructor
 //==============================================================================
 void Goniometer_Constructor(Goniometer *me)
 {

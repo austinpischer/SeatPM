@@ -6,7 +6,7 @@
     <Toolchain Name="ARM GCC Generic" Selected="True">
       <Tool Name="prebuild" Command="" Options="" />
       <Tool Name="assembler" Command="arm-none-eabi-as.exe" Options="-mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=${OutputDir}/${CompileFile}.lst -g -W" />
-      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb &quot;-I.\Source Code&quot; &quot;-I.\Source Code\Components&quot; &quot;-I.\Source Code\Components\Goniometer&quot; &quot;-I.\Source Code\Components\Goniometer\Acceleration Vector&quot; &quot;-I.\Source Code\Components\Goniometer\Accelerometer&quot; &quot;-I.\Source Code\Components\Goniometer\ADXL345&quot; &quot;-I.\Source Code\Components\Goniometer\Moving Average Filter&quot; &quot;-I.\Source Code\Components\Motor&quot; &quot;-I.\Source Code\Components\Motor\Emergency Stop&quot; &quot;-I.\Source Code\Components\User Interface&quot; &quot;-I.\Source Code\Components\User Interface\Runtime&quot; &quot;-I.\Source Code\Components\User Interface\Runtime\CPM Runtime&quot; &quot;-I.\Source Code\Components\User Interface\Finite State Machine&quot; &quot;-I.\Source Code\Components\User Interface\Buttons&quot; &quot;-I.\Source Code\Data Models&quot; &quot;-I.\Source Code\Data Models\Parameter&quot; &quot;-I.\Source Code\Macros&quot; &quot;-I.\Source Code\Components\User Interface\Screen&quot; &quot;-I.\Source Code\Components\User Interface\User Interface States&quot; -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os" />
+      <Tool Name="compiler" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb &quot;-I.\Source Code&quot; &quot;-I.\Source Code\Components&quot; &quot;-I.\Source Code\Components\Goniometer&quot; &quot;-I.\Source Code\Components\Goniometer\Acceleration Vector&quot; &quot;-I.\Source Code\Components\Goniometer\Accelerometer&quot; &quot;-I.\Source Code\Components\Goniometer\ADXL345&quot; &quot;-I.\Source Code\Components\Goniometer\Moving Average Filter&quot; &quot;-I.\Source Code\Components\Motor&quot; &quot;-I.\Source Code\Components\Motor\Emergency Stop&quot; &quot;-I.\Source Code\Components\User Interface&quot; &quot;-I.\Source Code\Components\User Interface\Runtime&quot; &quot;-I.\Source Code\Components\User Interface\Runtime\CPM Runtime&quot; &quot;-I.\Source Code\Components\User Interface\Finite State Machine&quot; &quot;-I.\Source Code\Components\User Interface\Buttons&quot; &quot;-I.\Source Code\Data Models&quot; &quot;-I.\Source Code\Data Models\Parameter&quot; &quot;-I.\Source Code\Macros&quot; &quot;-I.\Source Code\Components\User Interface\Screen&quot; &quot;-I.\Source Code\Components\User Interface\User Interface States&quot; &quot;-I.\Source Code\Components\Goniometer\Potentiometer&quot; &quot;-I.\Source Code\Components\Motor\Motor Hardware&quot; -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Os" />
       <Tool Name="linker" Command="arm-none-eabi-gcc.exe" Options="-mcpu=cortex-m0 -mthumb -l m -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T Generated_Source\PSoC4\cm0gcc.ld -specs=nano.specs -u _printf_float -Wl,--gc-sections -g -ffunction-sections -Os -ffat-lto-objects" />
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
@@ -229,14 +229,20 @@
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
         <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\Goniometer\Potentiometer\potentiometer.c</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\Goniometer\Potentiometer\potentiometer.h</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
+        <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
           <File BuildType="BUILD" Toolchain="">Source Code\Components\Motor\motor.h</File>
           <File BuildType="BUILD" Toolchain="">Source Code\Components\Motor\motor.c</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
         <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
-          <File BuildType="BUILD" Toolchain="">Source Code\Components\Motor\Emergency Stop\emergency_stop.c</File>
-          <File BuildType="BUILD" Toolchain="">Source Code\Components\Motor\Emergency Stop\emergency_stop.h</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\Motor\Motor Hardware\motor_hardware.c</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\Motor\Motor Hardware\motor_hardware.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
@@ -270,8 +276,8 @@
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
         <Files Root="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
-          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Screen\screen.h</File>
           <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Screen\screen.c</File>
+          <File BuildType="BUILD" Toolchain="">Source Code\Components\User Interface\Screen\screen.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">

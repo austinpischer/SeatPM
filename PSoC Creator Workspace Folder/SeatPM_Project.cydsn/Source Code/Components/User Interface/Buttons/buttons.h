@@ -40,8 +40,8 @@ extern UserInterface_Signal g_SignalToDispatch;
 //=============================================================================
 // Function Prototypes
 //=============================================================================
-void UI_Button_Dispatch(const enum UserInterface_Signal ButtonSignal);
-void UI_Buttons_EnableInterrupts();
+void Buttons_Dispatch(const enum UserInterface_Signal ButtonSignal);
+void Buttons_Setup();
 
 //=============================================================================
 // Interrupt Function Prototypes

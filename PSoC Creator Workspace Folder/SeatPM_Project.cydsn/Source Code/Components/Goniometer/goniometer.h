@@ -50,6 +50,8 @@ struct Goniometer
 //==============================================================================
 // Method Members
 //==============================================================================
+void Goniometer_Setup();
+
 /* Function Name: Goniometer_Constructor
 Requirements: Address of Goniometer instance
 Results: Goniometer instance's data members are initialized

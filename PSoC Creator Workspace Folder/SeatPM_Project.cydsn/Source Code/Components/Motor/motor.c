@@ -1,4 +1,4 @@
-/*============================================================================= 
+/*=============================================================================
 Project: SeatPM
 Team: Joint Effort
 School: Seattle Pacific University
@@ -17,48 +17,47 @@ in the associated file "motor.h" Please see that file for high level information
 //=============================================================================
 void Motor_Constructor(Motor *me)
 {
+    me->CurrentDirection = RELEASING;
+
     // Initialize speed parameter
     double MinValue = 0;
     double MaxValue = 100;
     double Value = 0;
-    bool IsValidConstructor =
-        Parameter_Constructor(&(me->CurrentSpeed),
-                              MinValue,
-                              MaxValue,
-                              Value,
-                              INVALID_SPEED);
+    bool IsValidConstructor = Parameter_Constructor(
+        &(me->CurrentSpeed), MinValue, MaxValue, Value, INVALID_SPEED);
 
     if (IsValidConstructor == FALSE)
     {
         DEBUG_PRINT("Invalid CPM Speed Constructor");
     }
 
-    // Cable released percent
+    // Initialize cable released percent parameter
     MinValue = 0;
     MaxValue = 100;
     Value = 0;
-    IsValidConstructor =
-        Parameter_Constructor(&(me->PercentCableReleased),
-                              MinValue,
-                              MaxValue,
-                              Value,
-                              INVALID_SPEED);
-
-    Motor_Clock_Start();
-
-    // Motor startup
-    Motor_PWM_Start(); // This needs to be first but I'm not sure why
-
-    // Set motor to be stopped at startup
-    Motor_Stop(me);
+    IsValidConstructor = Parameter_Constructor(
+        &(me->PercentCableReleased), MinValue, MaxValue, Value, INVALID_SPEED);
 }
 
 //=============================================================================
 //  Motor Get Direction
 //=============================================================================
-Direction Motor_GetDirection(Motor *me)
+Direction Motor_GetDirection(Motor *me) { return (me->CurrentDirection); }
+
+//=============================================================================
+//  Motor Get Speed
+//=============================================================================
+int Motor_GetSpeed(Motor *me)
 {
-    return (me->CurrentDirection);
+    return (Parameter_GetValue(&(me->CurrentSpeed)));
+}
+
+//=============================================================================
+//  Motor Get Percent Cable Released
+//=============================================================================
+int Motor_GetPercentCableReleased(Motor *me)
+{
+    return (Parameter_GetValue(&(me->PercentCableReleased)));
 }
 
 //=============================================================================
@@ -75,16 +74,7 @@ void Motor_SetDirection(Motor *me, Direction NewDirection)
     // Set direction variable to new
     me->CurrentDirection = NewDirection;
     // Make hardware follow data
-    Motor_Direction_Write(Motor_GetDirection(me));
-    ;
-}
-
-//=============================================================================
-//  Motor Get Speed
-//=============================================================================
-int Motor_GetSpeed(Motor *me)
-{
-    return (Parameter_GetValue(&(me->CurrentSpeed)));
+    MotorHardware_SetDirection(Motor_GetDirection(me));
 }
 
 //=============================================================================
@@ -99,7 +89,7 @@ bool Motor_SetSpeed(Motor *me, int NewSpeed)
     if (IsNewSpeedValid == TRUE)
     {
         // Make hardware follow data
-        Motor_PWM_WriteCompare(Motor_GetSpeed(me));
+        MotorHardware_SetSpeed(Motor_GetSpeed(me));
     }
     else
     {
@@ -111,56 +101,51 @@ bool Motor_SetSpeed(Motor *me, int NewSpeed)
 //=============================================================================
 //  Motor Stop
 //=============================================================================
-void Motor_Stop(Motor *me)
-{
-    Motor_SetSpeed(me, 0);
-}
-
-//=============================================================================
-//  Motor Get Percent Cable Released
-//=============================================================================
-int Motor_GetPercentCableReleased(Motor *me)
-{
-    return (Parameter_GetValue(&(me->PercentCableReleased)));
-}
+void Motor_Stop(Motor *me) { Motor_SetSpeed(me, 0); }
 
 //=============================================================================
 //  Motor Set Percent Cable Released
 //=============================================================================
-bool Motor_SetPercentCableReleased(Motor *me, int NewPercentCableReleased)
+bool Motor_SetPercentCableReleased(Motor *me, int New_PercentCableReleased)
 {
-    if (Motor_GetPercentCableReleased(me) == NewPercentCableReleased)
+    // do nothing if percent wont change
+    if (Motor_GetPercentCableReleased(me) == New_PercentCableReleased)
     {
         return (FALSE);
     }
 
-    int CopyPercentCableReleased = Motor_GetPercentCableReleased(me);
-    int PercentToChange;
+    // Get current p.c.r. before changing it
+    int Old_PercentCableReleased = Motor_GetPercentCableReleased(me);
 
-    bool IsNewPercentCableReleasedValid =
-        Parameter_SetValue(&(me->PercentCableReleased), NewPercentCableReleased);
-    if (IsNewPercentCableReleasedValid == TRUE)
-    {
-        if (CopyPercentCableReleased > NewPercentCableReleased)
-        {
-            Motor_SetDirection(me, RELEASING);
-            PercentToChange = NewPercentCableReleased - Motor_GetPercentCableReleased(me);
-        }
-        else
-        {
-            Motor_SetDirection(me, RETRACTING);
-            PercentToChange = Motor_GetPercentCableReleased(me) - NewPercentCableReleased;
-        }
-        // Release to the new percentage
-        Motor_SetSpeed(me, Parameter_GetMaximumValue(&(me->CurrentSpeed)));
-        CyDelay(250 * PercentToChange);
-        Motor_Stop(me);
-    }
-    else
+    bool IsNewPercentCableReleasedValid = Parameter_SetValue(
+        &(me->PercentCableReleased), New_PercentCableReleased);
+
+    if (IsNewPercentCableReleasedValid == FALSE)
     {
         DEBUG_PRINT("Invalid value to set percent of cable released!");
+        return (FALSE);
     }
-    return (IsNewPercentCableReleasedValid);
+
+    int PercentToRelease = 0;
+
+    // If new greater than old, then we are releasing cable
+    if (New_PercentCableReleased > Old_PercentCableReleased)
+    {
+        Motor_SetDirection(me, RELEASING);
+        PercentToRelease = New_PercentCableReleased - Old_PercentCableReleased;
+    }
+    else  // retracting cable
+    {
+        Motor_SetDirection(me, RETRACTING);
+        PercentToRelease = Old_PercentCableReleased - New_PercentCableReleased;
+    }
+
+    // Retract/release to the new percentage
+    Motor_SetSpeed(me,50); // Start motor
+    CyDelay(250 * PercentToRelease); // Keep motor going for amount of time
+    Motor_Stop(me); // Stop motor
+    
+    return (TRUE);
 }
 
 /* [] END OF FILE */

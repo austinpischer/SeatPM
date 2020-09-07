@@ -3,14 +3,14 @@
  * Team: Joint Effort
  * School: Seattle Pacific University
  * Class: CatalyzeU Senior Design
- * 
+ *
  * File Name: user_interface_fsm.c
  * Author: Austin Pischer
- * 
+ *
  * File Explanation:
  * Thisfile contains all the function implementations for those defined in
  * user_interface_fsm.c.
- * 
+ *
  * The majority of the functions in this file are states, which consist of
  * switch statements that handle dispatched signals.
  *============================================================================*/
@@ -36,22 +36,22 @@ void UserInterface_Constructor(UserInterface *me)
     me->ShallMainLoopUpdateAngleReading = FALSE;
     me->HasUserSeenAttachAnkleStrapMessage = FALSE;
     me->ShallMainLoopHandleCPMMessage = FALSE;
-    
+
     // One should not expect for the initial state
     // to do anything with this signal
     Event InitialEvent;
     InitialEvent.EventSignal = CONFIRM_BUTTON_PRESSED;
-    
-    Parameter_Constructor(&me->New_CPM_Speed,0,100,0,-1);
-    
-    Parameter_Constructor(&me->KneeAngle,
-                          ABSOLUTE_MINIMUM_KNEE_ANGLE,
-                          ABSOLUTE_MAXIMUM_KNEE_ANGLE, 
-                          INVALID_ANGLE,
+
+    Parameter_Constructor(&me->New_CPM_Speed, 0, 100, 0, -1);
+
+    Parameter_Constructor(&me->KneeAngle, ABSOLUTE_MINIMUM_KNEE_ANGLE,
+                          ABSOLUTE_MAXIMUM_KNEE_ANGLE, INVALID_ANGLE,
                           INVALID_ANGLE);
-    
-        
+
     me->KneeAngle_Raw = INVALID_ANGLE;
+
+    Runtime_Constructor(&me->CPM_Runtime);
+    Motor_Constructor(&me->CPM_Motor);
 
     DEBUG_PRINT("Executing Initial State\r\n");
     FSM_ExecuteInitialState(&me->Parent, &InitialEvent);
@@ -92,7 +92,7 @@ bool UserInterface_IsKneeAngle_Raw_Valid(UserInterface *me)
     // Handle non-errors
     else
     {
-        return(TRUE);
+        return (TRUE);
     }
     CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     return (FALSE);
@@ -104,16 +104,14 @@ bool UserInterface_IsKneeAngle_Raw_Valid(UserInterface *me)
 void UserInterface_DisplayCableReleasedPercent(UserInterface *me)
 {
     //                           1234567890123456
-    sprintf(&me->Message[0][0], "Cable Released %%"); // Double % shows "%"
-    sprintf(&me->Message[1][0],
-            "%lf %%",
-            Parameter_GetValue(&(g_CPM_Motor.PercentCableReleased)));
+    sprintf(&me->Message[0][0], "Cable Released %%");  // Double % shows "%"
+    sprintf(&me->Message[1][0], "%lf %%",
+            Parameter_GetValue(&(me->CPM_Motor.PercentCableReleased)));
     Screen_PrintMessage(me->Message);
 }
 
-
 //=============================================================================
-// Execute Current State Function 
+// Execute Current State Function
 //=============================================================================
 void UserInterface_ExecuteCurrentStateFunction(UserInterface *me)
 {
@@ -134,7 +132,9 @@ void UserInterface_PrintInvalidSignalMessage(UserInterface *me)
 //=============================================================================
 // Shall Update Angle Reading
 //=============================================================================
-bool UserInterface_ShallUpdateAngleReadingMessage(UserInterface *me, double KneeAngle, double LastKneeAngle)
+bool UserInterface_ShallUpdateAngleReadingMessage(UserInterface *me,
+                                                  double KneeAngle,
+                                                  double LastKneeAngle)
 {
     return (me->ShallMainLoopUpdateAngleReading == TRUE &&
             KneeAngle != LastKneeAngle);
@@ -143,7 +143,8 @@ bool UserInterface_ShallUpdateAngleReadingMessage(UserInterface *me, double Knee
 //=============================================================================
 // Update Angle Reading
 //=============================================================================
-void UserInterface_UpdateAngleReadingMessage(UserInterface *me, double KneeAngle)
+void UserInterface_UpdateAngleReadingMessage(UserInterface *me,
+                                             double KneeAngle)
 {
     sprintf(&me->Message[0][0], "Current=%4.1lfdeg", KneeAngle);
     Screen_PrintMessage(me->Message);
@@ -152,14 +153,14 @@ void UserInterface_UpdateAngleReadingMessage(UserInterface *me, double KneeAngle
 //=============================================================================
 // Shall Update CPM Runtime Message
 //=============================================================================
-bool UserInterface_ShallUpdateCPMRuntimeMessage(UserInterface *me, 
-                                double KneeAngle, 
-                                   double LastKneeAngle,
-                                   double LastTotalSeconds)
+bool UserInterface_ShallUpdateCPMRuntimeMessage(UserInterface *me,
+                                                double KneeAngle,
+                                                double LastKneeAngle,
+                                                double LastTotalSeconds)
 {
     return (me->ShallMainLoopHandleCPMMessage == TRUE &&
             KneeAngle != LastKneeAngle &&
-            Runtime_GetTotalSeconds(&g_CPM_Runtime) != LastTotalSeconds);
+            Runtime_GetTotalSeconds(&me->CPM_Runtime) != LastTotalSeconds);
 }
 
 //=============================================================================
@@ -167,14 +168,60 @@ bool UserInterface_ShallUpdateCPMRuntimeMessage(UserInterface *me,
 //=============================================================================
 void UserInterface_UpdateCPMRuntimeMessage(UserInterface *me, double KneeAngle)
 {
-    // Update the runtime
-    Runtime_Update(&g_CPM_Runtime);
+    // Update the runtime values
+    Runtime_Update(&me->CPM_Runtime);
     // Print message
     sprintf(&me->Message[0][0], "RT: %2dh %2dm %2ds",
-            Runtime_GetHours(&g_CPM_Runtime),
-            Runtime_GetMinutes(&g_CPM_Runtime),
-            Runtime_GetSeconds(&g_CPM_Runtime));
+            Runtime_GetHours(&me->CPM_Runtime),
+            Runtime_GetMinutes(&me->CPM_Runtime),
+            Runtime_GetSeconds(&me->CPM_Runtime));
     sprintf(&me->Message[1][0], "Angle = %4.1lfdeg", KneeAngle);
     Screen_PrintMessage(me->Message);
+}
+
+//=============================================================================
+// Handle Emergency Stop Condition
+//=============================================================================
+void UserInterface_EmergencyStop(UserInterface *me)
+{
+    // Stop motor -- always comes first
+    Motor_Stop(&me->CPM_Motor); /// todo
+
+    // Print Stop Message
+    sprintf(&me->Message[0][0], "    EMERGENCY   ");
+    sprintf(&me->Message[1][0], "      STOP      ");
+    Screen_PrintMessage(me->Message);
+
+    // Stopping execution is stand in for emergency buttons cutting power
+    for (;;)
+    {
+        // Do nothing forever
+    }
+}
+
+//=============================================================================
+// Handle Emergency Stop Condition
+//=============================================================================
+void UserInterface_HandleEmergencyStopCondition(UserInterface *me,
+                                                bool IsKneeAngleValid,
+                                                double KneeAngle)
+{
+    if (IsKneeAngleValid == FALSE &&
+        me->HasUserSeenAttachAnkleStrapMessage == TRUE)
+    {
+        // Print to debug what went wrong
+        char8 debug[64];
+        sprintf(debug,
+                "current = %lf,\r\n"
+                "val = %lf,\r\n"
+                "min = %lf,\r\n"
+                "max = %lf\r\n\r\n",
+                KneeAngle, Parameter_GetValue(&me->KneeAngle),
+                Parameter_GetMinimumValue(&me->KneeAngle),
+                Parameter_GetMaximumValue(&me->KneeAngle));
+        DEBUG_PRINT(debug);
+
+        UserInterface_EmergencyStop(me);
+    }
 }
 /* [] END OF FILE */
