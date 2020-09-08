@@ -27,7 +27,7 @@ spent in continuous passive motion in other parts of the code.
 typedef struct Runtime Runtime;
 struct Runtime
 {
-    long long int TotalSeconds;
+    long int TotalSeconds;
     int Hours;
     int Minutes;
     int Seconds;
@@ -57,7 +57,7 @@ void Runtime_Update(Runtime *me);
 void Runtime_Reset(Runtime *me);
 
 /* Simple "get" functions */
-long long int Runtime_GetTotalSeconds(Runtime *me);
+long int Runtime_GetTotalSeconds(Runtime *me);
 int Runtime_GetHours(Runtime *me);
 int Runtime_GetMinutes(Runtime *me);
 int Runtime_GetSeconds(Runtime *me);

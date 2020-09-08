@@ -13,24 +13,26 @@ the associated header file "runtime.h"
 
 #include "runtime.h"
 
-//=============================================================================
-// Runtime Startup
-//=============================================================================
+/* Function Name: Runtime_Constructor
+Requirements: //todo
+Results: 
+*/
 void Runtime_Constructor(Runtime *me)
 {
     // CPM Runtime startup
     me->TotalSeconds = me->Hours = me->Minutes = me->Seconds = 0;
 }
 
-//=============================================================================
-// Update Runtime
-//=============================================================================
+/* Function Name: Runtime_Update
+Requirements: //todo
+Results: 
+*/
 void Runtime_Update(Runtime *me)
 {
     /* Get a copy of the current TotalSeconds so that it doesn't change
     due to an interrupt while executing this function */
-    long long int TotalSeconds_Copy = me->TotalSeconds;
-    long long int Remainder;
+    long int TotalSeconds_Copy = me->TotalSeconds;
+    long int Remainder;
 
     const int seconds_in_a_minute = 60;
     const int minutes_in_an_hour = 60;
@@ -49,9 +51,10 @@ void Runtime_Update(Runtime *me)
     me->Seconds = (int)(Remainder);
 }
 
-//=============================================================================
-// Runtime Reset
-//=============================================================================
+/* Function Name: Runtime_Reset
+Requirements: //todo
+Results: 
+*/
 void Runtime_Reset(Runtime *me)
 {
     me->TotalSeconds = 0;
@@ -64,7 +67,7 @@ void Runtime_Reset(Runtime *me)
 Requirements: Address of Runtime instance
 Results: Returns value of TotalSeconds member of passed runtime instance
 */
-long long int Runtime_GetTotalSeconds(Runtime *me)
+long int Runtime_GetTotalSeconds(Runtime *me)
 {
     return(me->TotalSeconds);
 }

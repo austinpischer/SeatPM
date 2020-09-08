@@ -1,3 +1,18 @@
+/*==============================================================================
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+Date: September 08 2020
+
+File Name: user_interface_states.c
+Author: Austin Pischer
+File Description: //todo
+==============================================================================*/
+
+//==============================================================================
+// Associated File Header 
+//==============================================================================
 #include "user_interface_states.h"
 
 //=============================================================================

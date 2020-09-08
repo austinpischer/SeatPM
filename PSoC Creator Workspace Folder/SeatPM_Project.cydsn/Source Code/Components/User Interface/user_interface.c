@@ -156,11 +156,11 @@ void UserInterface_UpdateAngleReadingMessage(UserInterface *me,
 bool UserInterface_ShallUpdateCPMRuntimeMessage(UserInterface *me,
                                                 double KneeAngle,
                                                 double LastKneeAngle,
-                                                double LastTotalSeconds)
+                                                long int LastTotalSeconds)
 {
-    return (me->ShallMainLoopHandleCPMMessage == TRUE &&
-            KneeAngle != LastKneeAngle &&
-            Runtime_GetTotalSeconds(&me->CPM_Runtime) != LastTotalSeconds);
+    return(me->ShallMainLoopHandleCPMMessage == TRUE &&
+           (KneeAngle != LastKneeAngle ||
+           Runtime_GetTotalSeconds(&me->CPM_Runtime) != LastTotalSeconds));
 }
 
 //=============================================================================
@@ -185,7 +185,7 @@ void UserInterface_UpdateCPMRuntimeMessage(UserInterface *me, double KneeAngle)
 void UserInterface_EmergencyStop(UserInterface *me)
 {
     // Stop motor -- always comes first
-    Motor_Stop(&me->CPM_Motor); /// todo
+    Motor_Stop(&me->CPM_Motor);
 
     // Print Stop Message
     sprintf(&me->Message[0][0], "    EMERGENCY   ");

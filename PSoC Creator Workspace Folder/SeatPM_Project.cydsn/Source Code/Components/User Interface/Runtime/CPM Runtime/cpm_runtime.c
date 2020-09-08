@@ -5,7 +5,7 @@
 //=============================================================================
 CY_ISR(CPM_Runtime_Timer_Interrupt_Handle)
 {
-    g_CPM_Runtime.TotalSeconds++;
+    g_UserInterface.CPM_Runtime.TotalSeconds++;
 }
 
 //=============================================================================

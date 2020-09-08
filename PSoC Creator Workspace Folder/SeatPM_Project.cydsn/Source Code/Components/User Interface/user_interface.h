@@ -22,7 +22,6 @@
 // Inclusions
 //=============================================================================
 #include <stdio.h>  // For sprintf
-#include "cpm_runtime.h" // For start/stop counting functions
 #include "debug.h" // For bool type and debug functions
 #include "finite_state_machine.h" // For base class
 #include "goniometer.h" // For invalid angle definition
@@ -31,6 +30,7 @@
 #include "project.h" // For PSoC components
 #include "runtime.h" // For displaying runtime of CPM useage
 #include "screen.h" // For screen functions
+#include "cpm_runtime.h"
 
 //=============================================================================
 // Definitions
@@ -109,7 +109,7 @@ void UserInterface_UpdateAngleReadingMessage(UserInterface *me,
 bool UserInterface_ShallUpdateCPMRuntimeMessage(UserInterface *me,
                                                 double KneeAngle,
                                                 double LastKneeAngle,
-                                                double LastTotalSeconds);
+                                                long int LastTotalSeconds);
 void UserInterface_UpdateCPMRuntimeMessage(UserInterface *me,
                                            double KneeAngle);
 void UserInterface_EmergencyStop(UserInterface *me);

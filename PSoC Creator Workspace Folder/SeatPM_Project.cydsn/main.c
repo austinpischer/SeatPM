@@ -66,6 +66,7 @@ int main(void)
     /* Major SeatPM Functionality 1: User Interface */
     Screen_Setup();
     Buttons_Setup();
+    CPM_Runtime_Setup();
 
     /* Major SeatPM Functionality 2: Goniometer */
     #ifdef ACCELEROMETER_GONIOMETER_ENABLED
@@ -75,7 +76,7 @@ int main(void)
     #endif
     
     /* Major SeatPM Functionality 3: Motor */
-    Motor_Setup();
+    MotorHardware_Setup();
 
     /* Non-essential Functionality: Debug Setup */
     PuTTY_Start();
@@ -96,7 +97,7 @@ int main(void)
     //-------------------------------------------------------------------------
     // Non-Global Variables
     double LastKneeAngle = INVALID_ANGLE;
-    double LastTotalSeconds = 0;
+    long int LastTotalSeconds = 0;
 
     //=========================================================================
     // Infinite Loop
@@ -123,6 +124,7 @@ int main(void)
         UserInterface_HandleEmergencyStopCondition(&g_UserInterface,
                                                    IsKneeAngleValid, KneeAngle);
 
+        /* Tell UI that a button was pressed (if flag is set to do so) */
         #ifdef DISPATCH_IN_MAIN
         Buttons_Dispatch(g_SignalToDispatch);
         g_SignalToDispatch = INVALID_SIGNAL;  // Reset signal
@@ -136,13 +138,13 @@ int main(void)
                                                     KneeAngle);
             LastKneeAngle = KneeAngle;
         }
-        
-        //not working???? TODO
-        else if (UserInterface_ShallUpdateCPMRuntimeMessage(
-                     &g_UserInterface, KneeAngle, LastKneeAngle,
-                     LastTotalSeconds))
+        else if(UserInterface_ShallUpdateCPMRuntimeMessage( 
+            &g_UserInterface, KneeAngle, LastKneeAngle, LastTotalSeconds))
         {
             UserInterface_UpdateCPMRuntimeMessage(&g_UserInterface, KneeAngle);
+            LastKneeAngle = KneeAngle;
+            LastTotalSeconds = 
+                Runtime_GetTotalSeconds(&g_UserInterface.CPM_Runtime);
         }
         #ifdef AUSTIN_DEBUG
         CyDelay(10);  // Necessary for debug output over serial to print

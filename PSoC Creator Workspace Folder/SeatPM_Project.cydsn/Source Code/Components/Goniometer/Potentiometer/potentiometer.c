@@ -1,12 +1,27 @@
+/*==============================================================================
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+Date: September 08 2020
+
+File Name: potentiometer.c
+Author: Austin Pischer
+File Description: This file contains definitions (implementations) for the
+functions declared (prototyped) in the associated header file, "potentiometer.h"
+==============================================================================*/
+
+//==============================================================================
+// Associated Header File 
+//==============================================================================
 #include "potentiometer.h" // Associated header file
 
-//=============================================================================
-// Potentiometer Setup
-//=============================================================================
+//==============================================================================
+// Potentiometer Setup 
+//==============================================================================
 void Potentiometer_Setup()
 {
     Potentiometer_ADC_Start();
-    Potentiometer_ADC_StartConvert();
 }
 
 //=============================================================================
