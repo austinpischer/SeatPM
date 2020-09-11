@@ -19,27 +19,39 @@ members:
 
 ## Project Context
 
-<!-- Todo: Shorten -->
+The SeatPM is a knee rehabilitation device. It is designed to be more
+lightweight and transportable than existing devices of its type. 
 
-The SeatPM is a lightweight, portable knee rehabilitation device. It is a type
-of Continuous Passive Motion (CPM) device, which are used to rehabilitate
-a person's joint by moving the joint through a limited range of motion,
-over-and-over again, without any effort from the user. CPM devices are useful
-because they stimulate bloodflow to an injured joint and help prevent the
-buildup of stiff scar tissue.
+The SeatPM is a Continuous Passive Motion (CPM) device. CPM devices move the 
+target joint back and forth, over-and-over again, without any effort from the
+user. 
 
-The problem with a traditional Knee CPM Devices is that they are prescribed
-to be used for many hours each day and they must be used while seated on a
-couch, bed, or floor. In addition, they are usually heavy, large, and bulky.
+CPM devices are useful because they stimulate blood flow and prevent
+buildup of stiff scar tissue, aiding in the healing process.
 
-For people in late-stage rehabilitation, such as student athletes
-and office workers, it is difficult to use the CPM device for the prescribed
-number of hours. That is why Joint Effort has set out to create an alternative
-that can be used on-the-go, such as in the office or school library.
+Traditional knee CPM devices are typically prescribed for 6+ hours
+of use per day. This is unobtainable for people in late-stage rehabilitation, 
+such as student athletes and office workers, because traditional devices are 
+too bulky and heavy to use on-the-go:
 
-The SeatPM empowers its users to speed up rehabilitation by attaching to a table
-so that the user can utilize this CPM device in a seated position. In addition,
-the SeatPM is designed to be more portable than traditional CPM devices.
+<p align="center">
+  <img src=/Documentation/tradcpm.jpg />
+  <em> A traditional knee CPM device, courtesy of Wikimedia Commons. </em>
+</p>
+
+To solve these problems, Joint Effort has set out to create an alternative
+device that can be used on-the-go, such as in the office or school library.
+
+Joint Effort's device, the SeatPM,  empowers its users to save time
+spent rehabilitating their knee. The SeatPM is designed for use in a seated
+position by clamping to a table. Therefore, users can comfortably multitask
+while fulfilling their prescribed hours of CPM use.
+
+<p align="center">
+  <img src=/Documentation/seatpm-illustration.jpg />
+  <em> An illustration of the SeatPM. </em>
+</p>
+
 
 ## Theory Of Operation
 
