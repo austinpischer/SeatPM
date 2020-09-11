@@ -35,7 +35,7 @@ such as student athletes and office workers, because traditional devices are
 too bulky and heavy to use on-the-go:
 
 <p align="center">
-  <img src="/Documentation/tradcpm.jpg" width="300" height="172" />
+  <img src="/Documentation/tradcpm.jpg" width="200" height="114" />
   <em> A traditional knee CPM device, courtesy of Wikimedia Commons. </em>
 </p>
 
