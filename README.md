@@ -48,7 +48,7 @@ position by clamping to a table. Therefore, users can comfortably multitask
 while fulfilling their prescribed hours of CPM use.
 
 <p align="center">
-  <img src=/Documentation/seatpm-illustration.jpg />
+  <img src=/Documentation/seatpm-illustration.png />
   <em> An illustration of the SeatPM. </em>
 </p>
 
