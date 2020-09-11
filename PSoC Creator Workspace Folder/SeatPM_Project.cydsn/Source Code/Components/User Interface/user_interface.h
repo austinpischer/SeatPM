@@ -95,24 +95,84 @@ enum UserInterface_Signal
 //=============================================================================
 // Method Members -- User Interface Finite State Machine Class
 //=============================================================================
+//todo: all
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 void UserInterface_Constructor(UserInterface *me);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 bool UserInterface_IsKneeAngle_Raw_Valid(UserInterface *me);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 void UserInterface_DisplayCableReleasedPercent(UserInterface *me);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 void UserInterface_ExecuteCurrentStateFunction(UserInterface *me);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 void UserInterface_PrintInvalidSignalMessage(UserInterface *me);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 void Handle_EmergencyStop(bool IsKneeAngleValid, double KneeAngle);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 bool UserInterface_ShallUpdateAngleReadingMessage(UserInterface *me,
                                                   double KneeAngle,
                                                   double LastKneeAngle);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 void UserInterface_UpdateAngleReadingMessage(UserInterface *me,
                                              double KneeAngle);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 bool UserInterface_ShallUpdateCPMRuntimeMessage(UserInterface *me,
                                                 double KneeAngle,
                                                 double LastKneeAngle,
                                                 long int LastTotalSeconds);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 void UserInterface_UpdateCPMRuntimeMessage(UserInterface *me,
                                            double KneeAngle);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 void UserInterface_EmergencyStop(UserInterface *me);
+
+/* Function Name: 
+Requirements: 
+Results: 
+*/
 void UserInterface_HandleEmergencyStopCondition(UserInterface *me,
                                                 bool IsKneeAngleValid,
                                                 double KneeAngle);

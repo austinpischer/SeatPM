@@ -65,7 +65,7 @@ bool UserInterface_IsKneeAngle_Raw_Valid(UserInterface *me)
     DEBUG_PRINT("Raw Knee Angle Validation Check:\r\n");
 
     // Handle errors
-    if (me->KneeAngle_Raw > me->KneeAngle.MaximumValue)
+    if (me->KneeAngle_Raw > me->KneeAngle.Maximum)
     {
         // Print knee angle too large error
         //                           1234567890123456
@@ -73,7 +73,7 @@ bool UserInterface_IsKneeAngle_Raw_Valid(UserInterface *me)
         sprintf(&me->Message[1][0], "maximum limit!  ");
         Screen_PrintMessage(me->Message);
     }
-    else if (me->KneeAngle_Raw < me->KneeAngle.MinimumValue)
+    else if (me->KneeAngle_Raw < me->KneeAngle.Minimum)
     {
         // Print knee angle too small error
         //                           1234567890123456
@@ -217,8 +217,8 @@ void UserInterface_HandleEmergencyStopCondition(UserInterface *me,
                 "min = %lf,\r\n"
                 "max = %lf\r\n\r\n",
                 KneeAngle, Parameter_GetValue(&me->KneeAngle),
-                Parameter_GetMinimumValue(&me->KneeAngle),
-                Parameter_GetMaximumValue(&me->KneeAngle));
+                Parameter_GetMinimum(&me->KneeAngle),
+                Parameter_GetMaximum(&me->KneeAngle));
         DEBUG_PRINT(debug);
 
         UserInterface_EmergencyStop(me);

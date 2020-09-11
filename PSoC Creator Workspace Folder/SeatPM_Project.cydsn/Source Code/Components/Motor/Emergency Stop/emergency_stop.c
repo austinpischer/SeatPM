@@ -16,7 +16,7 @@ emergency stop function such that it can easily change in the future.
 void EmergencyStop()
 {
     // Stop motor -- always comes first
-    Motor_PWM_Stop(); /// todo
+    Motor_Stop(&g_UserInterface.CPM_Motor);
 
     // Print Stop Message
     sprintf(&g_UserInterface.Message[0][0], "    EMERGENCY   ");

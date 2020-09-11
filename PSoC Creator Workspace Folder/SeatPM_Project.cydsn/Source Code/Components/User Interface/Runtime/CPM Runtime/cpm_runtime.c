@@ -1,3 +1,18 @@
+/*==============================================================================
+Project: SeatPM
+Team: Joint Effort
+School: Seattle Pacific University
+Class: CatalyzeU Senior Design
+Date: September 08 2020
+
+File Name: cpm_runtime.c
+Author: Austin Pischer
+File Description: //TODO
+==============================================================================*/
+
+//==============================================================================
+// Associated Header File 
+//==============================================================================
 #include "cpm_runtime.h"
 
 //=============================================================================
@@ -33,3 +48,4 @@ void CPM_Runtime_StopCounting()
     CPM_Runtime_Timer_Stop();
 }
 
+/* [] END OF FILE */

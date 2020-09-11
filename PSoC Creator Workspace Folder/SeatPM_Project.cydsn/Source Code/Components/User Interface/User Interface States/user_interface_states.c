@@ -60,19 +60,19 @@ void UserInterface_SetMinimumKneeAngle_State(UserInterface *me,
 
         case INCREMENT_BUTTON_PRESSED:
             // Only increment minval up to maxval
-            if ((Parameter_GetMinimumValue(&me->KneeAngle) + 1) <=
-                Parameter_GetMaximumValue(&me->KneeAngle))
+            if ((Parameter_GetMinimum(&me->KneeAngle) + 1) <=
+                Parameter_GetMaximum(&me->KneeAngle))
             {
-                Parameter_IncrementMinimumValue(&me->KneeAngle);
+                Parameter_IncrementMinimum(&me->KneeAngle);
             }  // Otherwise do nothing
             break;
 
         case DECREMENT_BUTTON_PRESSED:
             // Decrement minval only down to absolute min
-            if ((Parameter_GetMinimumValue(&me->KneeAngle) - 1) >=
+            if ((Parameter_GetMinimum(&me->KneeAngle) - 1) >=
                 ABSOLUTE_MINIMUM_KNEE_ANGLE)
             {
-                Parameter_DecrementMinimumValue(&me->KneeAngle);
+                Parameter_DecrementMinimum(&me->KneeAngle);
             }  // Otherwise do nothing
             break;
 
@@ -110,7 +110,7 @@ void UserInterface_SetMinimumKneeAngle_State(UserInterface *me,
         //                           1234567890123456
         sprintf(&me->Message[0][0], "Min. knee angle ");
         sprintf(&me->Message[1][0], "= %4.1lf degrees",
-                Parameter_GetMinimumValue(&me->KneeAngle));
+                Parameter_GetMinimum(&me->KneeAngle));
         Screen_PrintMessage(me->Message);
     }
 }  // End of set minimum knee angle state
@@ -142,19 +142,19 @@ void UserInterface_SetMaximumKneeAngle_State(UserInterface *me,
 
         case INCREMENT_BUTTON_PRESSED:
             // only increment up to absolute max
-            if ((Parameter_GetMaximumValue(&me->KneeAngle) + 1) <=
+            if ((Parameter_GetMaximum(&me->KneeAngle) + 1) <=
                 ABSOLUTE_MAXIMUM_KNEE_ANGLE)
             {
-                Parameter_IncrementMaximumValue(&me->KneeAngle);
+                Parameter_IncrementMaximum(&me->KneeAngle);
             }
             break;
 
         case DECREMENT_BUTTON_PRESSED:
             // only decrement down to minimum
-            if ((Parameter_GetMaximumValue(&me->KneeAngle) - 1) >=
-                Parameter_GetMinimumValue(&me->KneeAngle))
+            if ((Parameter_GetMaximum(&me->KneeAngle) - 1) >=
+                Parameter_GetMinimum(&me->KneeAngle))
             {
-                Parameter_DecrementMaximumValue(&me->KneeAngle);
+                Parameter_DecrementMaximum(&me->KneeAngle);
             }
             break;
 
@@ -192,7 +192,7 @@ void UserInterface_SetMaximumKneeAngle_State(UserInterface *me,
         //                               1234567890123456
         sprintf(&me->Message[0][0], "Max. knee angle");
         sprintf(&me->Message[1][0], "= %4.1lf degrees",
-                Parameter_GetMaximumValue(&me->KneeAngle));
+                Parameter_GetMaximum(&me->KneeAngle));
         Screen_PrintMessage(me->Message);
     }
 }  // End of Set Maximum Knee Angle State
@@ -273,8 +273,8 @@ void UserInterface_GoniometerReadingCheck_State(UserInterface *me,
         sprintf(&me->Message[0][0], "Current=%4.1lfdeg",
                 Parameter_GetValue(&me->KneeAngle));
         sprintf(&me->Message[1][0], "Min=%3.0lf Max=%3.0lf",
-                Parameter_GetMinimumValue(&me->KneeAngle),
-                Parameter_GetMaximumValue(&me->KneeAngle));
+                Parameter_GetMinimum(&me->KneeAngle),
+                Parameter_GetMaximum(&me->KneeAngle));
         Screen_PrintMessage(me->Message);
 
         // 0123456789123456

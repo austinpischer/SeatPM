@@ -50,6 +50,11 @@ struct Goniometer
 //==============================================================================
 // Method Members
 //==============================================================================
+
+/* Function Name:  todo
+Requirements: 
+Results: 
+*/
 void Goniometer_Setup();
 
 /* Function Name: Goniometer_Constructor

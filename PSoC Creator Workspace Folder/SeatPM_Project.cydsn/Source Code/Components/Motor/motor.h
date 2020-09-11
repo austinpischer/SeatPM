@@ -50,7 +50,7 @@ enum Direction
 typedef struct Motor Motor;
 struct Motor
 {
-  Parameter CurrentSpeed;
+  Parameter Speed;
   Direction CurrentDirection;
   Parameter PercentCableReleased;
 };

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=/Documentation_Files/SeatPM-Logo-3.png />
+  <img src=/Documentation/SeatPM-Logo-3.png />
 </p>
 
 # SeatPM by Joint Effort
@@ -18,6 +18,8 @@ members:
 [Austin Pischer](https://www.linkedin.com/in/austinpischer/) (Electrical Engineering)  
 
 ## Project Context
+
+<!-- Todo: Shorten -->
 
 The SeatPM is a lightweight, portable knee rehabilitation device. It is a type
 of Continuous Passive Motion (CPM) device, which are used to rehabilitate
@@ -50,12 +52,39 @@ increased the complexity of the code.
 
 For a summary of the changes, see the below diagram:
 
-Diagram Coming Soon(TM)
+<p align="center">
+  <img src=/Documentation/blockdiagram.png />
+</p>
 
 The SeatPM can be broken down into three main subsystems:
 1) The goniometer (a knee angle measurement device made from two accelerometers)
 2) The motor (used to move the knee)
 3) The user interface (used to configure the device parameters)
+
+The software of the SeatPM code is broken up into "classes":
+
+<p align="center">
+  <img src=/Documentation/classdiagram.png />
+</p>
+
+A class is a set of related data and/or functions.
+Traditionally, classes can be used by other classes (dependency),
+can contain instances of other classes (composition),
+and/or can be extensions of other classes (inheritance).
+
+As seen in the class diagram, the user interface class is central to the flow
+of control of the SeatPM code. Physically, the user interface is a 16x2 character screen and four buttons: confirm, back, increment, and decrement. 
+
+Conceptually, the user interface is a finite state machine. This means that the user manipulates the device through a series of "states," one state at a time. 
+Each state has a limited set of possible operations, and transitions between 
+states depend upon specific conditions being met.
+
+Below is a diagram that outlines each state and the transitions between them:
+
+<p align="center">
+  <img src=/Documentation/statediagram.png />
+</p>
+
 
 ## How to Collaborate
 This is a public repository that allows potential collaborators to
@@ -72,7 +101,7 @@ To contribute to the project, one must do at least the following steps:
 6. Use the command "git pull" to fetch the latest branches and files from G.H.
 7. Checkout a branch on your computer
 8. In PSoC creator, be sure to "Update Components" under the "Project" tab.
-9. Build all projects in PSoC Creator to generate source code for components.
+9. Build the project in PSoC Creator 4.2 to generate source code for components.
 10. Commit your changes and push them to the GitHub servers
 11. Create a pull request and wait for my approval.
 

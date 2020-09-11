@@ -25,7 +25,7 @@ void Goniometer_CalculateCurrentAngle(Goniometer *me);
 
 
 //==============================================================================
-// Goniometer Setup(hardware)
+// Goniometer Setup (hardware)
 //==============================================================================
 void Goniometer_Setup()
 {

@@ -107,7 +107,7 @@ Requirements: - Address of UserInterface instance
               - Address of Event instance (containing signal and other data)
 Results: - Displays new and current motor speed
          - Transitions to CPM state and changes speed to new after confirm 
-           button is pressed (speed does not change if back is pressed)
+           button is pressed (speed does not change if back is pressed
 */
 void UserInterface_ConfirmSpeedChange_State(UserInterface *me,
                                             Event const *event);

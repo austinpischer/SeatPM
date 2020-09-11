@@ -43,8 +43,8 @@ typedef struct Parameter Parameter;
 struct Parameter
 {
     double Value;
-    double MinimumValue;
-    double MaximumValue;
+    double Minimum;
+    double Maximum;
     double InvalidValue;
 };
 
@@ -65,24 +65,24 @@ enum Parameter_ValueValidationResult
 // Method Member Declarations - Parmater Class
 //=============================================================================
 bool Parameter_Constructor(Parameter *me,
-                           double NewMinimumValue,
-                           double NewMaximumValue,
+                           double NewMinimum,
+                           double NewMaximum,
                            double NewValue,
                            double NewInvalidValue);
 
 
 bool Parameter_SetValue(Parameter *me, double NewValue);
 double Parameter_GetValue(Parameter *me);
-bool Parameter_SetMinimumValue(Parameter *me, double NewMinimumValue);
-double Parameter_GetMinimumValue(Parameter *me);
-bool Parameter_SetMaximumValue(Parameter *me, double NewMaximumValue);
-double Parameter_GetMaximumValue(Parameter *me);
+bool Parameter_SetMinimum(Parameter *me, double NewMinimum);
+double Parameter_GetMinimum(Parameter *me);
+bool Parameter_SetMaximum(Parameter *me, double NewMaximum);
+double Parameter_GetMaximum(Parameter *me);
 bool Parameter_IncrementValue(Parameter *me);
 bool Parameter_DecrementValue(Parameter *me);
-bool Parameter_IncrementMinimumValue(Parameter *me);
-bool Parameter_DecrementMinimumValue(Parameter *me);
-bool Parameter_IncrementMaximumValue(Parameter *me);
-bool Parameter_DecrementMaximumValue(Parameter *me);
+bool Parameter_IncrementMinimum(Parameter *me);
+bool Parameter_DecrementMinimum(Parameter *me);
+bool Parameter_IncrementMaximum(Parameter *me);
+bool Parameter_DecrementMaximum(Parameter *me);
 Parameter_ValueValidationResult Parameter_ValidateValue(Parameter *me);
 
 

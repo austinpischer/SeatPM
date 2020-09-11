@@ -24,7 +24,7 @@ void Motor_Constructor(Motor *me)
     double MaxValue = 100;
     double Value = 0;
     bool IsValidConstructor = Parameter_Constructor(
-        &(me->CurrentSpeed), MinValue, MaxValue, Value, INVALID_SPEED);
+        &(me->Speed), MinValue, MaxValue, Value, INVALID_SPEED);
 
     if (IsValidConstructor == FALSE)
     {
@@ -49,7 +49,7 @@ Direction Motor_GetDirection(Motor *me) { return (me->CurrentDirection); }
 //=============================================================================
 int Motor_GetSpeed(Motor *me)
 {
-    return (Parameter_GetValue(&(me->CurrentSpeed)));
+    return (Parameter_GetValue(&(me->Speed)));
 }
 
 //=============================================================================
@@ -84,7 +84,7 @@ bool Motor_SetSpeed(Motor *me, int NewSpeed)
 {
     // Don't do anything if speed isn't going to change
     // Set speed variable to new
-    bool IsNewSpeedValid = Parameter_SetValue(&me->CurrentSpeed, NewSpeed);
+    bool IsNewSpeedValid = Parameter_SetValue(&me->Speed, NewSpeed);
 
     if (IsNewSpeedValid == TRUE)
     {
