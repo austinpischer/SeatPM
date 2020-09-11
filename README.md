@@ -35,7 +35,7 @@ such as student athletes and office workers, because traditional devices are
 too bulky and heavy to use on-the-go:
 
 <p align="center">
-  <img src=/Documentation/tradcpm.jpg />
+  <img src="/Documentation/tradcpm.jpg" width="500" />
   <em> A traditional knee CPM device, courtesy of Wikimedia Commons. </em>
 </p>
 
@@ -48,7 +48,7 @@ position by clamping to a table. Therefore, users can comfortably multitask
 while fulfilling their prescribed hours of CPM use.
 
 <p align="center">
-  <img src=/Documentation/seatpm-illustration.png />
+  <img src=/Documentation/seatpmill.PNG />
   <em> An illustration of the SeatPM. </em>
 </p>
 
