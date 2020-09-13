@@ -35,7 +35,7 @@ such as student athletes and office workers, because traditional devices are
 too bulky and heavy to use on-the-go:
 
 <p align="center">
-  <img src="/Documentation/tradcpm.jpg" width="200" height="114" />
+  <img src="/Documentation/tradcpm.jpg"/>
   <em> A traditional knee CPM device, courtesy of Wikimedia Commons. </em>
 </p>
 
@@ -85,9 +85,11 @@ can contain instances of other classes (composition),
 and/or can be extensions of other classes (inheritance).
 
 As seen in the class diagram, the user interface class is central to the flow
-of control of the SeatPM code. Physically, the user interface is a 16x2 character screen and four buttons: confirm, back, increment, and decrement. 
+of control of the SeatPM code. Physically, the user interface is a 16x2 
+character screen and four buttons: confirm, back, increment, and decrement. 
 
-Conceptually, the user interface is a finite state machine. This means that the user manipulates the device through a series of "states," one state at a time. 
+Conceptually, the user interface is a finite state machine. This means that the 
+user manipulates the device through a series of "states," one state at a time. 
 Each state has a limited set of possible operations, and transitions between 
 states depend upon specific conditions being met.
 
