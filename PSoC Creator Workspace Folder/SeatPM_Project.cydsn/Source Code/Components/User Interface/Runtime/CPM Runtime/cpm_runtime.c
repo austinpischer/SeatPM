@@ -7,7 +7,9 @@ Date: September 08 2020
 
 File Name: cpm_runtime.c
 Author: Austin Pischer
-File Description: //TODO
+File Description: This file contains the implementations/definitions for the
+functions prototyped/declared in cpm_runtime.h. Please see that file for a
+high level explanation of this set of functions.
 ==============================================================================*/
 
 //==============================================================================

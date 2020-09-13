@@ -7,7 +7,9 @@ Date: September 08 2020
 
 File Name: motor_hardware.c
 Author: Austin Pischer
-File Description: todo
+File Description: This file contains the function definitions (implementations)
+for the functions declared (prototyped) in motor_hardware.h. Please see
+motor_hardware.h for a high level description of this set of functions.
 ==============================================================================*/
 
 //==============================================================================

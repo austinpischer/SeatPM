@@ -11,6 +11,12 @@ This file contains all the code for the finite state machine base class.
 There is no finite_state_machine.c file because all of the "functions" for
 the FSM base class are macros.
 
+A finite state machine is a way to systematize the flow of control through a
+program. A state defines the possible events that can be occur and the
+results of each possible event occuring. There is only one active state at a
+time, and one state transitions to another state only after a certain set of
+conditions are met.
+
 This file is mostly adopted from the following link:
 https://barrgroup.com/embedded-systems/how-to/state-machines-event-driven-systems
 

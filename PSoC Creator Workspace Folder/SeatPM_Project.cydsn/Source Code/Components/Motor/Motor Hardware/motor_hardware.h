@@ -7,7 +7,12 @@ Date: September 08 2020
 
 File Name: motor_hardware.h
 Author: Austin Pischer
-File Description: //todo
+File Description: This file contains all the function declarations (prototypes)
+related to the motor hardware/components of the SeatPM. It is meant to serve as
+a layer of abstraction between direct calls to the PSoC Component APIs. It is
+distinct from the fuctions in motor.h because those functions are related to
+the motor struct data model. To decouple the data model and the component APIs,
+this set of functions steps in.
 ==============================================================================*/
 
 // Start of Multiple Inclusion Protection

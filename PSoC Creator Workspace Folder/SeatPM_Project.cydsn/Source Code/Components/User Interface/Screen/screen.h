@@ -7,7 +7,11 @@ Date: September 08 2020
 
 File Name: screen.h
 Author: Austin Pischer
-File Description: //todo
+File Description: This file contains the function declarations(prototypes) 
+related to the SeatPM's screen. These functions are meant to act as a layer
+of abstraction between the PSoC CharLCD Component APIs and the rest of the code.
+
+The current screen is a 16x2 Character LCD.
 ==============================================================================*/
 
 // Start of Multiple Inclusion Protection
@@ -32,14 +36,18 @@ File Description: //todo
 //==============================================================================
 
 /* Function Name: Screen_Setup
-Requirements: //todo
-Results: //todo
+Requirements: A CharLCD component in TopDesign.cysch named "UI_Screen"
+Results: Starts the screen and clears it.
 */
 void Screen_Setup(); 
 
 /* Function Name: Screen_PrintMessage
-Requirements: //todo
-Results: //todo
+Requirements: - A CharLCD component in TopDesign.cysch named "UI_Screen"
+              - A two dimensional char array (or reference to the first 
+                character of one) with the dimensions MESSAGE_ROWS
+                by MESSAGE_CHARACTERS_PER_ROW + 1
+Results: The chars present in the message are displayed on the screen and
+         are also output to debug.
 */
 void Screen_PrintMessage(
     char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW + 1]);

@@ -30,12 +30,12 @@ void UserInterface_Constructor(UserInterface *me)
     FSM_Constructor(&me->Parent, &UserInterface_Initial_State);
 
     // Initialized in the order they appear in state flow
-    me->IsFirstTimeSettingMinAngle = TRUE;
-    me->IsFirstTimeSettingMaxAngle = TRUE;
-    me->HasUserSeenAttachGoniometerMessage = FALSE;
-    me->ShallMainLoopUpdateAngleReading = FALSE;
-    me->HasUserSeenAttachAnkleStrapMessage = FALSE;
-    me->ShallMainLoopHandleCPMMessage = FALSE;
+    me->Is_First_Time_Setting_Min_Angle = TRUE;
+    me->Is_First_Time_Setting_Max_Angle = TRUE;
+    me->Has_User_Seen_Attach_Goniometer_Message = FALSE;
+    me->Shall_Main_Loop_Update_Angle_Reading = FALSE;
+    me->Has_User_Seen_Attach_Ankle_Strap_Message = FALSE;
+    me->Shall_Main_Loop_Handle_CPM_Message = FALSE;
 
     // One should not expect for the initial state
     // to do anything with this signal
@@ -136,7 +136,7 @@ bool UserInterface_ShallUpdateAngleReadingMessage(UserInterface *me,
                                                   double KneeAngle,
                                                   double LastKneeAngle)
 {
-    return (me->ShallMainLoopUpdateAngleReading == TRUE &&
+    return (me->Shall_Main_Loop_Update_Angle_Reading == TRUE &&
             KneeAngle != LastKneeAngle);
 }
 
@@ -158,7 +158,7 @@ bool UserInterface_ShallUpdateCPMRuntimeMessage(UserInterface *me,
                                                 double LastKneeAngle,
                                                 long int LastTotalSeconds)
 {
-    return(me->ShallMainLoopHandleCPMMessage == TRUE &&
+    return(me->Shall_Main_Loop_Handle_CPM_Message == TRUE &&
            (KneeAngle != LastKneeAngle ||
            Runtime_GetTotalSeconds(&me->CPM_Runtime) != LastTotalSeconds));
 }
@@ -207,7 +207,7 @@ void UserInterface_HandleEmergencyStopCondition(UserInterface *me,
                                                 double KneeAngle)
 {
     if (IsKneeAngleValid == FALSE &&
-        me->HasUserSeenAttachAnkleStrapMessage == TRUE)
+        me->Has_User_Seen_Attach_Ankle_Strap_Message == TRUE)
     {
         // Print to debug what went wrong
         char8 debug[64];

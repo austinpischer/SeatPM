@@ -38,7 +38,7 @@ This is the "data model" class for the motor, which is separate from the
 typedef enum Direction Direction;
 enum Direction
 {
-  // TODO: Subject to change based on physical design on the motor.
+  // Subject to change based on physical design on the motor.
   // These should always be boolean (0 or 1)
   RETRACTING = 0,
   RELEASING = 1

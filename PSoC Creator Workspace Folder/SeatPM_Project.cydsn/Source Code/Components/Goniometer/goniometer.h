@@ -51,9 +51,9 @@ struct Goniometer
 // Method Members
 //==============================================================================
 
-/* Function Name:  todo
-Requirements: 
-Results: 
+/* Function Name:  Goniometer_Setup
+Requirements:  - SCB component in TopDesign.cysch configured as I2C "Master"
+Results: I2C serial bus is initialized to communicate with accelerometers.
 */
 void Goniometer_Setup();
 

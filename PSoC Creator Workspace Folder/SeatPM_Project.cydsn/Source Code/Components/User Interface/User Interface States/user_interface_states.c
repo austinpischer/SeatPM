@@ -7,11 +7,13 @@ Date: September 08 2020
 
 File Name: user_interface_states.c
 Author: Austin Pischer
-File Description: //todo
+File Description: This file contains the definitions(implementations) for the
+state functions declared(prototyped) in user_interface_states.h. Please see 
+user_interface_states.h for a high level explanation of this group of functions.
 ==============================================================================*/
 
 //==============================================================================
-// Associated File Header 
+// Associated File Header
 //==============================================================================
 #include "user_interface_states.h"
 
@@ -37,7 +39,6 @@ void UserInterface_Initial_State(UserInterface *me, Event const *MyEvent)
     // Update display in next function without any inputs
     UserInterface_ExecuteCurrentStateFunction(me);
 }  // End of initial state
-
 
 //=============================================================================
 // Set Minimum Knee Angle State
@@ -88,7 +89,7 @@ void UserInterface_SetMinimumKneeAngle_State(UserInterface *me,
     }  // End of signal processing
 
     // One-off message
-    if (me->IsFirstTimeSettingMinAngle == TRUE)
+    if (me->Is_First_Time_Setting_Min_Angle == TRUE)
     {
         // Prompt user to set the minimum angle of the device
         //                           1234567890123456
@@ -96,7 +97,7 @@ void UserInterface_SetMinimumKneeAngle_State(UserInterface *me,
         sprintf(&me->Message[1][0], "knee angle...   ");
         Screen_PrintMessage(me->Message);
 
-        me->IsFirstTimeSettingMinAngle = FALSE;
+        me->Is_First_Time_Setting_Min_Angle = FALSE;
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     }
 
@@ -170,7 +171,7 @@ void UserInterface_SetMaximumKneeAngle_State(UserInterface *me,
     }  // End of signal processing
 
     // One-off message
-    if (me->IsFirstTimeSettingMaxAngle == TRUE)
+    if (me->Is_First_Time_Setting_Max_Angle == TRUE)
     {
         // Prompt user to set the max angle of the device
         //                               1234567890123456
@@ -178,7 +179,7 @@ void UserInterface_SetMaximumKneeAngle_State(UserInterface *me,
         sprintf(&me->Message[1][0], "knee angle...   ");
         Screen_PrintMessage(me->Message);
 
-        me->IsFirstTimeSettingMaxAngle = FALSE;
+        me->Is_First_Time_Setting_Max_Angle = FALSE;
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
     }
 
@@ -212,7 +213,7 @@ void UserInterface_GoniometerReadingCheck_State(UserInterface *me,
             {
                 // If knee angle is valid, tell user to attach ankle strap
                 DEBUG_PRINT("Transition to Ankle Strap R/R\r\n");
-                me->ShallMainLoopUpdateAngleReading = FALSE;
+                me->Shall_Main_Loop_Update_Angle_Reading = FALSE;
                 FSM_Transition(&me->Parent,
                                UserInterface_AnkleStrapRetractRelease_State);
                 // Update display in next function without any inputs
@@ -224,7 +225,7 @@ void UserInterface_GoniometerReadingCheck_State(UserInterface *me,
         case BACK_BUTTON_PRESSED:
             // Go back to set maximum angle
             DEBUG_PRINT("Transition to Set Maximum Knee Angle\r\n");
-            me->ShallMainLoopUpdateAngleReading = FALSE;
+            me->Shall_Main_Loop_Update_Angle_Reading = FALSE;
             FSM_Transition(&me->Parent,
                            UserInterface_SetMaximumKneeAngle_State);
             // Update display in next function without any inputs
@@ -251,7 +252,7 @@ void UserInterface_GoniometerReadingCheck_State(UserInterface *me,
     }  // End of signal processing
 
     // Skip attach goniometer message if user has already seen it
-    if (me->HasUserSeenAttachGoniometerMessage == FALSE)
+    if (me->Has_User_Seen_Attach_Goniometer_Message == FALSE)
     {
         // Prompt user to attach goniometer
         //                           1234567890123456
@@ -259,7 +260,7 @@ void UserInterface_GoniometerReadingCheck_State(UserInterface *me,
         sprintf(&me->Message[1][0], "the knee brace. ");
         Screen_PrintMessage(me->Message);
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
-        me->HasUserSeenAttachGoniometerMessage = TRUE;
+        me->Has_User_Seen_Attach_Goniometer_Message = TRUE;
     }
 
     // Dont print message if state transitioned in signal processing
@@ -282,7 +283,7 @@ void UserInterface_GoniometerReadingCheck_State(UserInterface *me,
         // xxx.x xxx.x xxx.x
         // Enable a piece of code in the main loop that
         // repeatedly updates the "current angle" of this state
-        me->ShallMainLoopUpdateAngleReading = TRUE;
+        me->Shall_Main_Loop_Update_Angle_Reading = TRUE;
     }
 }  // End of Goniometer Reading Check State
 
@@ -313,14 +314,16 @@ void UserInterface_AnkleStrapRetractRelease_State(UserInterface *me,
             // Only release cable and show percent release while button is
             // pressed and knee angle is valid
             Motor_SetPercentCableReleased(
-                &me->CPM_Motor, Motor_GetPercentCableReleased(&me->CPM_Motor) + 1);
+                &me->CPM_Motor,
+                Motor_GetPercentCableReleased(&me->CPM_Motor) + 1);
             break;
 
         case DECREMENT_BUTTON_PRESSED:
             // Only retract cable and show percent release while button is
             // pressed and knee angle is valid
             Motor_SetPercentCableReleased(
-                &me->CPM_Motor, Motor_GetPercentCableReleased(&me->CPM_Motor) - 1);
+                &me->CPM_Motor,
+                Motor_GetPercentCableReleased(&me->CPM_Motor) - 1);
             break;
 
         case NO_OPERATION:
@@ -335,7 +338,7 @@ void UserInterface_AnkleStrapRetractRelease_State(UserInterface *me,
     }
 
     // One-off message
-    if (me->HasUserSeenAttachAnkleStrapMessage == FALSE)
+    if (me->Has_User_Seen_Attach_Ankle_Strap_Message == FALSE)
     {
         // Prompt user to attach goniometer
         //                           1234567890123456
@@ -343,7 +346,7 @@ void UserInterface_AnkleStrapRetractRelease_State(UserInterface *me,
         sprintf(&me->Message[1][0], "the ankle strap. ");
         Screen_PrintMessage(me->Message);
         CyDelay(MESSAGE_ON_SCREEN_TIME_MS);
-        me->HasUserSeenAttachAnkleStrapMessage = TRUE;
+        me->Has_User_Seen_Attach_Ankle_Strap_Message = TRUE;
         // Prompt user to retract/release the cable
         //                           1234567890123456
         sprintf(&me->Message[0][0], "Release Cable[+]");
@@ -435,7 +438,7 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
             /* "Soft stop": Stop motor and go back to confirmation state */
             Motor_Stop(&me->CPM_Motor);
             CPM_Runtime_StopCounting();
-            me->ShallMainLoopHandleCPMMessage = FALSE;
+            me->Shall_Main_Loop_Handle_CPM_Message = FALSE;
             FSM_Transition(&me->Parent, UserInterface_ConfirmCPMStartup_State);
             // Update display in next function without any inputs
             UserInterface_ExecuteCurrentStateFunction(me);
@@ -445,7 +448,7 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
             /* "Soft stop": Stop motor and go back to confirmation state */
             Motor_Stop(&me->CPM_Motor);
             CPM_Runtime_StopCounting();
-            me->ShallMainLoopHandleCPMMessage = FALSE;
+            me->Shall_Main_Loop_Handle_CPM_Message = FALSE;
             FSM_Transition(&me->Parent, UserInterface_ConfirmCPMStartup_State);
             // Update display in next function without any inputs
             UserInterface_ExecuteCurrentStateFunction(me);
@@ -457,7 +460,7 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
                                Motor_GetSpeed(&me->CPM_Motor));
             // Set new value to current + 1
             Parameter_IncrementValue(&me->New_CPM_Speed);
-            me->ShallMainLoopHandleCPMMessage = FALSE;
+            me->Shall_Main_Loop_Handle_CPM_Message = FALSE;
             // Go to change speed state
             FSM_Transition(&me->Parent, UserInterface_ConfirmSpeedChange_State);
             // Update display in next function without any inputs
@@ -470,7 +473,7 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
                                Motor_GetSpeed(&me->CPM_Motor));
             // Set new value to current - 1
             Parameter_DecrementValue(&me->New_CPM_Speed);
-            me->ShallMainLoopHandleCPMMessage = FALSE;
+            me->Shall_Main_Loop_Handle_CPM_Message = FALSE;
             // Go to change speed state
             FSM_Transition(&me->Parent, UserInterface_ConfirmSpeedChange_State);
             // Update display in next function without any inputs
@@ -493,7 +496,7 @@ void UserInterface_ContinuousPassiveMotion_State(UserInterface *me,
 
     if (HasStateTransitioned == FALSE)
     {
-        me->ShallMainLoopHandleCPMMessage = TRUE;
+        me->Shall_Main_Loop_Handle_CPM_Message = TRUE;
     }
 }
 

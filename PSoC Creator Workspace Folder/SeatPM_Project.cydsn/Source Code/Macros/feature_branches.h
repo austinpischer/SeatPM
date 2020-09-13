@@ -51,8 +51,6 @@ of the same """feature""".
     #define ACCELEROMETER_GONIOMETER_ENABLED
 #endif
 
-// TODO  Loop vs interrupt goniometer sample
-
 // End multiple inclusion protection
 #endif
 /* [] END OF FILE */

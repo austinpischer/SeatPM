@@ -7,16 +7,18 @@ Date: September 08 2020
 
 File Name: screen.c
 Author: Austin Pischer
-File Description: //todo
+File Description: This file defines(implements) the functions
+declared(prototyped) in screen.h. For a high level explanation of this group
+of functions, see screen.h.
 ==============================================================================*/
 
 //==============================================================================
-// Associated Header File 
+// Associated Header File
 //==============================================================================
 #include "screen.h"
 
 //==============================================================================
-// Screen Setup 
+// Screen Setup
 //==============================================================================
 void Screen_Setup()
 {
@@ -25,19 +27,19 @@ void Screen_Setup()
 }
 
 //==============================================================================
-// Screen Print Message 
+// Screen Print Message
 //==============================================================================
 void Screen_PrintMessage(
     char Message[MESSAGE_ROWS][MESSAGE_CHARACTERS_PER_ROW + 1])
 {
     UI_Screen_ClearDisplay();
     UI_Screen_PrintString(&Message[0][0]);
-    UI_Screen_Position(1,0);
+    UI_Screen_Position(1, 0);
     UI_Screen_PrintString(&Message[1][0]);
 
     DEBUG_PRINT(&Message[0][0]);
-    DEBUG_PRINT("\r\n"); //newline
+    DEBUG_PRINT("\r\n");  // newline
     DEBUG_PRINT(&Message[1][0]);
-    DEBUG_PRINT("\r\n\r\n"); //two newlines
+    DEBUG_PRINT("\r\n\r\n");  // two newlines
 }
 /* [] END OF FILE */

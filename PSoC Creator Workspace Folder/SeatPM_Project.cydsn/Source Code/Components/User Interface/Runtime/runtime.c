@@ -13,20 +13,18 @@ the associated header file "runtime.h"
 
 #include "runtime.h"
 
-/* Function Name: Runtime_Constructor
-Requirements: //todo
-Results: 
-*/
+//==============================================================================
+// Constructor 
+//==============================================================================
 void Runtime_Constructor(Runtime *me)
 {
     // CPM Runtime startup
     me->TotalSeconds = me->Hours = me->Minutes = me->Seconds = 0;
 }
 
-/* Function Name: Runtime_Update
-Requirements: //todo
-Results: 
-*/
+//==============================================================================
+// Update 
+//==============================================================================
 void Runtime_Update(Runtime *me)
 {
     /* Get a copy of the current TotalSeconds so that it doesn't change
@@ -51,10 +49,9 @@ void Runtime_Update(Runtime *me)
     me->Seconds = (int)(Remainder);
 }
 
-/* Function Name: Runtime_Reset
-Requirements: //todo
-Results: 
-*/
+//==============================================================================
+// Reset 
+//==============================================================================
 void Runtime_Reset(Runtime *me)
 {
     me->TotalSeconds = 0;
@@ -63,34 +60,34 @@ void Runtime_Reset(Runtime *me)
     me->Seconds = 0;
 }
 
-/* Function Name: Runtime_GetTotalSeconds
-Requirements: Address of Runtime instance
-Results: Returns value of TotalSeconds member of passed runtime instance
-*/
+//==============================================================================
+// Get Total Seconds 
+//==============================================================================
 long int Runtime_GetTotalSeconds(Runtime *me)
 {
     return(me->TotalSeconds);
 }
-/* Function Name: Runtime_GetHours
-Requirements: Address of Runtime instance
-Results: Returns value of Hours member of passed runtime instance
-*/
+
+
+//==============================================================================
+// Get Hours  
+//==============================================================================
 int Runtime_GetHours(Runtime *me)
 {
     return(me->Hours);
 }
-/* Function Name: Runtime_GetMinutes
-Requirements: Address of Runtime instance
-Results: Returns value of Minutes member of passed runtime instance
-*/
+
+//==============================================================================
+// Get Minutes 
+//==============================================================================
 int Runtime_GetMinutes(Runtime *me)
 {
     return(me->Minutes);
 }
-/* Function Name: Runtime_GetSeconds
-Requirements: Address of Runtime instance
-Results: Returns value of Seconds member of passed runtime instance
-*/
+
+//==============================================================================
+// Get Seconds 
+//==============================================================================
 int Runtime_GetSeconds(Runtime *me)
 {
     return(me->Seconds);

@@ -179,14 +179,10 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_aliases.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_PM.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_Interrupt.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_Interrupt.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_aliases.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_PM.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_Interrupt.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_Interrupt.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen_PM.c</File>
@@ -194,6 +190,10 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen_LCDPort.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen_LCDPort_aliases.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\UI_Screen_LCDPort_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_ISR.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Right_ISR.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_ISR.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Button_EmergencyStop_Left_ISR.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\go4ar\Desktop\SeatPM\PSoC Creator Workspace Folder\SeatPM_Project.cydsn">
