@@ -64,27 +64,136 @@ enum Parameter_ValueValidationResult
 //=============================================================================
 // Method Member Declarations - Parmater Class
 //=============================================================================
+
+/* Function Name: Parameter_Constructor
+Requirements: - Address of Parameter instance
+              - The minimum value that the Value member can be
+              - The maximum value that the Value member can be
+              - The initial value of the Value member
+              - The value at which the Value member will always be invalid
+Results: Returns bool if min<=val<=max and val != inval
+*/
 bool Parameter_Constructor(Parameter *me,
                            double NewMinimum,
                            double NewMaximum,
                            double NewValue,
                            double NewInvalidValue);
 
-
-bool Parameter_SetValue(Parameter *me, double NewValue);
-double Parameter_GetValue(Parameter *me);
-bool Parameter_SetMinimum(Parameter *me, double NewMinimum);
-double Parameter_GetMinimum(Parameter *me);
-bool Parameter_SetMaximum(Parameter *me, double NewMaximum);
-double Parameter_GetMaximum(Parameter *me);
-bool Parameter_IncrementValue(Parameter *me);
-bool Parameter_DecrementValue(Parameter *me);
-bool Parameter_IncrementMinimum(Parameter *me);
-bool Parameter_DecrementMinimum(Parameter *me);
-bool Parameter_IncrementMaximum(Parameter *me);
-bool Parameter_DecrementMaximum(Parameter *me);
+/* Function Name: Parameter_ValidateValue
+Requirements: Address of Parameter instance.
+Results: Enumerated integer within Parameter_ValueValidationResult
+         that represents the validity of the Value member of the Parameter
+         instance.
+*/
 Parameter_ValueValidationResult Parameter_ValidateValue(Parameter *me);
 
+
+//==============================================================================
+// Simple get functions 
+//==============================================================================
+
+/* Function Name: Parameter_GetValue
+Requirements: Address of Parameter instance
+Results: Returns value of Value member of instance 
+*/
+double Parameter_GetValue(Parameter *me);
+
+/* Function Name: Parameter_GetMinimum
+Requirements: Address of Parameter instance
+Results: Returns value of Minimum member of instance 
+*/
+double Parameter_GetMinimum(Parameter *me);
+
+/* Function Name: Parameter_GetMaximum
+Requirements: Address of Parameter instance
+Results: Returns value of Maximum member of instance 
+*/
+double Parameter_GetMaximum(Parameter *me);
+
+
+//==============================================================================
+//  Set functions
+//==============================================================================
+
+/* Function Name: Parameter_SetValue
+Requirements: - Address of Parameter instance
+              - New value of Value member of instance
+Results: - Returns true if min<=value<=max and val!=inval
+           and Value member of instance is set to value of NewValue
+         - Otherwise returns false
+*/
+bool Parameter_SetValue(Parameter *me, double NewValue);
+
+/* Function Name: Parameter_SetMinimum
+Requirements: - Address of Parameter instance
+              - New value of Minimum member of instance
+Results: - Returns true if min<=value<=max and val!=inval
+           and Minimum member of instance is set to value of NewMinimum
+         - Otherwise returns false
+*/
+bool Parameter_SetMinimum(Parameter *me, double NewMinimum);
+
+/* Function Name: Parameter_SetMaximum
+Requirements: - Address of Parameter instance
+              - New value of Maximum member of instance
+Results: - Returns true if min<=value<=max and val!=inval
+           and Maximum member of instance is set to value of NewMaximum
+         - Otherwise returns false
+*/
+bool Parameter_SetMaximum(Parameter *me, double NewMaximum);
+
+
+//==============================================================================
+// Simple increment/decrement functions 
+//==============================================================================
+
+/* Function Name: Parameter_IncrementValue
+Requirements: - Address of Parameter instance
+Results: - Returns true if min<=value<=max and val!=inval
+           and Value member of instance is incremeneted by 1
+         - Otherwise returns false
+*/
+bool Parameter_IncrementValue(Parameter *me);
+
+/* Function Name: Parameter_DecrementValue
+Requirements: - Address of Parameter instance
+Results: - Returns true if min<=value<=max and val!=inval
+           and Value member of instance is decremeneted by 1
+         - Otherwise returns false
+*/
+bool Parameter_DecrementValue(Parameter *me);
+
+/* Function Name: Parameter_IncrementMinimum
+Requirements: - Address of Parameter instance
+Results: - Returns true if min<=value<=max and val!=inval
+           and Minimum member of instance is incremeneted by 1
+         - Otherwise returns false
+*/
+bool Parameter_IncrementMinimum(Parameter *me);
+
+/* Function Name: Parameter_DecrementMinimum
+Requirements: - Address of Parameter instance
+Results: - Returns true if min<=value<=max and val!=inval
+           and Minimum member of instance is decremeneted by 1
+         - Otherwise returns false
+*/
+bool Parameter_DecrementMinimum(Parameter *me);
+
+/* Function Name: Parameter_IncrementMaximum
+Requirements: - Address of Parameter instance
+Results: - Returns true if min<=value<=max and val!=inval
+           and Maximum member of instance is incremeneted by 1
+         - Otherwise returns false
+*/
+bool Parameter_IncrementMaximum(Parameter *me);
+
+/* Function Name: Parameter_DecrementMaximum
+Requirements: - Address of Parameter instance
+Results: - Returns true if min<=value<=max and val!=inval
+           and Maximum member of instance is decremeneted by 1
+         - Otherwise returns false
+*/
+bool Parameter_DecrementMaximum(Parameter *me);
 
 #endif // End of multiple inclusion protection
 /* [] END OF FILE */

@@ -15,7 +15,7 @@ the Parameter class.
 //=============================================================================
 // Inclusions
 //=============================================================================
-#include "parameter.h" // Associated header file
+#include "parameter.h"  // Associated header file
 
 //*****************************************************************************
 // Method Member Implementations - Parameter Class
@@ -23,76 +23,62 @@ the Parameter class.
 //=============================================================================
 // Constructor
 //=============================================================================
-bool Parameter_Constructor(Parameter *me,
-                           double NewMinimum,
-                           double NewMaximum,
-                           double NewValue,
-                           double NewInvalidValue)
+bool Parameter_Constructor(Parameter *me, double NewMinimum, double NewMaximum,
+                           double NewValue, double NewInvalidValue)
 {
-     
     char DebugString[64];
-    
+
     me->Minimum = NewMinimum;
     me->Maximum = NewMaximum;
     me->Value = NewValue;
     me->InvalidValue = NewInvalidValue;
-    
+
     Parameter_ValueValidationResult Result = Parameter_ValidateValue(me);
-    
+
     // Handle valid constructor (value==invlaid okay b/c this is constructor)
-    if((me->Minimum <= me->Minimum) && 
-       (Result == VALUE_VALID || Result == VALUE_EQUAL_TO_INVALID))
+    if ((me->Minimum <= me->Minimum) &&
+        (Result == VALUE_VALID || Result == VALUE_EQUAL_TO_INVALID))
     {
-        return(TRUE);
+        return (TRUE);
     }
-    else // Print Error Messages
+    else  // Print Error Messages
     {
-        if((me->Minimum <= me->Minimum) == FALSE)
+        if ((me->Minimum <= me->Minimum) == FALSE)
         {
             DEBUG_PRINT("ERROR: Minimum is greater than Maximum!\r\n");
             sprintf(DebugString, "%lf > %lf\r\n", me->Minimum, me->Maximum);
             DEBUG_PRINT(DebugString);
         }
-        if(Result == VALUE_GREATER_THAN_MAXIMUM) 
+        if (Result == VALUE_GREATER_THAN_MAXIMUM)
         {
             DEBUG_PRINT("ERROR: Value is greater than maximum!\r\n");
             sprintf(DebugString, "%lf > %lf\r\n", me->Value, me->Maximum);
             DEBUG_PRINT(DebugString);
         }
-        if(Result == VALUE_LESS_THAN_MINIMUM) 
+        if (Result == VALUE_LESS_THAN_MINIMUM)
         {
             DEBUG_PRINT("ERROR: Maximum is less than value!\r\n");
             sprintf(DebugString, "%lf > %lf\r\n", me->Value, me->Minimum);
             DEBUG_PRINT(DebugString);
         }
-    } // End printing error message
-    return(FALSE);
+    }  // End printing error message
+    return (FALSE);
 }
 
-
 //=============================================================================
-// Get Functions 
+// Get Functions
 //=============================================================================
-double Parameter_GetValue(Parameter* me)
-{
-    return(me->Value);
-}
-double Parameter_GetMinimum(Parameter *me)
-{
-    return(me->Minimum);
-}
-double Parameter_GetMaximum(Parameter *me)
-{
-    return(me->Maximum);
-}
+double Parameter_GetValue(Parameter *me) { return (me->Value); }
+double Parameter_GetMinimum(Parameter *me) { return (me->Minimum); }
+double Parameter_GetMaximum(Parameter *me) { return (me->Maximum); }
 
 //=============================================================================
 // Set Functions
-//=============================================================================                           
-bool Parameter_SetValue(Parameter* me, double NewValue)
+//=============================================================================
+bool Parameter_SetValue(Parameter *me, double NewValue)
 {
-    if(NewValue <= me->Maximum && // Check upper bound
-       NewValue >= me->Minimum)   // Check lower bound
+    if (NewValue <= me->Maximum &&  // Check upper bound
+        NewValue >= me->Minimum)    // Check lower bound
     {
         me->Value = NewValue;
         return TRUE;
@@ -101,48 +87,47 @@ bool Parameter_SetValue(Parameter* me, double NewValue)
     {
         return FALSE;
     }
-    
 }
 bool Parameter_SetMinimum(Parameter *me, double NewMinimum)
 {
     // min <= max
-    if(NewMinimum <= me->Maximum)
+    if (NewMinimum <= me->Maximum)
     {
         me->Minimum = NewMinimum;
         return TRUE;
     }
     else
     {
-        return(FALSE);
+        return (FALSE);
     }
 }
 bool Parameter_SetMaximum(Parameter *me, double NewMaximum)
 {
     // max >= min,val
-    if(NewMaximum >= me->Minimum)
+    if (NewMaximum >= me->Minimum)
     {
         me->Maximum = NewMaximum;
         return TRUE;
     }
     else
     {
-        return(FALSE);
+        return (FALSE);
     }
 }
 //=============================================================================
-// Increments 
+// Increments
 //=============================================================================
 bool Parameter_IncrementValue(Parameter *me)
 {
-    return(Parameter_SetValue(me, Parameter_GetValue(me)+1));
+    return (Parameter_SetValue(me, Parameter_GetValue(me) + 1));
 }
 bool Parameter_IncrementMinimum(Parameter *me)
 {
-    return(Parameter_SetMinimum(me, Parameter_GetMinimum(me)+1));
+    return (Parameter_SetMinimum(me, Parameter_GetMinimum(me) + 1));
 }
 bool Parameter_DecrementMinimum(Parameter *me)
 {
-    return(Parameter_SetMinimum(me, Parameter_GetMinimum(me)-1));
+    return (Parameter_SetMinimum(me, Parameter_GetMinimum(me) - 1));
 }
 
 //=============================================================================
@@ -150,15 +135,15 @@ bool Parameter_DecrementMinimum(Parameter *me)
 //=============================================================================
 bool Parameter_DecrementValue(Parameter *me)
 {
-    return(Parameter_SetValue(me, Parameter_GetValue(me)-1));
+    return (Parameter_SetValue(me, Parameter_GetValue(me) - 1));
 }
 bool Parameter_IncrementMaximum(Parameter *me)
 {
-    return(Parameter_SetMaximum(me, Parameter_GetMaximum(me)+1));
+    return (Parameter_SetMaximum(me, Parameter_GetMaximum(me) + 1));
 }
 bool Parameter_DecrementMaximum(Parameter *me)
 {
-    return(Parameter_SetMaximum(me, Parameter_GetMaximum(me)-1));
+    return (Parameter_SetMaximum(me, Parameter_GetMaximum(me) - 1));
 }
 
 //=============================================================================
@@ -167,29 +152,33 @@ bool Parameter_DecrementMaximum(Parameter *me)
 Parameter_ValueValidationResult Parameter_ValidateValue(Parameter *me)
 {
     char debug[64];
-    if(me->Value > me->Maximum) // Going over max
+    if (me->Value > me->Maximum)  // Going over max
     {
-        sprintf(debug, "\r\nERROR: [Value = %lf] > [Max = %lf]\r\n", me->Value, me->Maximum);
+        sprintf(debug, "\r\nERROR: [Value = %lf] > [Max = %lf]\r\n", me->Value,
+                me->Maximum);
         DEBUG_PRINT(debug);
-        return(VALUE_GREATER_THAN_MAXIMUM);
+        return (VALUE_GREATER_THAN_MAXIMUM);
     }
-    else if(me->Value < me->Minimum) // Going below min
+    else if (me->Value < me->Minimum)  // Going below min
     {
-        sprintf(debug, "\r\nERROR:[Value = %lf] < [Min = %lf]\r\n", me->Value, me->Minimum);
+        sprintf(debug, "\r\nERROR:[Value = %lf] < [Min = %lf]\r\n", me->Value,
+                me->Minimum);
         DEBUG_PRINT(debug);
-        return(VALUE_LESS_THAN_MINIMUM);
+        return (VALUE_LESS_THAN_MINIMUM);
     }
-    else if(me->Value == me->InvalidValue) // Invalid
+    else if (me->Value == me->InvalidValue)  // Invalid
     {
-        sprintf(debug, "\r\nERROR:[Value = %lf] == [Invalid = %lf]\r\n", me->Value, me->InvalidValue);
+        sprintf(debug, "\r\nERROR:[Value = %lf] == [Invalid = %lf]\r\n",
+                me->Value, me->InvalidValue);
         DEBUG_PRINT(debug);
-        return(VALUE_EQUAL_TO_INVALID);
+        return (VALUE_EQUAL_TO_INVALID);
     }
     else
     {
-        sprintf(debug, "\r\n[Value = %lf]\r\n[Max = %lf]\r\n[Min = %lf]\r\n", me->Value, me->Maximum, me->Minimum);
+        sprintf(debug, "\r\n[Value = %lf]\r\n[Max = %lf]\r\n[Min = %lf]\r\n",
+                me->Value, me->Maximum, me->Minimum);
         DEBUG_PRINT(debug);
-        return(VALUE_VALID);
+        return (VALUE_VALID);
     }
-    
 }
+/* [] END OF FILE */

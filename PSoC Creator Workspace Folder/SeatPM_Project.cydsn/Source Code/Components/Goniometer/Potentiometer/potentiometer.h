@@ -27,14 +27,15 @@ the angle of the user's knee, for demonstration purposes.
 //==============================================================================
 
 /* Function Name: Potentiometer_Setup
-Requirements: - SAR ADC component in TopDesign.cysch named Potentiometer_ADC
+Requirements: SAR ADC component in TopDesign.cysch named Potentiometer_ADC
 Results: Analog to Digital converter that samples potentiometer is enabled
 */
 void Potentiometer_Setup();
 
 /* Function Name: Potentiometer_Sample
-Requirements: 
-Results: 
+Requirements: SAR ADC component in TopDesign.cysch named Potentiometer_ADC
+Results: Returns angle value between 90 and 180 based on position of
+         potentiometer knob
 */
 double Potentiometer_Sample();
 
