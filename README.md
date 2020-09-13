@@ -36,6 +36,7 @@ too bulky and heavy to use on-the-go:
 
 <p align="center">
   <img src="/Documentation/tradcpm.jpg"/>
+  </br>
   <em> A traditional knee CPM device, courtesy of Wikimedia Commons. </em>
 </p>
 
