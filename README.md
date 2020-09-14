@@ -17,6 +17,14 @@ members:
 [Ali Alansari](https://www.linkedin.com/in/ali-alansari/) (Electrical Engineering)  
 [Austin Pischer](https://www.linkedin.com/in/austinpischer/) (Electrical Engineering)  
 
+To jump straight into the code, navigate to:
+```
+SeatPM/PSoC Creator Workspace Folder/SeatPM_Project.cydsn/main.c 
+```
+and
+```
+SeatPM/PSoC Creator Workspace Folder/SeatPM_Project.cydsn/Source Code/...
+```
 ## Project Context
 
 The SeatPM is a knee rehabilitation device. It is designed to be more
